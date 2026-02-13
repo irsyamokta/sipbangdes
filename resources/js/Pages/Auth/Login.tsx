@@ -1,132 +1,147 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import Input from '@/Components/form/input/InputField';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { Head, Link, useForm } from "@inertiajs/react";
+import { toast } from "sonner";
+
+import Form from "@/Components/form/Form";
+import Input from "@/Components/form/input/InputField";
+import Button from "@/Components/ui/button/Button";
+
+import { AiOutlineMail } from "react-icons/ai";
+import { TbLockPassword } from "react-icons/tb";
+
+import LogoColor from "../../../assets/logo/logo-color.svg"
+import Illustration from "../../../assets/svg/image-login.svg"
 
 export default function Login({
-    status,
-    canResetPassword,
+    status
 }: {
     status?: string;
-    canResetPassword: boolean;
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-        remember: false as boolean,
+        email: "",
+        password: "",
     });
 
-    const submit: FormEventHandler = (e) => {
+    const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        post(route('login'), {
-            onFinish: () => reset('password'),
+        post(route("login"), {
+            onFinish: () => {
+                reset("password");
+            },
+            onSuccess: () => {
+                toast.success("Login Berhasil");
+            },
         });
     };
 
     return (
-        <GuestLayout>
-            <Head title="Log in" />
+        <>
+            <Head title="Login" />
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
-
-            <form onSubmit={submit}>
-                <div>
-                    {/* <InputLabel htmlFor="email" value="Email" /> */}
-
-                    <Input
-                        label="Email"
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        placeholder="johndoe@example.com"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        error={errors.email}
-                        required
-                    />
-
-                    {/* <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    /> */}
-
-                </div>
-
-                <div className="mt-4">
-                    <Input
-                        label="Password"
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-
-                        autoComplete="username"
-                        onChange={(e) => setData('password', e.target.value)}
-                        error={errors.password}
-                        required
-                    />
-
-                    {/* <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    /> */}
-                </div>
-
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData(
-                                    'remember',
-                                    (e.target.checked || false) as false,
-                                )
-                            }
+            <div className="min-h-screen flex items-center justify-center">
+                {/* Left Side */}
+                <div className="w-full lg:w-1/2 h-screen flex flex-col justify-center px-6 md:px-10 lg:px-20 bg-white">
+                    {/* Logo */}
+                    <div className="flex items-center gap-3 mb-10">
+                        <img
+                            src={LogoColor}
+                            alt="Logo SIPBANGDES"
                         />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
+                    </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
+                    {/* Title */}
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                        Masuk Akun Anda
+                    </h1>
+                    <p className="text-gray-500 mb-10">
+                        Selamat Datang Kembali!
+                    </p>
+
+                    {/* Status */}
+                    {status && (
+                        <div className="mb-4 text-sm font-medium text-green-600">
+                            {status}
+                        </div>
                     )}
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
+                    {/* Form */}
+                    <Form onSubmit={submit} className="space-y-6">
+                        {/* Email */}
+                        <Input
+                            label="Email"
+                            id="email"
+                            type="email"
+                            name="email"
+                            value={data.email}
+                            startIcon={<AiOutlineMail />}
+                            placeholder="Email"
+                            autoComplete="username"
+                            onChange={(e) =>
+                                setData("email", e.target.value)
+                            }
+                            error={errors.email}
+                        />
+
+                        {/* Password */}
+                        <Input
+                            label="Password"
+                            id="password"
+                            type="password"
+                            name="password"
+                            value={data.password}
+                            startIcon={<TbLockPassword />}
+                            placeholder="Password"
+                            autoComplete="current-password"
+                            onChange={(e) =>
+                                setData("password", e.target.value)
+                            }
+                            enablePasswordValidation={false}
+                            error={errors.password}
+                        />
+
+                        {/* Button */}
+                        <Button
+                            type="submit"
+                            size="lg"
+                            className="w-full"
+                            disabled={processing}
+                        >
+                            Masuk
+                        </Button>
+
+                        {/* Forgot Password */}
+                        <div className="text-center text-sm text-gray-500 mt-4">
+                            Lupa Password?{" "}
+                            <Link
+                                href={"https://wa.me/6281286966966"}
+                                target="_blank"
+                                className="text-[#163B73] font-semibold hover:underline"
+                            >
+                                Hubungi Admin
+                            </Link>
+                        </div>
+                    </Form>
                 </div>
-            </form>
-        </GuestLayout>
+
+                {/* Right Side */}
+                <div className="w-1/2 h-screen py-3 px-3 hidden lg:flex">
+                    <div className="bg-primary flex flex-col justify-center items-center rounded-xl p-10">
+                        {/* Illustration */}
+                        <img
+                            src={Illustration}
+                            alt="Login Illustration"
+                            className="w-[80%] mb-10"
+                        />
+
+                        {/* Description */}
+                        <p className="text-center text-white text-sm max-w-md leading-relaxed">
+                            Setiap tahapan pembangunan desa direncanakan secara
+                            terukur, dilaksanakan secara efisien, dan
+                            dipertanggungjawabkan untuk memastikan manfaat yang
+                            maksimal bagi masyarakat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }
