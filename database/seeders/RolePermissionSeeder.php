@@ -5,60 +5,219 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        // Permissions
-        Permission::firstOrCreate(['name' => 'manage master data']);
-        Permission::firstOrCreate(['name' => 'give approval']);
-        Permission::firstOrCreate(['name' => 'give review']);
-        Permission::firstOrCreate(['name' => 'send rab']);
-        Permission::firstOrCreate(['name' => 'forward rab']);
-        Permission::firstOrCreate(['name' => 'manage rab']);
-        Permission::firstOrCreate(['name' => 'manage take of sheet']);
-        Permission::firstOrCreate(['name' => 'manage worker category']);
-        Permission::firstOrCreate(['name' => 'manage ahsp']);
-        Permission::firstOrCreate(['name' => 'manage project']);
-        Permission::firstOrCreate(['name' => 'manage progress']);
-        Permission::firstOrCreate(['name' => 'manage users']);
-        Permission::firstOrCreate(['name' => 'download rab']);
+        /* Create Permissions */
+        $permissions = [
 
-        // Roles
+            /* Dashboard Module */
+            'dashboard.view',
+
+            /* Project Module */
+            'project.view',
+            'project.create',
+            'project.edit',
+            'project.delete',
+
+            /* Take Off Sheet Module */
+            'tos.view',
+            'tos.create',
+            'tos.edit',
+            'tos.delete',
+
+            /* RAB Module */
+            'rab.view',
+            'rab.create',
+            'rab.edit',
+            'rab.delete',
+            'rab.send',
+            'rab.forward',
+            'rab.download',
+            'rab.approve',
+            'rab.review',
+
+            /* Master Data Module */
+            'material.view',
+            'material.create',
+            'material.edit',
+            'material.delete',
+
+            'tool.view',
+            'tool.create',
+            'tool.edit',
+            'tool.delete',
+
+            'wage.view',
+            'wage.create',
+            'wage.edit',
+            'wage.delete',
+
+            'unit.view',
+            'unit.create',
+            'unit.edit',
+            'unit.delete',
+
+            'workercategory.view',
+            'workercategory.create',
+            'workercategory.edit',
+            'workercategory.delete',
+
+            'ahsp.view',
+            'ahsp.create',
+            'ahsp.edit',
+            'ahsp.delete',
+
+            /* Progress Module */
+            'progress.view',
+            'progress.create',
+            'progress.edit',
+            'progress.delete',
+
+            /* Users Module */
+            'users.view',
+            'users.create',
+            'users.edit',
+            'users.delete',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
+
+        /* Create Roles */
         $admin = Role::firstOrCreate(['name' => 'admin']);
         $planner = Role::firstOrCreate(['name' => 'planner']);
-        $approver = Role::firstOrCreate(['name' => 'approver']);
         $reviewer = Role::firstOrCreate(['name' => 'reviewer']);
+        $approver = Role::firstOrCreate(['name' => 'approver']);
 
-        // Grant permissions
+        /* Admin Permissions */
         $admin->givePermissionTo([
-            'manage master data',
-            'manage rab',
-            'manage take of sheet',
-            'manage worker category',
-            'manage ahsp',
-            'manage project',
-            'manage users',
+            'dashboard.view',
+
+            'project.view',
+
+            'tos.view',
+            'tos.create',
+            'tos.edit',
+            'tos.delete',
+
+            'rab.view',
+
+            'material.view',
+            'material.create',
+            'material.edit',
+            'material.delete',
+
+            'tool.view',
+            'tool.create',
+            'tool.edit',
+            'tool.delete',
+
+            'wage.view',
+            'wage.create',
+            'wage.edit',
+            'wage.delete',
+
+            'unit.view',
+            'unit.create',
+            'unit.edit',
+            'unit.delete',
+
+            'workercategory.view',
+            'workercategory.create',
+            'workercategory.edit',
+            'workercategory.delete',
+
+            'ahsp.view',
+            'ahsp.create',
+            'ahsp.edit',
+            'ahsp.delete',
+
+            'progress.view',
+
+            'users.view',
+            'users.create',
+            'users.edit',
+            'users.delete',
         ]);
+
+        /* Planner Permissions */
         $planner->givePermissionTo([
-            'manage master data',
-            'send rab',
-            'manage take of sheet',
-            'manage worker category',
-            'manage ahsp',
-            'manage project',
-            'download rab',
+            'dashboard.view',
+
+            'project.view',
+            'project.create',
+            'project.edit',
+            'project.delete',
+
+            'tos.view',
+            'tos.create',
+            'tos.edit',
+            'tos.delete',
+
+            'rab.view',
+            'rab.create',
+            'rab.edit',
+            'rab.send',
+            'rab.download',
+
+            'ahsp.view',
+            'ahsp.create',
+            'ahsp.edit',
+            'ahsp.delete',
+
+            'workercategory.view',
+            'workercategory.create',
+            'workercategory.edit',
+            'workercategory.delete',
+
+            'progress.view',
         ]);
-        $approver->givePermissionTo([
-            'give approval',
-            'give review',
-        ]);
+
+        /* Reviewer Permissions */
         $reviewer->givePermissionTo([
-            'give review',
-            'manage progress',
+            'dashboard.view',
+
+            'project.view',
+
+            'tos.view',
+
+            'rab.view',
+            'rab.forward',
+            'rab.review',
+
+            'ahsp.view',
+
+            'workercategory.view',
+
+            'progress.view',
+            'progress.create',
+            'progress.edit',
+            'progress.delete',
+        ]);
+
+        /* Approver Permissions */
+        $approver->givePermissionTo([
+            'dashboard.view',
+
+            'project.view',
+
+            'tos.view',
+
+            'rab.view',
+            'rab.approve',
+            'rab.review',
+            'ahsp.view',
+
+            'workercategory.view',
+
+            'progress.view',
         ]);
     }
 }
