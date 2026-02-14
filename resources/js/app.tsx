@@ -22,6 +22,7 @@ createInertiaApp({
             <>
                 <App {...props} />
                 <Toaster
+                    richColors
                     duration={3000}
                 />
             </>
