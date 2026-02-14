@@ -12,7 +12,7 @@ import LogoColor from "../../../assets/logo/logo-color.svg"
 import Illustration from "../../../assets/svg/image-login.svg"
 
 export default function Login({
-    status
+    status,
 }: {
     status?: string;
 }) {
@@ -29,6 +29,9 @@ export default function Login({
             },
             onSuccess: () => {
                 toast.success("Login Berhasil");
+            },
+            onError: () => {
+                toast.error("Login Gagal");
             },
         });
     };
@@ -114,7 +117,7 @@ export default function Login({
                             <Link
                                 href={"https://wa.me/6281286966966"}
                                 target="_blank"
-                                className="text-[#163B73] font-semibold hover:underline"
+                                className="text-primary font-semibold hover:underline"
                             >
                                 Hubungi Admin
                             </Link>
