@@ -26,7 +26,7 @@ interface ButtonProps {
 }
 
 const BASE_CLASSES =
-    "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+    "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50";
 
 const SIZE_CLASSES: Record<NonNullable<ButtonProps["size"]>, string> = {
     xs: "h-8 px-3 text-xs rounded-md",
@@ -45,15 +45,15 @@ const VARIANT_CLASSES: Record<
     secondary:
         "bg-secondary text-white hover:bg-secondary/90 focus:ring-secondary",
     outline:
-        "border border-gray-300 bg-transparent hover:bg-gray-100 focus:ring-gray-400",
+        "border border-primary bg-transparent hover:bg-gray-100 focus:ring-gray-400",
     outlineDash:
         "border border-dashed border-primary bg-transparent hover:bg-primary/5 focus:ring-primary",
     ghost:
-        "bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-gray-400",
+        "bg-transparent hover:bg-gray-100 text-gray-700",
     danger:
-        "bg-error-200 text-white hover:bg-error-100 focus:ring-error-600",
+        "bg-transparent text-red-700 hover:bg-red-50",
     edit:
-        "bg-blue-200 text-white hover:bg-blue-100 focus:ring-blue-600",
+        "bg-transparent text-blue-700 hover:bg-blue-50",
     link:
         "bg-transparent text-primary hover:underline shadow-none px-0 h-auto",
 };

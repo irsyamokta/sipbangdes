@@ -19,7 +19,7 @@ interface SelectProps {
 
     label?: string;
     hint?: string;
-    error?: boolean;
+    error?: string | boolean;
     success?: boolean;
     required?: boolean;
     optional?: boolean;
@@ -39,7 +39,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
             onChange,
             label,
             hint,
-            error = false,
+            error = false || "",
             success = false,
             required = false,
             optional = false,
@@ -121,7 +121,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                         id={selectId}
                         type="button"
                         disabled={disabled}
-                        aria-invalid={hasError}
+                        aria-invalid={hasError ? true : false}
                         aria-describedby={hintId}
                         aria-expanded={open}
                         onClick={() => !disabled && setOpen((prev) => !prev)}
