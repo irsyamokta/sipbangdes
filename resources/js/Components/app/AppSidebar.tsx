@@ -1,7 +1,6 @@
 import { Link, usePage } from "@inertiajs/react";
 import { useCallback } from "react";
 
-import Button from "@/Components/ui/button/Button";
 import { useSidebar } from "@/Context/SidebarContext";
 
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -143,11 +142,9 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ sections }) => {
                                 href={route("logout")}
                                 method="post"
                                 as="button"
-                                className="shrink-0"
+                                className="hover:bg-white/25 shrink-0 p-2 rounded-lg"
                             >
-                                <Button size="icon" className="hover:bg-white/25">
-                                    <MdLogout size={18} />
-                                </Button>
+                                <MdLogout size={18} />
                             </Link>
                         </>
                     )}
