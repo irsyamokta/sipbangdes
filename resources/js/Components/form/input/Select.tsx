@@ -75,7 +75,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
 
                     // Required validation saat dropdown ditutup
                     if (required && !value) {
-                        setInternalError("Field ini wajib dipilih");
+                        setInternalError(null);
                     }
                 }
             };
@@ -169,7 +169,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                 </div>
 
                 {/* Hint / Error */}
-                {(hint || internalError) && (
+                {(hint || error || internalError) && (
                     <p
                         id={hintId}
                         className={`text-xs ${hasError
@@ -179,7 +179,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                                     : "text-gray-500"
                             }`}
                     >
-                        {internalError ?? hint}
+                        {error ?? internalError ?? hint}
                     </p>
                 )}
             </div>

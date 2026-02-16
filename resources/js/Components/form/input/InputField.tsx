@@ -57,7 +57,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
         const validatePassword = (value: string) => {
-            if (!value.trim()) return "Password wajib diisi";
+            if (!value.trim()) return null;
 
             if (!passwordRegex.test(value)) {
                 return "Password minimal 8 karakter, harus ada huruf besar, huruf kecil, angka, dan simbol";
@@ -119,36 +119,22 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                         onChange={(e) => {
                             const value = e.target.value;
 
-                            // Required realtime
                             if (required && value.trim() === "") {
-                                setInternalError("Field ini wajib diisi");
+                                setInternalError(null);
                             }
 
-                            // Password regex hanya kalau diaktifkan
-                            else if (
+                            if (
                                 isPassword &&
                                 enablePasswordValidation
                             ) {
                                 setInternalError(validatePassword(value));
                             }
 
-                            // Clear error normal
                             else {
                                 setInternalError(null);
                             }
 
                             onChange?.(e);
-                        }}
-
-                        // Blur fallback
-                        onBlur={(e) => {
-                            const value = e.target.value;
-
-                            if (required && !value.trim()) {
-                                setInternalError("Field ini wajib diisi");
-                            }
-
-                            onBlur?.(e);
                         }}
 
                         className={[

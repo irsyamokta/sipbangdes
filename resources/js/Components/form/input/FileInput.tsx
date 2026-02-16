@@ -55,12 +55,6 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             onChange?.(e);
         };
 
-        const handleBlur = () => {
-            if (required && (!files || files.length === 0)) {
-                setInternalError("File wajib diunggah");
-            }
-        };
-
         const baseClasses =
             "h-11 w-full overflow-hidden rounded-lg border text-sm shadow-theme-xs transition-colors file:mr-5 file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-gray-200 file:bg-gray-50 file:py-3 file:pl-3.5 file:pr-3 file:text-sm file:text-gray-700 hover:file:bg-gray-100 focus:outline-none dark:file:border-gray-800 dark:file:bg-white/5 dark:file:text-gray-400";
 
@@ -128,7 +122,6 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
                             disabled={disabled}
                             multiple={multiple}
                             onChange={handleChange}
-                            onBlur={handleBlur}
                             className="hidden"
                             {...props}
                         />
@@ -144,14 +137,13 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
                         disabled={disabled}
                         multiple={multiple}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         className={`${baseClasses} ${stateClasses} ${className}`}
                         {...props}
                     />
                 )}
 
                 {/* Hint / Error */}
-                {(hint || hasError) && (
+                {(hint || error || hasError) && (
                     <p
                         id={hintId}
                         className={`text-xs ${hasError
@@ -161,7 +153,7 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
                                     : "text-gray-500"
                             }`}
                     >
-                        {internalError ?? hint}
+                        {internalError ?? error ?? hint}
                     </p>
                 )}
             </div>

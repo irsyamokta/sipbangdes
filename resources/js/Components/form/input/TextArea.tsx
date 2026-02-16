@@ -54,12 +54,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             onChange?.(newValue);
         };
 
-        const handleBlur = () => {
-            if (required && value.trim() === "") {
-                setInternalError("Field ini wajib diisi");
-            }
-        };
-
         const stateClasses = disabled
             ? "bg-gray-100 text-gray-500 border-gray-300 cursor-not-allowed opacity-60"
             : hasError
@@ -101,7 +95,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     aria-invalid={hasError}
                     aria-describedby={hintId}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                     className={`w-full rounded-lg border px-4 py-2.5 text-sm shadow-theme-xs
                     transition focus:outline-none focus:ring-1
                     bg-transparent ${stateClasses} ${className}`}
@@ -111,7 +104,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 {/* Hint / Error + Counter */}
                 <div className="flex justify-between text-xs -mt-1">
                     {/* Hint atau Internal Error */}
-                    {(hint || internalError) && (
+                    {(hint || error || internalError) && (
                         <p
                             id={hintId}
                             className={`${
@@ -122,7 +115,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                     : "text-gray-500"
                             }`}
                         >
-                            {internalError ?? hint}
+                            {internalError ?? error ?? hint}
                         </p>
                     )}
 

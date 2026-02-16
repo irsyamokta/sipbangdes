@@ -151,7 +151,6 @@ const TimeSelect: React.FC<TimeSelectProps> = ({
                         readOnly
                         disabled={disabled}
                         onClick={() => !disabled && setIsHourOpen((prev) => !prev)}
-                        onBlur={() => setTouched(true)}
                         className={`h-11 w-full rounded-lg border px-4 py-2.5 text-sm
               focus:outline-none focus:ring-1
               disabled:bg-gray-100 disabled:cursor-not-allowed
@@ -191,7 +190,6 @@ const TimeSelect: React.FC<TimeSelectProps> = ({
                         readOnly
                         disabled={disabled}
                         onClick={() => !disabled && setIsMinuteOpen((prev) => !prev)}
-                        onBlur={() => setTouched(true)}
                         className={`h-11 w-full rounded-lg border px-4 py-2.5 text-sm
               focus:outline-none focus:ring-1
               disabled:bg-gray-100 disabled:cursor-not-allowed

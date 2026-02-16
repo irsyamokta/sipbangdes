@@ -1,6 +1,7 @@
 import { FC, ReactNode, FormEvent, KeyboardEvent } from "react";
 
 interface FormProps {
+    id?: string;
     onSubmit: (event: FormEvent<HTMLFormElement>) => void;
     children: ReactNode;
     className?: string;
@@ -10,6 +11,7 @@ interface FormProps {
 }
 
 const Form: FC<FormProps> = ({
+    id,
     onSubmit,
     children,
     className,
@@ -30,6 +32,7 @@ const Form: FC<FormProps> = ({
 
     return (
         <form
+            id={id}
             onSubmit={(event) => {
                 event.preventDefault();
                 onSubmit(event);

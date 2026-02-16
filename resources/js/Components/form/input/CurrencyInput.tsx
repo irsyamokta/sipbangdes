@@ -64,12 +64,6 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
             }
         };
 
-        const handleBlur = () => {
-            if (required && (value === null || value === 0)) {
-                setInternalError("Field ini wajib diisi");
-            }
-        };
-
         const baseClasses =
             `h-11 w-full rounded-lg border px-4 ${isCurrency ? "pl-9" : ""
             } text-sm shadow-theme-xs transition-all duration-200 placeholder:text-gray-400 focus:outline-none focus:ring-1 bg-transparent`;
@@ -123,14 +117,13 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
                         aria-describedby={hintId}
                         value={formatNumber(value)}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         className={`${baseClasses} ${stateClasses} ${className}`}
                         {...props}
                     />
                 </div>
 
                 {/* Hint / Error */}
-                {(hint || hasError) && (
+                {(hint || error || hasError) && (
                     <p
                         id={hintId}
                         className={`text-xs ${hasError
@@ -140,7 +133,7 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
                                     : "text-gray-500"
                             }`}
                     >
-                        {internalError ?? hint}
+                        {internalError ?? error ?? hint}
                     </p>
                 )}
             </div>

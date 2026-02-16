@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 interface ButtonProps {
+    form?: string;
     type?: "button" | "submit" | "reset";
     children?: ReactNode;
 
@@ -59,6 +60,7 @@ const VARIANT_CLASSES: Record<
 };
 
 const Button = ({
+    form,
     type = "button",
     children,
     size = "md",
@@ -72,6 +74,7 @@ const Button = ({
 }: ButtonProps) => {
     return (
         <button
+            {...(form ? { form } : {})}
             type={type}
             onClick={onClick}
             disabled={disabled}

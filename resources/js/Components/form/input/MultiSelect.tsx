@@ -208,7 +208,7 @@ const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                 </div>
 
                 {/* Hint / Error */}
-                {(hint || internalError) && (
+                {(hint || error || internalError) && (
                     <p
                         id={hintId}
                         className={`text-xs ${
@@ -219,7 +219,7 @@ const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                                 : "text-gray-500"
                         }`}
                     >
-                        {internalError ?? hint}
+                        {internalError ?? error ?? hint}
                     </p>
                 )}
             </div>

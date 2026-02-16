@@ -123,7 +123,6 @@ export default function DatePicker({
                     readOnly
                     disabled={disabled}
                     placeholder={placeholder}
-                    onBlur={() => setTouched(true)}
                     className={`h-11 w-full rounded-lg border px-4 py-2.5 text-sm
             placeholder:text-gray-400
             focus:outline-none focus:ring-1
