@@ -118,7 +118,7 @@ export const Modal: React.FC<ModalProps> = ({
 
                 {/* Footer (Always Exists If Actions Provided) */}
                 {(formId || submitLabel) && (
-                    <div className="sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 md:px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 md:px-6 py-4 rounded-b-xl">
                         <div className="flex justify-end gap-3">
                             {!hideCancel && (
                                 <Button
