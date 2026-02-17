@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Prompts\Progress;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -66,5 +67,40 @@ class User extends Authenticatable implements MustVerifyEmail
             'role' => 'string',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function rabComments()
+    {
+        return $this->hasMany(RabComment::class);
+    }
+
+    public function projectProgresses()
+    {
+        return $this->hasMany(ProjectProgress::class);
+    }
+
+    public function projectDocuments()
+    {
+        return $this->hasMany(ProjectDocument::class);
+    }
+
+    public function submittedProjects()
+    {
+        return $this->hasMany(Project::class, 'submitted_by');
+    }
+
+    public function approvedProjects()
+    {
+        return $this->hasMany(Project::class, 'approved_by');
+    }
+
+    public function reportedProgress()
+    {
+        return $this->hasMany(ProjectProgress::class, 'reported_by');
+    }
+
+    public function uploadedDocuments()
+    {
+        return $this->hasMany(Project::class, 'uploaded_by');
     }
 }
