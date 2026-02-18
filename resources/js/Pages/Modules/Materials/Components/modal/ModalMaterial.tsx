@@ -31,6 +31,7 @@ export const ModalMaterial = ({
         },
         editData: material,
         editId: material?.id,
+        successMessage: "Material berhasil disimpan",
         storeRoute: "material.store",
         updateRoute: "material.update",
     });

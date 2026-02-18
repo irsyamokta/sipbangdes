@@ -32,6 +32,7 @@ export const ModalUser = ({
         },
         editData: user,
         editId: user?.id,
+        successMessage: "Pengguna berhasil disimpan",
         storeRoute: "user.store",
         updateRoute: "user.update",
     });

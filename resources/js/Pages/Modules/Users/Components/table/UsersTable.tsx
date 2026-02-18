@@ -211,8 +211,12 @@ export default function UsersTable({
 
                 {/* Pagination */}
                 {last_page > 1 && (
-                    <div className="p-4 border-t">
-                        <Pagination links={links} />
+                    <div className="pb-6 border-t">
+                        <Pagination
+                            links={links}
+                            filters={filters}
+                            routeName="user.index"
+                        />
                     </div>
                 )}
             </div>

@@ -182,12 +182,15 @@ export default function MaterialsTable({
 
                 {/* Pagination */}
                 {last_page > 1 && (
-                    <div className="p-4 border-t">
-                        <Pagination links={links} />
+                    <div className="pb-6 border-t">
+                        <Pagination
+                            links={links}
+                            filters={filters}
+                            routeName="material.index"
+                        />
                     </div>
                 )}
             </div>
         </div>
     )
-
 }

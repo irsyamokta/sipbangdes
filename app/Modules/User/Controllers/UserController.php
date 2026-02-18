@@ -23,9 +23,7 @@ class UserController extends Controller
 
         return Inertia::render('Modules/Users/Index', [
             'users' => $users,
-            'filters' => [
-                'search' => $request->search,
-            ],
+            'filters' => $request->only(['search', 'page']),
         ]);
     }
 

@@ -28,6 +28,7 @@ export const ModalUnit = ({
         },
         editData: unit,
         editId: unit?.id,
+        successMessage: "Satuan berhasil disimpan",
         storeRoute: "unit.store",
         updateRoute: "unit.update",
     });

@@ -24,9 +24,7 @@ class UnitController extends Controller
 
         return Inertia::render('Modules/Units/Index', [
             'units' => $units,
-            'filters' => [
-                'search' => $request->search,
-            ],
+            'filters' => $request->only(['search', 'page']),
         ]);
     }
 

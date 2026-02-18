@@ -31,9 +31,7 @@ class MaterialController extends Controller
                 'value' => $unit->name,
                 'label' => $unit->name,
             ]),
-            'filters' => [
-                'search' => $request->search,
-            ],
+            'filters' => $request->only(['search', 'page']),
         ]);
     }
 
