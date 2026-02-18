@@ -25,6 +25,18 @@ class UserRepository
         return User::findOrFail($id);
     }
 
+    public function existsByEmail(string $email): bool
+    {
+        return User::where('email', $email)->exists();
+    }
+
+    public function existsByEmailExcept($id, string $email): bool
+    {
+        return User::where('email', $email)
+            ->where('id', '!=', $id)
+            ->exists();
+    }
+
     public function create(array $data): User
     {
         return User::create($data);

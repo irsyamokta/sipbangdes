@@ -2,7 +2,8 @@
 
 namespace App\Modules\User\Services;
 
-use Exception;
+use DomainException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Modules\User\Repositories\UserRepository;
 
@@ -19,8 +20,12 @@ class UserService
 
     public function createUser(array $data)
     {
-        try {
-            $role = $data["role"];
+        if ($this->repo->existsByEmail($data['email']))
+            throw new DomainException("Email sudah terdaftar");
+
+        return DB::transaction(function () use ($data) {
+
+            $role = $data['role'] ?? null;
 
             $user = $this->repo->create([
                 ...$data,
@@ -31,36 +36,38 @@ class UserService
             $user->assignRole($role);
 
             return $user;
-        } catch (Exception $e) {
-            throw new Exception("Gagal membuat pengguna: " . $e->getMessage());
-        }
+        });
     }
 
     public function updateUser($id, array $data)
     {
-        try {
-            $user = $this->repo->find($id);
+        $user = $this->repo->find($id);
 
-            if (empty($data["password"])) {
-                unset($data["password"]);
-            } else {
-                $data["password"] = Hash::make($data["password"]);
-            }
+        if (!$user)
+            throw new DomainException("Pengguna tidak ditemukan");
 
-            return $this->repo->update($user, $data);
-        } catch (Exception $e) {
-            throw new Exception("Gagal update pengguna: " . $e->getMessage());
+        if (
+            isset($data['email']) &&
+            $this->repo->existsByEmailExcept($id, $data['email'])
+        )
+            throw new DomainException("Email sudah terdaftar");
+
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
         }
+
+        return $this->repo->update($user, $data);
     }
 
     public function deleteUser($id)
     {
-        try {
-            $user = $this->repo->find($id);
+        $user = $this->repo->find($id);
 
-            return $this->repo->delete($user);
-        } catch (Exception $e) {
-            throw new Exception("Gagal hapus pengguna: " . $e->getMessage());
-        }
+        if (!$user)
+            throw new DomainException("Pengguna tidak ditemukan");
+
+        return $this->repo->delete($user);
     }
 }

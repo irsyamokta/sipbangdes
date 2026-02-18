@@ -2,7 +2,8 @@
 
 namespace App\Modules\User\Controllers;
 
-use Exception;
+use Throwable;
+use DomainException;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -33,13 +34,18 @@ class UserController extends Controller
         try {
             $this->service->createUser($request->validated());
 
-            return redirect()
-                ->back()
-                ->with("success", "Pengguna berhasil dibuat");
-        } catch (Exception $e) {
-            return redirect()
-                ->back()
-                ->with("error", $e->getMessage());
+            return back();
+        } catch (DomainException $e) {
+            return back()->withErrors([
+                'name' => $e->getMessage()
+            ]);
+        } catch (Throwable $e) {
+            report($e);
+
+            return back()->with(
+                "error",
+                "Terjadi kesalahan sistem, silakan coba lagi"
+            );
         }
     }
 
@@ -48,13 +54,18 @@ class UserController extends Controller
         try {
             $this->service->updateUser($id, $request->validated());
 
-            return redirect()
-                ->back()
-                ->with("success", "Pengguna berhasil diperbarui");
-        } catch (Exception $e) {
-            return redirect()
-                ->back()
-                ->with("error", $e->getMessage());
+            return back();
+        } catch (DomainException $e) {
+            return back()->withErrors([
+                'name' => $e->getMessage()
+            ]);
+        } catch (Throwable $e) {
+            report($e);
+
+            return back()->with(
+                "error",
+                "Terjadi kesalahan sistem, silakan coba lagi"
+            );
         }
     }
 
@@ -63,13 +74,14 @@ class UserController extends Controller
         try {
             $this->service->deleteUser($id);
 
-            return redirect()
-                ->back()
-                ->with("success", "Pengguna berhasil dihapus");
-        } catch (Exception $e) {
-            return redirect()
-                ->back()
-                ->with("error", $e->getMessage());
+            return back();
+        } catch (Throwable $e) {
+            report($e);
+
+            return back()->with(
+                "error",
+                "Terjadi kesalahan sistem, silakan coba lagi"
+            );
         }
     }
 }
