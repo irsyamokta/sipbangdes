@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Modules\Unit\Controllers\UnitController;
 use App\Modules\Material\Controllers\MaterialController;
 use App\Modules\Tool\Controllers\ToolController;
+use App\Modules\Wage\Controllers\WageController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     /* Materials */
@@ -25,9 +26,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /* Wages */
     Route::prefix('upah')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('Modules/Wages');
-        })->middleware('permission:wage.view')->name('wage.index');
+        Route::get('/', [WageController::class, 'index'])->middleware('permission:wage.view')->name('wage.index');
+        Route::post('/', [WageController::class, 'store'])->middleware('permission:wage.create')->name('wage.store');
+        Route::patch('/{id}', [WageController::class, 'update'])->middleware('permission:wage.edit')->name('wage.update');
+        Route::delete('/{id}', [WageController::class, 'destroy'])->middleware('permission:wage.delete')->name('wage.destroy');
     });
 
     /* Units */
