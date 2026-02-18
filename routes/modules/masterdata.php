@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Modules\Unit\Controllers\UnitController;
 use App\Modules\Material\Controllers\MaterialController;
+use App\Modules\Tool\Controllers\ToolController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     /* Materials */
@@ -16,9 +17,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /* Tools */
     Route::prefix('alat')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('Modules/Tools');
-        })->middleware('permission:tool.view')->name('tool.index');
+        Route::get('/', [ToolController::class, 'index'])->middleware('permission:tool.view')->name('tool.index');
+        Route::post('/', [ToolController::class, 'store'])->middleware('permission:tool.create')->name('tool.store');
+        Route::patch('/{id}', [ToolController::class, 'update'])->middleware('permission:tool.edit')->name('tool.update');
+        Route::delete('/{id}', [ToolController::class, 'destroy'])->middleware('permission:tool.delete')->name('tool.destroy');
     });
 
     /* Wages */
