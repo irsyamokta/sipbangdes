@@ -2,6 +2,7 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Modules\Unit\Controllers\UnitController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     /* Materials */
@@ -27,9 +28,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /* Units */
     Route::prefix('satuan')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('Modules/Units');
-        })->middleware('permission:unit.view')->name('unit.index');
+        Route::get('/', [UnitController::class, 'index'])->middleware('permission:unit.view')->name('unit.index');
+        Route::post('/', [UnitController::class, 'store'])->middleware('permission:unit.create')->name('unit.store');
+        Route::patch('/{id}', [UnitController::class, 'update'])->middleware('permission:unit.edit')->name('unit.update');
+        Route::delete('/{id}', [UnitController::class, 'destroy'])->middleware('permission:unit.delete')->name('unit.destroy');
     });
 
     /* Worker Category */
