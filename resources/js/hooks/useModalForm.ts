@@ -1,12 +1,16 @@
 import { useState, useEffect, FormEventHandler } from "react";
 import { router } from "@inertiajs/react";
 
+import { toast } from "sonner";
+
 type CrudFormOptions<T> = {
     isOpen: boolean;
     onClose: () => void;
     initialValues: T;
     editData?: Partial<T> | null;
     editId?: string | number | null;
+    successMessage?: string;
+    errorMessage?: string;
     storeRoute: string;
     updateRoute?: string;
     forceFormData?: boolean;
@@ -18,6 +22,8 @@ export function useModalForm<T extends Record<string, any>>({
     initialValues,
     editData,
     editId,
+    successMessage = "Berhasil disimpan",
+    errorMessage = "Gagal menyimpan data",
     storeRoute,
     updateRoute,
     forceFormData = false,
@@ -88,12 +94,14 @@ export function useModalForm<T extends Record<string, any>>({
         const config = {
             onSuccess: () => {
                 onClose();
+                toast.success(successMessage);
             },
             onError: (errors: any) => {
                 setServerErrors(errors);
             },
             onFinish: () => {
                 setLoading(false);
+
             },
         };
 

@@ -17,6 +17,7 @@ return [
     'attributes'             => [
         'name' => 'Nama',
         'category' => 'Kategori',
+        'unit' => 'Satuan',
         'position' => 'Posisi',
         'coefficient' => 'Koefisien',
         'note' => 'Catatan',
