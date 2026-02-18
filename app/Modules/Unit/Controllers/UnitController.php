@@ -33,7 +33,7 @@ class UnitController extends Controller
         try {
             $this->service->createUnit($request->validated());
 
-            return redirect()->back();
+            return back();
         } catch (DomainException $e) {
             return back()->withErrors([
                 'name' => $e->getMessage()
@@ -53,7 +53,7 @@ class UnitController extends Controller
         try {
             $this->service->updateUnit($id, $request->validated());
 
-            return redirect()->back();
+            return back();
         } catch (DomainException $e) {
             return back()->withErrors([
                 'name' => $e->getMessage()
@@ -73,11 +73,12 @@ class UnitController extends Controller
         try {
             $this->service->deleteUnit($id);
 
-            return redirect()->back();
+            return back();
         } catch (Exception $e) {
-            return redirect()
-                ->back()
-                ->with("error", $e->getMessage());
+            return back()->with(
+                "error",
+                "Terjadi kesalahan sistem, silakan coba lagi"
+            );
         }
     }
 }

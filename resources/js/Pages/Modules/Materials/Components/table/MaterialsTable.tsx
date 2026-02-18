@@ -113,7 +113,7 @@ export default function MaterialsTable({
                         {/* Body */}
                         <TableBody className="divide-y divide-gray-100">
                             {materials.length === 0 ? (
-                                <EmptyTable colspan={6} description="Tidak ada data satuan" />
+                                <EmptyTable colspan={6} description="Tidak ada data material" />
                             ) : (
                                 materials.map((material) => (
                                     <TableRow

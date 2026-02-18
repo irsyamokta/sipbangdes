@@ -40,7 +40,7 @@ class WageController extends Controller
         try {
             $this->service->createWage($request->validated());
 
-            return redirect()->back();
+            return back();
         } catch (DomainException $e) {
             return back()->withErrors([
                 'position' => $e->getMessage()
@@ -60,7 +60,7 @@ class WageController extends Controller
         try {
             $this->service->updateWage($id, $request->validated());
 
-            return redirect()->back();
+            return back();
         } catch (DomainException $e) {
             return back()->withErrors([
                 'position' => $e->getMessage()
@@ -80,11 +80,12 @@ class WageController extends Controller
         try {
             $this->service->deleteWage($id);
 
-            return redirect()->back();
+            return back();
         } catch (Exception $e) {
-            return redirect()
-                ->back()
-                ->with("error", $e->getMessage());
+            return back()->with(
+                "error",
+                "Terjadi kesalahan sistem, silakan coba lagi"
+            );
         }
     }
 }

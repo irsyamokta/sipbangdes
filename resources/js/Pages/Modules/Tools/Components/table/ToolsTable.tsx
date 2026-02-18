@@ -113,7 +113,7 @@ export default function ToolsTable({
                         {/* Body */}
                         <TableBody className="divide-y divide-gray-100">
                             {tools.length === 0 ? (
-                                <EmptyTable colspan={6} description="Tidak ada data satuan" />
+                                <EmptyTable colspan={6} description="Tidak ada data alat" />
                             ) : (
                                 tools.map((tool) => (
                                     <TableRow

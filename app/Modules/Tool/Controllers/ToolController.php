@@ -40,7 +40,7 @@ class ToolController extends Controller
         try {
             $this->service->createTool($request->validated());
 
-            return redirect()->back()->with('success', 'Alat berhasil ditambahkan');
+            return back();
         } catch (DomainException $e) {
             return back()->withErrors([
                 'name' => $e->getMessage()
@@ -60,7 +60,7 @@ class ToolController extends Controller
         try {
             $this->service->updateTool($id, $request->validated());
 
-            return redirect()->back()->with('success');
+            return back();
         } catch (DomainException $e) {
             return back()->withErrors([
                 'name' => $e->getMessage()
@@ -80,11 +80,12 @@ class ToolController extends Controller
         try {
             $this->service->deleteTool($id);
 
-            return redirect()->back();
+            return back();
         } catch (Exception $e) {
-            return redirect()
-                ->back()
-                ->with("error", $e->getMessage());
+            return back()->with(
+                "error",
+                "Terjadi kesalahan sistem, silakan coba lagi"
+            );
         }
     }
 }

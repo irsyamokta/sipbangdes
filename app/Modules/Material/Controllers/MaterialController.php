@@ -40,7 +40,7 @@ class MaterialController extends Controller
         try {
             $this->service->createMaterial($request->validated());
 
-            return redirect()->back();
+            return back();
         } catch (DomainException $e) {
             return back()->withErrors([
                 'name' => $e->getMessage()
@@ -60,7 +60,7 @@ class MaterialController extends Controller
         try {
             $this->service->updateMaterial($id, $request->validated());
 
-            return redirect()->back();
+            return back();
         } catch (DomainException $e) {
             return back()->withErrors([
                 'name' => $e->getMessage()
@@ -80,11 +80,12 @@ class MaterialController extends Controller
         try {
             $this->service->deleteMaterial($id);
 
-            return redirect()->back();
+            return back();
         } catch (Exception $e) {
-            return redirect()
-                ->back()
-                ->with("error", $e->getMessage());
+            return back()->with(
+                "error",
+                "Terjadi kesalahan sistem, silakan coba lagi"
+            );
         }
     }
 }
