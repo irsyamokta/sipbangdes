@@ -18,7 +18,7 @@ return [
         'name' => 'Nama',
         'category' => 'Kategori',
         'unit' => 'Satuan',
-        'position' => 'Posisi',
+        'position' => 'Jabatan',
         'coefficient' => 'Koefisien',
         'note' => 'Catatan',
         'percentage' => 'Persentase',
