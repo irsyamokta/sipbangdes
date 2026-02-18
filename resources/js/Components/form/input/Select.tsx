@@ -8,14 +8,14 @@ import React, {
 import { LuChevronDown } from "react-icons/lu";
 
 interface Option {
-    value: string;
+    value: string | boolean | number;
     label: string;
 }
 
 interface SelectProps {
     options: Option[];
-    value: string;
-    onChange: (value: string) => void;
+    value: string | boolean | number;
+    onChange: (value: string | boolean | number) => void;
 
     label?: string;
     hint?: string;
@@ -148,7 +148,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                         <ul className="absolute z-20 mt-2 w-full rounded-lg overflow-auto border border-gray-200 bg-white shadow-lg">
                             {options.map((opt) => (
                                 <li
-                                    key={opt.value}
+                                    key={String(opt.value)}
                                     onClick={() => {
                                         onChange(opt.value);
 

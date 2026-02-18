@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { router } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
 
 import { useDelete } from "@/hooks/useDelete";
+import { useSearch } from "@/hooks/useSearch";
 
-import { UsersTableProps } from "@/types/user";
+import { UserPageProps, UsersTableProps } from "@/types/user";
 
 import { EmptyTable } from "@/Components/empty/EmptyTable";
 import Button from "@/Components/ui/button/Button";
@@ -46,6 +46,8 @@ export default function UsersTable({
     links,
     onEdit
 }: UsersTableProps) {
+    const { props } = usePage<UserPageProps>();
+
     const { handleDelete, deletingId } = useDelete({
         routeName: "user.destroy",
         confirmTitle: "Hapus Pengguna?",
@@ -53,16 +55,12 @@ export default function UsersTable({
         errorMessage: "Gagal menghapus pengguna",
     });
 
-    const [search, setSearch] = useState("");
-
-    const handleSearch = (value: string) => {
-        setSearch(value);
-
-        router.get(route("user.index"),
-            { search: value },
-            { preserveState: true, replace: true }
-        );
-    };
+    const { filters, setFilter } = useSearch({
+        routeName: "user.index",
+        initialFilters: {
+            search: props.filters.search ?? "",
+        }
+    })
 
     return (
         <div className="flex flex-col gap-4 mt-4">
@@ -72,8 +70,8 @@ export default function UsersTable({
                     type="text"
                     startIcon={<FiSearch />}
                     placeholder="Cari berdasarkan nama atau email..."
-                    value={search}
-                    onChange={(e) => handleSearch(e.target.value)}
+                    value={filters.search}
+                    onChange={(e) => setFilter("search", (e.target.value))}
                     className="w-full rounded-lg border-gray-300 text-sm"
                 />
             </div>
