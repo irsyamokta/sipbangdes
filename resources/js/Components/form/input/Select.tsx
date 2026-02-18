@@ -146,24 +146,26 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                     {/* Dropdown */}
                     {open && !disabled && (
                         <ul className="absolute z-20 mt-2 w-full rounded-lg overflow-auto border border-gray-200 bg-white shadow-lg">
-                            {options.map((opt) => (
-                                <li
-                                    key={String(opt.value)}
-                                    onClick={() => {
-                                        onChange(opt.value);
+                            {options
+                                .filter(opt => opt.value !== undefined && opt.value !== null)
+                                .map((opt, index) => (
+                                    <li
+                                        key={`${opt.value}-${index}`}
+                                        onClick={() => {
+                                            onChange(opt.value);
 
-                                        setInternalError(null);
+                                            setInternalError(null);
 
-                                        setOpen(false);
-                                    }}
-                                    className={`cursor-pointer px-4 py-2 text-sm transition hover:bg-secondary hover:text-white ${value === opt.value
+                                            setOpen(false);
+                                        }}
+                                        className={`cursor-pointer px-4 py-2 text-sm transition hover:bg-secondary hover:text-white ${value === opt.value
                                             ? "bg-gray-100 font-medium"
                                             : ""
-                                        }`}
-                                >
-                                    {opt.label}
-                                </li>
-                            ))}
+                                            }`}
+                                    >
+                                        {opt.label}
+                                    </li>
+                                ))}
                         </ul>
                     )}
                 </div>
@@ -173,10 +175,10 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                     <p
                         id={hintId}
                         className={`text-xs ${hasError
-                                ? "text-error-500"
-                                : success
-                                    ? "text-success-500"
-                                    : "text-gray-500"
+                            ? "text-error-500"
+                            : success
+                                ? "text-success-500"
+                                : "text-gray-500"
                             }`}
                     >
                         {error ?? internalError ?? hint}

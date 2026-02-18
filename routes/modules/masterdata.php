@@ -3,13 +3,15 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Modules\Unit\Controllers\UnitController;
+use App\Modules\Material\Controllers\MaterialController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     /* Materials */
     Route::prefix('material')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('Modules/Materials');
-        })->middleware('permission:material.view')->name('material.index');
+        Route::get('/', [MaterialController::class, 'index'])->middleware('permission:material.view')->name('material.index');
+        Route::post('/', [MaterialController::class, 'store'])->middleware('permission:material.create')->name('material.store');
+        Route::patch('/{id}', [MaterialController::class, 'update'])->middleware('permission:material.edit')->name('material.update');
+        Route::delete('/{id}', [MaterialController::class, 'destroy'])->middleware('permission:material.delete')->name('material.destroy');
     });
 
     /* Tools */
