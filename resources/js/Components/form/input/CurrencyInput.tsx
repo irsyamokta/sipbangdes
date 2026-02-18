@@ -9,7 +9,7 @@ interface CurrencyInputProps
     onChange: (value: number | null) => void;
     label?: string;
     hint?: string;
-    error?: boolean;
+    error?: string | boolean;
     success?: boolean;
     required?: boolean;
     optional?: boolean;
@@ -113,7 +113,7 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
                         inputMode="numeric"
                         pattern="[\d.]*"
                         disabled={disabled}
-                        aria-invalid={hasError}
+                        aria-invalid={!!error || !!internalError}
                         aria-describedby={hintId}
                         value={formatNumber(value)}
                         onChange={handleChange}
