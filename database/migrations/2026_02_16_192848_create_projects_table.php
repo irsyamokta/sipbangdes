@@ -12,9 +12,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('project_name');
             $table->string('location');
+            $table->string('chairman');
             $table->integer('budget_year');
-            $table->string('project_status');
-            $table->string('rab_status');
+            $table->string('project_status')->default('draft');
+            $table->string('rab_status')->default('draft');
             $table->timestamp('submitted_at')->nullable();
             $table->foreignUuid('submitted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('approved_at')->nullable();
