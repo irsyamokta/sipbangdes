@@ -12,6 +12,7 @@ type CrudFormOptions<T> = {
     successMessage?: string;
     errorMessage?: string;
     storeRoute: string;
+    storeParams?: any;
     updateRoute?: string;
     forceFormData?: boolean;
 };
@@ -25,6 +26,7 @@ export function useModalForm<T extends Record<string, any>>({
     successMessage = "Berhasil disimpan",
     errorMessage = "Gagal menyimpan data",
     storeRoute,
+    storeParams,
     updateRoute,
     forceFormData = false,
 }: CrudFormOptions<T>) {
@@ -106,7 +108,7 @@ export function useModalForm<T extends Record<string, any>>({
         };
 
         if (!isEditing) {
-            router.post(route(storeRoute), payload as any, config);
+            router.post(route(storeRoute, storeParams), payload as any, config);
         } else if (isEditing && updateRoute && editId) {
             const url = route(updateRoute, editId);
 
