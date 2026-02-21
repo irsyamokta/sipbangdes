@@ -10,6 +10,7 @@ import { LuChevronDown } from "react-icons/lu";
 interface Option {
     value: string | boolean | number;
     label: string;
+    disabled?: boolean;
 }
 
 interface SelectProps {
@@ -125,7 +126,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                         aria-describedby={hintId}
                         aria-expanded={open}
                         onClick={() => !disabled && setOpen((prev) => !prev)}
-                        className={`flex h-11 w-full items-center justify-between rounded-lg border bg-white px-4 py-2 text-sm transition focus:outline-none focus:ring-1 ${stateClasses}`}
+                        className={`flex h-11 w-full items-center justify-between rounded-lg border bg-transparent px-4 py-2 text-sm transition focus:outline-none focus:ring-1 ${stateClasses}`}
                     >
                         <span
                             className={
@@ -148,24 +149,32 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                         <ul className="absolute z-20 mt-2 w-full rounded-lg overflow-auto border border-gray-200 bg-white shadow-lg">
                             {options
                                 .filter(opt => opt.value !== undefined && opt.value !== null)
-                                .map((opt, index) => (
-                                    <li
-                                        key={`${opt.value}-${index}`}
-                                        onClick={() => {
-                                            onChange(opt.value);
+                                .map((opt, index) => {
+                                    const isDisabled = opt.disabled;
 
-                                            setInternalError(null);
+                                    return (
+                                        <li
+                                            key={`${opt.value}-${index}`}
+                                            onClick={() => {
+                                                if (isDisabled) return; // guard
 
-                                            setOpen(false);
-                                        }}
-                                        className={`cursor-pointer px-4 py-2 text-sm transition hover:bg-secondary hover:text-white ${value === opt.value
-                                            ? "bg-gray-100 font-medium"
-                                            : ""
-                                            }`}
-                                    >
-                                        {opt.label}
-                                    </li>
-                                ))}
+                                                onChange(opt.value);
+                                                setInternalError(null);
+                                                setOpen(false);
+                                            }}
+                                            className={`
+                    px-4 py-2 text-sm transition
+                    ${isDisabled
+                                                    ? "cursor-not-allowed text-gray-400 bg-gray-50"
+                                                    : "cursor-pointer hover:bg-secondary hover:text-white"
+                                                }
+                    ${value === opt.value ? "bg-gray-100 font-medium" : ""}
+                `}
+                                        >
+                                            {opt.label}
+                                        </li>
+                                    );
+                                })}
                         </ul>
                     )}
                 </div>

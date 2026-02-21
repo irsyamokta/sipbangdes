@@ -19,7 +19,7 @@ interface ButtonProps {
     startIcon?: ReactNode;
     endIcon?: ReactNode;
 
-    onClick?: () => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     disabled?: boolean;
     fullWidth?: boolean;
 

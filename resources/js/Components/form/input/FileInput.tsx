@@ -2,12 +2,12 @@ import React, { forwardRef, useId, useState } from "react";
 import { LuUpload } from "react-icons/lu";
 
 type NativeFileInputProps =
-    React.ComponentPropsWithoutRef<"input">;
+    Omit<React.ComponentPropsWithoutRef<"input">, "value" | "type">;
 
 interface FileInputProps extends NativeFileInputProps {
     label?: string;
     hint?: string;
-    error?: boolean;
+    error?: string | boolean;
     success?: boolean;
     required?: boolean;
     optional?: boolean;
