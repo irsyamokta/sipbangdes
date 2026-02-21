@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignUuid('project_id')->constrained('projects')->cascadeOnDelete();
             $table->foreignUuid('reported_by')->nullable()->constrained('users')->nullOnDelete();
             $table->decimal('percentage', 5, 2);
-            $table->string('description');
+            $table->text('description');
             $table->timestamps();
         });
     }

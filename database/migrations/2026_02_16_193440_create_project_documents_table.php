@@ -15,7 +15,6 @@ return new class extends Migration
             $table->foreignUuid('uploaded_by')->nullable()->constrained('users')->nullOnDelete();
             $table->string('image_url');
             $table->string('public_id');
-            $table->string('description');
             $table->timestamps();
         });
     }

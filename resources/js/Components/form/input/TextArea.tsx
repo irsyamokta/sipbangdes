@@ -7,7 +7,7 @@ interface TextAreaProps
     extends Omit<NativeTextareaProps, "onChange"> {
     label?: string;
     hint?: string;
-    error?: boolean;
+    error?: string | boolean;
     success?: boolean;
     required?: boolean;
     optional?: boolean;
@@ -63,7 +63,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             : "border-gray-300 focus:border-primary focus:ring-primary/20";
 
         return (
-            <div className="w-full space-y-1.5">
+            <div className="w-full space-y-1.5 -mb-2">
                 {/* Label */}
                 {label && (
                     <label
@@ -92,7 +92,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     value={value}
                     required={required}
                     disabled={disabled}
-                    aria-invalid={hasError}
+                    aria-invalid={hasError ? true : false}
                     aria-describedby={hintId}
                     onChange={handleChange}
                     className={`w-full rounded-lg border px-4 py-2.5 text-sm shadow-theme-xs

@@ -42,4 +42,9 @@ class ProjectProgress extends Model
     {
         return $this->belongsTo(User::class, 'reported_by');
     }
+
+    public function documents()
+    {
+        return $this->hasMany(ProjectDocument::class, 'progress_id');
+    }
 }

@@ -31,7 +31,6 @@ class ProjectDocument extends Model
         'uploaded_by',
         'image_url',
         'public_id',
-        'description',
     ];
 
     public function project()

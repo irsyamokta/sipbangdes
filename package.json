@@ -30,6 +30,7 @@
         "clsx": "^2.1.1",
         "date-fns": "^4.1.0",
         "flatpickr": "^4.6.13",
+        "lightgallery": "^2.9.0",
         "react": "^19.1.0",
         "react-apexcharts": "^1.7.0",
         "react-datepicker": "^9.0.0",
