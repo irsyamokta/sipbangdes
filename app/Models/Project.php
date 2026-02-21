@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ProjectProgress;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $id
  * @property string $project_name
  * @property string $location
+ * @property string $chairman
  * @property int $budget_year
  * @property string $project_status
  * @property string $rab_status
@@ -31,6 +33,7 @@ class Project extends Model
     protected $fillable = [
         'project_name',
         'location',
+        'chairman',
         'budget_year',
         'project_status',
         'rab_status',
@@ -39,6 +42,8 @@ class Project extends Model
         'approved_at',
         'approved_by',
     ];
+
+    protected $appends = ['progress_percentage'];
 
     protected $casts = [
         'budget_year' => 'integer',
@@ -79,5 +84,16 @@ class Project extends Model
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function latestProgress()
+    {
+        return $this->hasOne(ProjectProgress::class, 'project_id')
+            ->latestOfMany();
+    }
+
+    public function getProgressPercentageAttribute()
+    {
+        return $this->latestProgress?->percentage ?? 0;
     }
 }
