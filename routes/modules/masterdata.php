@@ -6,6 +6,10 @@ use App\Modules\Unit\Controllers\UnitController;
 use App\Modules\Material\Controllers\MaterialController;
 use App\Modules\Tool\Controllers\ToolController;
 use App\Modules\Wage\Controllers\WageController;
+use App\Modules\Ahsp\Controllers\AhspController;
+use App\Modules\Ahsp\Controllers\AhspMaterialController;
+use App\Modules\Ahsp\Controllers\AhspWageController;
+use App\Modules\Ahsp\Controllers\AhspToolController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     /* Materials */
@@ -49,8 +53,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /* AHSP */
     Route::prefix('ahsp')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('Modules/AHSP');
-        })->middleware('permission:ahsp.view')->name('ahsp.index');
+        Route::get('/', [AhspController::class, 'index'])->middleware('permission:ahsp.view')->name('ahsp.index');
+        Route::post('/', [AhspController::class, 'store'])->middleware('permission:ahsp.create')->name('ahsp.store');
+        Route::patch('/{id}', [AhspController::class, 'update'])->middleware('permission:ahsp.edit')->name('ahsp.update');
+        Route::delete('/{id}', [AhspController::class, 'destroy'])->middleware('permission:ahsp.delete')->name('ahsp.destroy');
+
+        Route::prefix('material')->group(function () {
+            Route::post('/', [AhspMaterialController::class, 'store'])->middleware('permission:ahsp.create')->name('ahsp.material.store');
+            Route::patch('/{id}', [AhspMaterialController::class, 'update'])->middleware('permission:ahsp.edit')->name('ahsp.material.update');
+            Route::delete('/{id}', [AhspMaterialController::class, 'destroy'])->middleware('permission:ahsp.delete')->name('ahsp.material.destroy');
+        });
+
+        Route::prefix('upah')->group(function () {
+            Route::post('/', [AhspWageController::class, 'store'])->middleware('permission:ahsp.create')->name('ahsp.wage.store');
+            Route::patch('/{id}', [AhspWageController::class, 'update'])->middleware('permission:ahsp.edit')->name('ahsp.wage.update');
+            Route::delete('/{id}', [AhspWageController::class, 'destroy'])->middleware('permission:ahsp.delete')->name('ahsp.wage.destroy');
+        });
+
+        Route::prefix('alat')->group(function () {
+            Route::post('/', [AhspToolController::class, 'store'])->middleware('permission:ahsp.create')->name('ahsp.tool.store');
+            Route::patch('/{id}', [AhspToolController::class, 'update'])->middleware('permission:ahsp.edit')->name('ahsp.tool.update');
+            Route::delete('/{id}', [AhspToolController::class, 'destroy'])->middleware('permission:ahsp.delete')->name('ahsp.tool.destroy');
+        });
     });
 });

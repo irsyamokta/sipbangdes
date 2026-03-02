@@ -4,6 +4,7 @@ namespace App\Modules\Material\Controllers;
 
 use Exception;
 use Throwable;
+use DomainException;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,7 +12,6 @@ use App\Modules\Material\Services\MaterialService;
 use App\Modules\Unit\Services\UnitService;
 use App\Modules\Material\Requests\MaterialStoreRequest;
 use App\Modules\Material\Requests\MaterialUpdateRequest;
-use DomainException;
 
 class MaterialController extends Controller
 {
@@ -22,8 +22,16 @@ class MaterialController extends Controller
 
     public function index(Request $request)
     {
-        $materials = $this->service->getMaterials($request->search);
-        $units = $this->unitService->getUnits();
+        $materials = $this->service->getMaterials(
+            $request->search,
+            true,
+            10
+        );
+
+        $units = $this->unitService->getUnits(
+            null,
+            false
+        );
 
         return Inertia::render('Modules/Materials/Index', [
             'materials' => $materials,
@@ -46,12 +54,9 @@ class MaterialController extends Controller
                 'name' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
@@ -66,12 +71,9 @@ class MaterialController extends Controller
                 'name' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
@@ -82,10 +84,9 @@ class MaterialController extends Controller
 
             return back();
         } catch (Exception $e) {
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 }

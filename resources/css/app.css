@@ -170,6 +170,7 @@
 	::file-selector-button {
 		border-color: var(--color-gray-200, currentColor);
         scroll-behavior: smooth;
+        @apply no-scrollbar;
 	}
 
 	button:not(:disabled),
@@ -178,7 +179,7 @@
 	}
 
 	body {
-		@apply relative font-normal font-outfit z-1 bg-gray-50 overflow-x-hidden;
+		@apply relative font-normal font-outfit z-1 bg-gray-50;
 	}
 }
 

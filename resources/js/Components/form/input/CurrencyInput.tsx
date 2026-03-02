@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, useState } from "react";
+import React, { forwardRef, useId, useState, useEffect } from "react";
 
 type NativeInputProps =
     React.ComponentPropsWithoutRef<"input">;
@@ -14,6 +14,7 @@ interface CurrencyInputProps
     required?: boolean;
     optional?: boolean;
     isCurrency?: boolean;
+    maxFractionDigits?: number;
 }
 
 const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
@@ -28,6 +29,7 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
             required = false,
             optional = false,
             isCurrency = false,
+            maxFractionDigits = 6,
             id,
             disabled,
             className = "",
@@ -40,32 +42,60 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
         const hintId = hint ? `${inputId}-hint` : undefined;
 
         const [internalError, setInternalError] = useState<string | null>(null);
+        const [displayValue, setDisplayValue] = useState<string>("");
 
         const hasError = error || !!internalError;
 
         const formatNumber = (num: number | null) => {
             if (num === null || isNaN(num)) return "";
-            return new Intl.NumberFormat("id-ID").format(num);
+
+            return new Intl.NumberFormat("id-ID", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: maxFractionDigits,
+            }).format(num);
         };
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const rawValue = e.target.value.replace(/\./g, "");
+        useEffect(() => {
+            setDisplayValue(formatNumber(value));
+        }, [value]);
 
-            if (!/^\d*$/.test(rawValue)) return;
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            let input = e.target.value;
+
+            input = input.replace(/[^\d,]/g, "");
+
+            const parts = input.split(",");
+            if (parts.length > 2) return;
 
             if (internalError) {
                 setInternalError(null);
             }
 
-            if (rawValue === "") {
+            setDisplayValue(input);
+
+            if (input === "") {
                 onChange(null);
-            } else {
-                onChange(Number(rawValue));
+                return;
+            }
+
+            const normalized = input.replace(",", ".");
+
+            const numericValue = Number(normalized);
+
+            if (!isNaN(numericValue)) {
+                onChange(numericValue);
+            }
+        };
+
+        const handleBlur = () => {
+            if (value !== null) {
+                setDisplayValue(formatNumber(value));
             }
         };
 
         const baseClasses =
-            `h-11 w-full rounded-lg border px-4 ${isCurrency ? "pl-9" : ""
+            `h-11 w-full rounded-lg border px-4 ${
+                isCurrency ? "pl-9" : ""
             } text-sm shadow-theme-xs transition-all duration-200 placeholder:text-gray-400 focus:outline-none focus:ring-1 bg-transparent`;
 
         const stateClasses = disabled
@@ -110,13 +140,13 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
                         ref={ref}
                         id={inputId}
                         type="text"
-                        inputMode="numeric"
-                        pattern="[\d.]*"
+                        inputMode="decimal"
                         disabled={disabled}
                         aria-invalid={!!error || !!internalError}
                         aria-describedby={hintId}
-                        value={formatNumber(value)}
+                        value={displayValue}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         className={`${baseClasses} ${stateClasses} ${className}`}
                         {...props}
                     />
@@ -126,12 +156,13 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
                 {(hint || error || hasError) && (
                     <p
                         id={hintId}
-                        className={`text-xs ${hasError
+                        className={`text-xs ${
+                            hasError
                                 ? "text-error-500"
                                 : success
                                     ? "text-success-500"
                                     : "text-gray-500"
-                            }`}
+                        }`}
                     >
                         {internalError ?? error ?? hint}
                     </p>

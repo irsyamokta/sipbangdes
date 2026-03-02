@@ -15,8 +15,15 @@ class ToolService
         protected CodeGeneratorService $codeGenerator
     ) {}
 
-    public function getTools(?string $search = null)
-    {
+    public function getTools(
+        ?string $search = null,
+        bool $paginate = true,
+        int $perPage = 10
+    ) {
+        if ($paginate) {
+            return $this->repo->getPaginated($search, $perPage);
+        }
+
         return $this->repo->getAll($search);
     }
 
@@ -40,8 +47,6 @@ class ToolService
     {
         $tool = $this->repo->find($id);
 
-        if (!$tool) throw new DomainException("Alat tidak ditemukan");
-
         if ($this->repo->existsByNameExcept($id, $data["name"]))
             throw new DomainException("Nama alat sudah ada");
 
@@ -51,8 +56,6 @@ class ToolService
     public function deleteTool($id)
     {
         $tool = $this->repo->find($id);
-
-        if (!$tool) throw new DomainException("Alat tidak ditemukan");
 
         return $this->repo->delete($tool);
     }

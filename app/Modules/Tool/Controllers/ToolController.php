@@ -4,6 +4,7 @@ namespace App\Modules\Tool\Controllers;
 
 use Exception;
 use Throwable;
+use DomainException;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,7 +12,6 @@ use App\Modules\Tool\Services\ToolService;
 use App\Modules\Unit\Services\UnitService;
 use App\Modules\Tool\Requests\ToolStoreRequest;
 use App\Modules\Tool\Requests\ToolUpdateRequest;
-use DomainException;
 
 class ToolController extends Controller
 {
@@ -22,8 +22,16 @@ class ToolController extends Controller
 
     public function index(Request $request)
     {
-        $tools = $this->service->getTools($request->search);
-        $units = $this->unitService->getUnits();
+        $tools = $this->service->getTools(
+            $request->search,
+            true,
+            10
+        );
+
+        $units = $this->unitService->getUnits(
+            null,
+            false
+        );
 
         return Inertia::render('Modules/Tools/Index', [
             'tools' => $tools,
@@ -46,12 +54,9 @@ class ToolController extends Controller
                 'name' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
@@ -66,12 +71,9 @@ class ToolController extends Controller
                 'name' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
@@ -82,10 +84,9 @@ class ToolController extends Controller
 
             return back();
         } catch (Exception $e) {
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 }
