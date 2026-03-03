@@ -4,6 +4,7 @@ namespace App\Modules\Wage\Controllers;
 
 use Exception;
 use Throwable;
+use DomainException;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,7 +12,6 @@ use App\Modules\Wage\Services\WageService;
 use App\Modules\Unit\Services\UnitService;
 use App\Modules\Wage\Requests\WageStoreRequest;
 use App\Modules\Wage\Requests\WageUpdateRequest;
-use DomainException;
 
 class WageController extends Controller
 {
@@ -22,8 +22,16 @@ class WageController extends Controller
 
     public function index(Request $request)
     {
-        $wages = $this->service->getWages($request->search);
-        $units = $this->unitService->getUnits();
+        $wages = $this->service->getWages(
+            $request->search,
+            true,
+            10
+        );
+
+        $units = $this->unitService->getUnits(
+            null,
+            false
+        );
 
         return Inertia::render('Modules/Wages/Index', [
             'wages' => $wages,
@@ -46,12 +54,9 @@ class WageController extends Controller
                 'position' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
@@ -66,12 +71,9 @@ class WageController extends Controller
                 'position' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
@@ -82,10 +84,9 @@ class WageController extends Controller
 
             return back();
         } catch (Exception $e) {
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 }

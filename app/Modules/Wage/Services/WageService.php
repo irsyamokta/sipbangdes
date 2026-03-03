@@ -15,8 +15,15 @@ class WageService
         protected CodeGeneratorService $codeGenerator
     ) {}
 
-    public function getWages(?string $search = null)
-    {
+    public function getWages(
+        ?string $search = null,
+        bool $paginate = true,
+        int $perPage = 10
+    ) {
+        if ($paginate) {
+            return $this->repo->getPaginated($search, $perPage);
+        }
+
         return $this->repo->getAll($search);
     }
 
@@ -40,8 +47,6 @@ class WageService
     {
         $wage = $this->repo->find($id);
 
-        if (!$wage) throw new DomainException("Jabatan tidak ditemukan");
-
         if ($this->repo->existsByPositionExcept($id, $data["position"]))
             throw new DomainException("Nama jabatan sudah ada");
 
@@ -51,8 +56,6 @@ class WageService
     public function deleteWage($id)
     {
         $wage = $this->repo->find($id);
-
-        if (!$wage) throw new DomainException("Jabatan tidak ditemukan");
 
         return $this->repo->delete($wage);
     }
