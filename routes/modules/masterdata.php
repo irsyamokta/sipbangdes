@@ -10,6 +10,8 @@ use App\Modules\Ahsp\Controllers\AhspController;
 use App\Modules\Ahsp\Controllers\AhspMaterialController;
 use App\Modules\Ahsp\Controllers\AhspWageController;
 use App\Modules\Ahsp\Controllers\AhspToolController;
+use App\Modules\WorkerCategory\Controllers\WorkerCategoryController;
+use App\Modules\WorkerCategory\Controllers\WorkerItemController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     /* Materials */
@@ -46,9 +48,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /* Worker Category */
     Route::prefix('kategori-pekerjaan')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('Modules/WorkerCategory');
-        })->middleware('permission:workercategory.view')->name('workercategory.index');
+        Route::get('/', [WorkerCategoryController::class, 'index'])->middleware('permission:workercategory.view')->name('workercategory.index');
+        Route::post('/', [WorkerCategoryController::class, 'store'])->middleware('permission:workercategory.create')->name('workercategory.store');
+        Route::patch('/{id}', [WorkerCategoryController::class, 'update'])->middleware('permission:workercategory.edit')->name('workercategory.update');
+        Route::delete('/{id}', [WorkerCategoryController::class, 'destroy'])->middleware('permission:workercategory.delete')->name('workercategory.destroy');
+
+        Route::prefix('item')->group(function () {
+            Route::post('/', [WorkerItemController::class, 'store'])->middleware('permission:workercategory.create')->name('workeritem.store');
+            Route::patch('/{id}', [WorkerItemController::class, 'update'])->middleware('permission:workercategory.edit')->name('workeritem.update');
+            Route::delete('/{id}', [WorkerItemController::class, 'destroy'])->middleware('permission:workercategory.delete')->name('workeritem.destroy');
+        });
     });
 
     /* AHSP */

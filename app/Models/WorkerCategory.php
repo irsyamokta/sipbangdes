@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Queue\Worker;
 
 /**
  * @property string $id
@@ -13,11 +14,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
-class CategoryJob extends Model
+class WorkerCategory extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $table = 'category_jobs';
+    protected $table = 'worker_categories';
     public $incrementing = false;
     protected $keyType = 'string';
 
@@ -26,13 +27,23 @@ class CategoryJob extends Model
         'description',
     ];
 
+    protected $appends = [
+        'total_items'
+    ];
+
+
     public function takeOffSheets()
     {
-        return $this->hasMany(TakeOffSheet::class, 'job_category_id');
+        return $this->hasMany(TakeOffSheet::class, 'worker_category_id');
     }
 
-    public function templateJobs()
+    public function workerItems()
     {
-        return $this->hasMany(TemplateJob::class, 'category_id');
+        return $this->hasMany(WorkerItem::class, 'category_id');
+    }
+
+    public function getTotalItemsAttribute()
+    {
+        return $this->workerItems()->count();
     }
 }

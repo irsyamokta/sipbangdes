@@ -55,9 +55,9 @@ class Ahsp extends Model
         return $this->hasMany(TakeOffSheet::class, 'ahsp_id');
     }
 
-    public function templateJobs()
+    public function workerItems()
     {
-        return $this->hasMany(TemplateJob::class, 'ahsp_id');
+        return $this->hasMany(WorkerItem::class, 'ahsp_id');
     }
 
     public function getMaterialTotalAttribute()

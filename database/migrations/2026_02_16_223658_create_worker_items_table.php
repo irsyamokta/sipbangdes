@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('template_jobs', function (Blueprint $table) {
+        Schema::create('worker_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('category_id')->constrained('category_jobs')->restrictOnDelete();
+            $table->foreignUuid('category_id')->constrained('worker_categories')->restrictOnDelete();
             $table->foreignUuid('ahsp_id')->constrained('ahsps')->restrictOnDelete();
             $table->string('work_name');
             $table->string('unit');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('template_jobs');
+        Schema::dropIfExists('worker_items');
     }
 };

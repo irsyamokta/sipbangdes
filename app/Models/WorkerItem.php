@@ -16,10 +16,10 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property \Carbon\Carbon $updated_at
  */
 
-class TemplateJob extends Model
+class WorkerItem extends Model
 {
     use HasFactory, HasUuids;
-    protected $table = 'template_jobs';
+    protected $table = 'worker_items';
     public $incrementing = false;
     protected $keyType = 'string';
 
@@ -30,10 +30,11 @@ class TemplateJob extends Model
         'unit'
     ];
 
-    public function categoryJob()
+    public function workerCategory()
     {
-        return $this->belongsTo(CategoryJob::class, 'category_id');
+        return $this->belongsTo(WorkerCategory::class, 'category_id');
     }
+    
     public function ahsp()
     {
         return $this->belongsTo(Ahsp::class, 'ahsp_id');
