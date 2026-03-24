@@ -12,7 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('project_id')->constrained('projects')->cascadeOnDelete();
             $table->foreignUuid('ahsp_id')->nullable()->constrained('ahsps')->nullOnDelete();
-            $table->foreignUuid('job_category_id')->nullable()->constrained('category_jobs')->nullOnDelete();
+            $table->foreignUuid('worker_category_id')->nullable()->constrained('worker_categories')->nullOnDelete();
             $table->string('work_name');
             $table->string('unit');
             $table->string('note')->nullable();

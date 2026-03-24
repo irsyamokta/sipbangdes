@@ -56,8 +56,8 @@ class TakeOffSheet extends Model
         return $this->belongsTo(Ahsp::class, 'ahsp_id');
     }
 
-    public function categoryJob()
+    public function workerCategory()
     {
-        return $this->belongsTo(CategoryJob::class, 'job_category_id');
+        return $this->belongsTo(WorkerCategory::class, 'worker_category_id');
     }
 }
