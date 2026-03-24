@@ -19,57 +19,57 @@ export interface MenuItem {
 export const MENU = {
     dashboard: {
         name: "Dashboard",
-        icon: <LuLayoutDashboard size={24} />,
+        icon: <LuLayoutDashboard size={20} />,
         path: "/dashboard",
     },
     proyek: {
         name: "Proyek",
-        icon: <AiOutlineProject size={24} />,
+        icon: <AiOutlineProject size={20} />,
         path: "/proyek",
     },
     tos: {
         name: "Take Off Sheet",
-        icon: <LiaClipboardListSolid size={24} strokeWidth={0.5} />,
+        icon: <LiaClipboardListSolid size={20} strokeWidth={0.5} />,
         path: "/take-off-sheet",
     },
     rab: {
         name: "RAB",
-        icon: <PiNote size={24} />,
+        icon: <PiNote size={20} />,
         path: "/rab",
     },
     material: {
         name: "Material",
-        icon: <PiPackage size={24} />,
+        icon: <PiPackage size={20} />,
         path: "/material",
     },
     alat: {
         name: "Alat",
-        icon: <LiaToolsSolid size={24} />,
+        icon: <LiaToolsSolid size={20} />,
         path: "/alat",
     },
     upah: {
         name: "Upah",
-        icon: <LuWallet size={24} />,
+        icon: <LuWallet size={20} />,
         path: "/upah",
     },
     satuan: {
         name: "Satuan",
-        icon: <TfiRulerAlt size={24} />,
+        icon: <TfiRulerAlt size={20} />,
         path: "/satuan",
     },
     kategori: {
         name: "Kategori Pekerjaan",
-        icon: <GrUserWorker size={24} />,
+        icon: <GrUserWorker size={20} />,
         path: "/kategori-pekerjaan",
     },
     ahsp: {
         name: "AHSP",
-        icon: <PiCalculatorLight size={24} />,
+        icon: <PiCalculatorLight size={20} />,
         path: "/ahsp",
     },
     pengguna: {
         name: "Pengguna",
-        icon: <LuUsers size={24} />,
+        icon: <LuUsers size={20} />,
         path: "/pengguna",
     },
 } as const satisfies Record<string, MenuItem>;

@@ -58,18 +58,18 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ sections }) => {
             onMouseLeave={() => setIsHovered(false)}
         >
             {/* Logo */}
-            <div className="px-4 py-6 sm:border-b border-white/10">
+            <div className="px-4 py-4 lg:border-b border-white/10">
                 <Link href="/" className="flex lg:justify-start">
                     <img
                         src={isOpen ? logoWhite : logoMini}
                         alt="Logo"
-                        className={`${isOpen ? "w-50" : "w-10"} -mt-2`}
+                        className={`${isOpen ? "w-45" : "w-10"}`}
                     />
                 </Link>
             </div>
 
             {/* Menu */}
-            <div className="flex-1 no-scrollbar overflow-x-hidden min-w-0 px-4 py-6 space-y-8">
+            <div className="flex-1 no-scrollbar overflow-x-hidden min-w-0 px-4 py-6 space-y-6">
                 {sections.map((section) => (
                     <div key={section.title}>
                         {/* Section Title */}
@@ -79,7 +79,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ sections }) => {
                                     {section.title}
                                 </p>
                             ) : (
-                                <div className="flex">
+                                <div className="flex justify-center">
                                     <HiDotsHorizontal className="text-white/70" />
                                 </div>
                             )}
@@ -91,7 +91,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ sections }) => {
                                 <li key={item.name}>
                                     <Link
                                         href={item.path}
-                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg
+                                        className={`flex ${!isExpanded && !isMobileOpen && !isOpen ? "justify-center" : ""} items-center gap-3 px-3 py-2 rounded-lg
                                         transition-colors duration-200
                                         ${isActive(item.path)
                                                 ? "bg-alternate"
@@ -99,7 +99,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ sections }) => {
                                             }`}
                                     >
                                         <span
-                                            className={`text-lg shrink-0 ${isActive(item.path)
+                                            className={`text-sm shrink-0 ${isActive(item.path)
                                                 ? "text-white"
                                                 : "text-white/80"
                                                 }`}
