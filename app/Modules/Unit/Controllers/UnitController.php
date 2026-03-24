@@ -4,13 +4,13 @@ namespace App\Modules\Unit\Controllers;
 
 use Exception;
 use Throwable;
+use DomainException;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Modules\Unit\Services\UnitService;
 use App\Modules\Unit\Requests\UnitStoreRequest;
 use App\Modules\Unit\Requests\UnitUpdateRequest;
-use DomainException;
 
 class UnitController extends Controller
 {
@@ -20,7 +20,11 @@ class UnitController extends Controller
 
     public function index(Request $request)
     {
-        $units = $this->service->getUnits($request->search);
+        $units = $this->service->getUnits(
+            $request->search,
+            true,
+            10
+        );
 
         return Inertia::render('Modules/Units/Index', [
             'units' => $units,
@@ -39,12 +43,9 @@ class UnitController extends Controller
                 'name' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
@@ -59,12 +60,9 @@ class UnitController extends Controller
                 'name' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
@@ -75,10 +73,9 @@ class UnitController extends Controller
 
             return back();
         } catch (Exception $e) {
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 }

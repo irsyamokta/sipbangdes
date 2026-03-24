@@ -15,8 +15,15 @@ class UnitService
         protected CodeGeneratorService $codeGenerator
     ) {}
 
-    public function getUnits(?string $search = null)
-    {
+    public function getUnits(
+        ?string $search = null,
+        bool $paginate = true,
+        int $perPage = 10
+    ) {
+        if ($paginate) {
+            return $this->repo->getPaginated($search, $perPage);
+        }
+
         return $this->repo->getAll($search);
     }
 
@@ -40,8 +47,6 @@ class UnitService
     {
         $unit = $this->repo->find($id);
 
-        if (!$unit) throw new DomainException("Satuan tidak ditemukan");
-
         if ($this->repo->existsByNameExcept($id, $data["name"]))
             throw new DomainException("Nama satuan sudah ada");
 
@@ -51,8 +56,6 @@ class UnitService
     public function deleteUnit($id)
     {
         $unit = $this->repo->find($id);
-
-        if (!$unit) throw new DomainException("Satuan tidak ditemukan");
 
         return $this->repo->delete($unit);
     }

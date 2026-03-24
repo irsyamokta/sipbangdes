@@ -15,8 +15,15 @@ class MaterialService
         protected CodeGeneratorService $codeGenerator
     ) {}
 
-    public function getMaterials(?string $search = null)
-    {
+    public function getMaterials(
+        ?string $search = null,
+        bool $paginate = true,
+        int $perPage = 10
+    ) {
+        if ($paginate) {
+            return $this->repo->getPaginated($search, $perPage);
+        }
+
         return $this->repo->getAll($search);
     }
 
@@ -40,8 +47,6 @@ class MaterialService
     {
         $material = $this->repo->find($id);
 
-        if (!$material) throw new DomainException("Material tidak ditemukan");
-
         if ($this->repo->existsByNameExcept($id, $data["name"]))
             throw new DomainException("Nama material sudah ada");
 
@@ -51,8 +56,6 @@ class MaterialService
     public function deleteMaterial($id)
     {
         $material = $this->repo->find($id);
-
-        if (!$material) throw new DomainException("Material tidak ditemukan");
 
         return $this->repo->delete($material);
     }

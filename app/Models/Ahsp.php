@@ -28,6 +28,13 @@ class Ahsp extends Model
         'unit',
     ];
 
+    protected $appends = [
+        'material_total',
+        'wage_total',
+        'tool_total',
+        'subtotal',
+    ];
+
     public function ahspComponentTools()
     {
         return $this->hasMany(AhspComponentTool::class, 'ahsp_id');
@@ -51,5 +58,31 @@ class Ahsp extends Model
     public function templateJobs()
     {
         return $this->hasMany(TemplateJob::class, 'ahsp_id');
+    }
+
+    public function getMaterialTotalAttribute()
+    {
+        return $this->ahspComponentMaterials->map(function ($item) {
+            return $item->coefficient * ($item->masterMaterial->price ?? 0);
+        })->sum();
+    }
+
+    public function getWageTotalAttribute()
+    {
+        return $this->ahspComponentWages->map(function ($item) {
+            return $item->coefficient * ($item->masterWage->price ?? 0);
+        })->sum();
+    }
+
+    public function getToolTotalAttribute()
+    {
+        return $this->ahspComponentTools->map(function ($item) {
+            return $item->coefficient * ($item->masterTool->price ?? 0);
+        })->sum();
+    }
+
+    public function getSubtotalAttribute()
+    {
+        return $this->material_total + $this->wage_total + $this->tool_total;
     }
 }
