@@ -66,7 +66,7 @@ export const WageTable = ({
                 )}
             </div>
             {wages.length === 0 ? (
-                <p className="text-gray-500 -mt-1">Belum ada komponen Upah</p>
+                <p className="text-gray-500 -mt-1">Belum ada komponen upah</p>
             ) : (
                 <div className="overflow-hidden">
                     {/* Table */}

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Head } from '@inertiajs/react';
-import { usePage } from "@inertiajs/react";
+import { Head, usePage, router } from '@inertiajs/react';
 
 import usePermission from "@/hooks/usePermission";
 import { useSearch } from "@/hooks/useSearch";
@@ -33,6 +32,12 @@ export default function Projects() {
         successMessage: "Proyek berhasil dihapus",
         errorMessage: "Gagal menghapus proyek",
     });
+
+    const handleTosClick = (project: any) => {
+        router.get(route("tos.index"), {
+            project_id: project.id,
+        });
+    };
 
     const { filters, setFilter } = useSearch({
         routeName: "project.index",
@@ -69,6 +74,7 @@ export default function Projects() {
 
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
+                    {/* Filter Bar */}
                     <FilterBar
                         select={{
                             value: filters.year,
@@ -82,6 +88,8 @@ export default function Projects() {
                             onChange: (value) => setFilter("search", value),
                         }}
                     />
+
+                    {/* Cards */}
                     <CardProject
                         projects={projects}
                         onEdit={(project) => {
@@ -89,11 +97,7 @@ export default function Projects() {
                             setIsModalOpen(true);
                         }}
                         onDelete={(project) => handleDelete(project.id)}
-
-                        onTosClick={(project) => {
-                            console.log("tos", project.id);
-                        }}
-
+                        onTosClick={handleTosClick}
                         onRabClick={(project) => {
                             console.log("rab", project.id);
                         }}
