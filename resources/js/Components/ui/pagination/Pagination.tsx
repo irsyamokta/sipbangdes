@@ -3,7 +3,7 @@ import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
 interface PaginationProps {
     links: any[];
-    filters: Record<string, any>;
+    filters?: Record<string, any>;
     routeName: string;
 }
 

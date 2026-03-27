@@ -41,7 +41,7 @@ export const CardProject = ({
             <div className="mt-4">
                 <EmptyState
                     title="Tidak Ada Proyek"
-                    description="Tidak menemukan proyek untuk ditampilkan."
+                    description="Tidak dapat menemukan proyek untuk ditampilkan."
                 />
             </div>
         );

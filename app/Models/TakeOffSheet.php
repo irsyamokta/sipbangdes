@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 /**
  * @property string $id
  * @property string $project_id
- * @property string|null $ahsp_id
- * @property string|null $job_category_id
+ * @property string $ahsp_id
+ * @property string $worker_category_id
  * @property string $work_name
  * @property string $unit
  * @property float $volume
@@ -31,7 +31,7 @@ class TakeOffSheet extends Model
     protected $fillable = [
         'project_id',
         'ahsp_id',
-        'job_category_id',
+        'worker_category_id',
         'work_name',
         'volume',
         'unit',
