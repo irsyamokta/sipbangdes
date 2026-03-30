@@ -62,23 +62,26 @@ class Ahsp extends Model
 
     public function getMaterialTotalAttribute()
     {
-        return $this->ahspComponentMaterials->map(function ($item) {
-            return $item->coefficient * ($item->masterMaterial->price ?? 0);
-        })->sum();
+        return $this->ahspComponentMaterials()
+            ->join('master_materials', 'master_materials.id', '=', 'ahsp_component_materials.material_id')
+            ->selectRaw('SUM(ahsp_component_materials.coefficient * master_materials.price) as total')
+            ->value('total') ?? 0;
     }
 
     public function getWageTotalAttribute()
     {
-        return $this->ahspComponentWages->map(function ($item) {
-            return $item->coefficient * ($item->masterWage->price ?? 0);
-        })->sum();
+        return $this->ahspComponentWages()
+            ->join('master_wages', 'master_wages.id', '=', 'ahsp_component_wages.wage_id')
+            ->selectRaw('SUM(ahsp_component_wages.coefficient * master_wages.price) as total')
+            ->value('total') ?? 0;
     }
 
     public function getToolTotalAttribute()
     {
-        return $this->ahspComponentTools->map(function ($item) {
-            return $item->coefficient * ($item->masterTool->price ?? 0);
-        })->sum();
+        return $this->ahspComponentTools()
+            ->join('master_tools', 'master_tools.id', '=', 'ahsp_component_tools.tool_id')
+            ->selectRaw('SUM(ahsp_component_tools.coefficient * master_tools.price) as total')
+            ->value('total') ?? 0;
     }
 
     public function getSubtotalAttribute()

@@ -14,7 +14,10 @@ interface ButtonProps {
     | "ghost"
     | "danger"
     | "edit"
-    | "link";
+    | "link"
+    | "send"
+    | "revision"
+    | "approve";
 
     startIcon?: ReactNode;
     endIcon?: ReactNode;
@@ -57,6 +60,12 @@ const VARIANT_CLASSES: Record<
         "bg-transparent text-blue-700 hover:bg-blue-50",
     link:
         "bg-transparent text-primary hover:underline shadow-none px-0 h-auto",
+    send:
+        "bg-blue-100 hover:bg-blue-200/30 text-blue-700",
+    revision:
+        "bg-warning-100 hover:bg-warning-200/30 text-warning-700",
+    approve:
+        "bg-green-100 hover:bg-green-200/30 text-green-700",
 };
 
 const Button = ({

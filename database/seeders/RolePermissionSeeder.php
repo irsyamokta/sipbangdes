@@ -108,6 +108,7 @@ class RolePermissionSeeder extends Seeder
             'tos.delete',
 
             'rab.view',
+            'rab.download',
 
             'material.view',
             'material.create',

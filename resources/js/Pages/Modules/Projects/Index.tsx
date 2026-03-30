@@ -39,6 +39,12 @@ export default function Projects() {
         });
     };
 
+    const handleRabClick = (project: any) => {
+        router.get(route("rab.index"), {
+            project_id: project.id,
+        });
+    };
+
     const { filters, setFilter } = useSearch({
         routeName: "project.index",
         initialFilters: {
@@ -98,9 +104,7 @@ export default function Projects() {
                         }}
                         onDelete={(project) => handleDelete(project.id)}
                         onTosClick={handleTosClick}
-                        onRabClick={(project) => {
-                            console.log("rab", project.id);
-                        }}
+                        onRabClick={handleRabClick}
                     />
                 </div>
             </div>
