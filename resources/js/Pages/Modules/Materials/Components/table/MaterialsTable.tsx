@@ -19,6 +19,7 @@ import Pagination from "@/Components/ui/pagination/Pagination";
 
 import { formatDateTime } from "@/utils/formatDate";
 import { formatCurrency } from "@/utils/formatCurrrency";
+import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { LuTrash2, LuPencil } from "react-icons/lu";
 import { FiSearch } from "react-icons/fi";
@@ -125,9 +126,9 @@ export default function MaterialsTable({
                                             {material.code}
                                         </TableCell>
 
-                                        {/* Nama */}
+                                        {/* Name */}
                                         <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                            {material.name}
+                                            {capitalizeEachWord(material.name)}
                                         </TableCell>
 
                                         {/* Unit */}

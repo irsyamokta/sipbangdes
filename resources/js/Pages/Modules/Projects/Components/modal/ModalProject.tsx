@@ -8,11 +8,13 @@ import { Modal } from '@/Components/ui/modal';
 import Form from '@/Components/form/Form';
 import Input from '@/Components/form/input/InputField';
 import Select from '@/Components/form/input/Select';
+import CurrencyInput from '@/Components/form/input/CurrencyInput';
 
 export const ModalProject = ({
     isOpen,
     onClose,
     project,
+    unitOptions
 }: ModalProjectProps) => {
     const {
         data,
@@ -30,6 +32,8 @@ export const ModalProject = ({
             chairman: "",
             project_status: "draft",
             budget_year: "",
+            volume: 0,
+            unit: "",
         },
         editData: project,
         editId: project?.id,
@@ -38,7 +42,7 @@ export const ModalProject = ({
         updateRoute: "project.update",
     });
 
-    const budgetYearOptions = useBudgetYears({range: 10});
+    const budgetYearOptions = useBudgetYears({ startYear: 2025 });
 
     return (
         <Modal
@@ -56,41 +60,56 @@ export const ModalProject = ({
                 className="flex flex-col gap-4 p-4 md:p-6"
                 preventEnterSubmit
             >
-                {/* Project Name */}
-                <Input
-                    label="Nama Proyek"
-                    type="text"
-                    name="project_name"
-                    value={data.project_name}
-                    placeholder="Contoh: Pembangunan Jalan Desa"
-                    onChange={(e) => setData("project_name", e.target.value)}
-                    error={serverErrors.project_name}
-                    required
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Project Name */}
+                    <Input
+                        label="Nama Proyek"
+                        type="text"
+                        name="project_name"
+                        value={data.project_name}
+                        placeholder="Contoh: Pembangunan Jalan Desa"
+                        onChange={(e) => setData("project_name", e.target.value)}
+                        error={serverErrors.project_name}
+                        required
+                    />
 
-                {/* Location */}
-                <Input
-                    label="Lokasi"
-                    type="text"
-                    name="location"
-                    value={data.location}
-                    placeholder="Contoh: Desa Sukamaju RT 04 RW 01"
-                    onChange={(e) => setData("location", e.target.value)}
-                    error={serverErrors.location}
-                    required
-                />
+                    {/* Location */}
+                    <Input
+                        label="Lokasi"
+                        type="text"
+                        name="location"
+                        value={data.location}
+                        placeholder="Contoh: Desa Sukamaju RT 04 RW 01"
+                        onChange={(e) => setData("location", e.target.value)}
+                        error={serverErrors.location}
+                        required
+                    />
+                </div>
 
-                {/* Chairman */}
-                <Input
-                    label="Ketua TPK"
-                    type="text"
-                    name="chairman"
-                    value={data.chairman}
-                    placeholder="Contoh: John Doe"
-                    onChange={(e) => setData("chairman", e.target.value)}
-                    error={serverErrors.chairman}
-                    required
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    {/* Volume */}
+                    <CurrencyInput
+                        label="Volume"
+                        name="volume"
+                        value={data.volume}
+                        onChange={(value) => setData("volume", value)}
+                        error={serverErrors.volume}
+                        required
+                    />
+
+                    {/* unit */}
+                    <Select
+                        label="Satuan"
+                        value={data.unit}
+                        onChange={(value) => setData("unit", value)}
+                        error={serverErrors.unit}
+                        required
+                        options={(unitOptions ?? [])
+                            .filter((unit: any) => unit?.value)
+                        }
+                    />
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Budget Year */}
@@ -117,6 +136,18 @@ export const ModalProject = ({
                         ]}
                     />
                 </div>
+
+                {/* Chairman */}
+                <Input
+                    label="Ketua TPK"
+                    type="text"
+                    name="chairman"
+                    value={data.chairman}
+                    placeholder="Contoh: John Doe"
+                    onChange={(e) => setData("chairman", e.target.value)}
+                    error={serverErrors.chairman}
+                    required
+                />
             </Form>
         </Modal>
     )

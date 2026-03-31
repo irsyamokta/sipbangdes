@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Modules\Dashboard\Controllers\DashboardController;
 
 Route::get('/', function () {
     return auth()->check()
@@ -11,9 +11,7 @@ Route::get('/', function () {
         : Inertia::render('Auth/Login');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Modules/Dashboard');
-})->middleware(['auth', 'verified', 'permission:dashboard.view'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'permission:dashboard.view'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
 require __DIR__.'/modules/project.php';

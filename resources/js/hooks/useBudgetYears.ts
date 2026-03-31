@@ -1,9 +1,8 @@
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 
 interface UseBudgetYearsOptions {
     startYear?: number;
-    range?: number;
-    endYear?: number;
+    range?: number; // jumlah tahun ke depan
 }
 
 interface YearOption {
@@ -13,29 +12,29 @@ interface YearOption {
 
 export const useBudgetYears = ({
     startYear,
-    range = 10,
-    endYear,
+    range = 1, // default 1 tahun ke depan
 }: UseBudgetYearsOptions = {}): YearOption[] => {
-    return useMemo(() => {
-        const currentYear = new Date().getFullYear();
-        const from = startYear ?? currentYear;
+    const [years, setYears] = useState<YearOption[]>([]);
 
-        let to: number;
+    useEffect(() => {
+        const updateYears = () => {
+            const currentYear = new Date().getFullYear();
+            const from = startYear ?? currentYear;
+            const to = currentYear + range - 1; // selalu mengikuti tahun berjalan
 
-        if (endYear) {
-            to = endYear;
-        } else {
-            to = from + range - 1;
-        }
+            const options: YearOption[] = [];
+            for (let year = from; year <= to; year++) {
+                options.push({ value: year, label: String(year) });
+            }
+            setYears(options);
+        };
 
-        const length = to - from + 1;
+        updateYears();
 
-        return Array.from({ length }, (_, i) => {
-            const year = from + i;
-            return {
-                value: year,
-                label: String(year),
-            };
-        });
-    }, [startYear, range, endYear]);
+        const interval = setInterval(updateYears, 1000 * 60 * 60 * 24);
+
+        return () => clearInterval(interval);
+    }, [startYear, range]);
+
+    return years;
 };

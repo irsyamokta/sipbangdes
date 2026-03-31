@@ -12,6 +12,7 @@ import { EmptyTable } from "@/Components/empty/EmptyTable";
 
 import { formatCurrency } from "@/utils/formatCurrrency";
 import { formatDecimal } from "@/utils/formatDecimal";
+import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { LuWallet} from "react-icons/lu";
 
@@ -81,7 +82,7 @@ export const RecapWageTable = ({ wages }: RecapWagesTableProps) => {
                                     >
                                         {/* Nama */}
                                         <TableCell className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                                            {item.name}
+                                            {capitalizeEachWord(item.name)}
                                         </TableCell>
 
                                         {/* Satuan */}

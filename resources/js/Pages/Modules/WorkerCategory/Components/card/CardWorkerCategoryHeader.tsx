@@ -5,6 +5,8 @@ import { WorkerCategoryHeaderCardProps } from "@/types/workerCategory";
 import Button from "@/Components/ui/button/Button";
 import Badge from "@/Components/ui/badge/Badge";
 
+import { capitalizeEachWord, capitalizedFirst } from "@/utils/capitalize";
+
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 import { GoChevronRight } from "react-icons/go";
 
@@ -36,10 +38,10 @@ export const CardWorkerCategoryHeader = ({
 
                     <div className="min-w-0">
                         <div className="font-semibold text-gray-800 word-break-words">
-                            {workerCategory.name}
+                            {capitalizeEachWord(workerCategory.name)}
                         </div>
                         <div className="text-sm text-gray-500">
-                            {workerCategory.description}
+                            {capitalizedFirst(workerCategory.description)}
                         </div>
                     </div>
                 </div>

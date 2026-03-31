@@ -1,6 +1,7 @@
 import React from "react";
 import rabStatusMap from "@/config/RabStatusMap";
 import Badge from "@/Components/ui/badge/Badge";
+import { capitalizeEachWord } from "@/utils/capitalize";
 
 interface ProjectInfoCardProps {
     name: string;
@@ -29,7 +30,7 @@ const ProjectInfoCard: React.FC<ProjectInfoCardProps> = ({
                 {/* Nama Proyek */}
                 <div className="flex flex-col gap-1">
                     <p className="text-gray-600 text-sm">Nama Proyek</p>
-                    <p className="font-semibold text-gray-800">{name}</p>
+                    <p className="font-semibold text-gray-800">{capitalizeEachWord(name)}</p>
                 </div>
 
                 {/* Lokasi */}
@@ -41,7 +42,7 @@ const ProjectInfoCard: React.FC<ProjectInfoCardProps> = ({
                 {/* Ketua TPK */}
                 <div className="flex flex-col gap-1">
                     <p className="text-gray-600 text-sm">Ketua TPK</p>
-                    <p className="font-semibold text-gray-800">{leader}</p>
+                    <p className="font-semibold text-gray-800">{capitalizeEachWord(leader)}</p>
                 </div>
 
                 {/* Tahun */}

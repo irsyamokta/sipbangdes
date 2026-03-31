@@ -138,7 +138,7 @@
             <td>{{ config('app.domicile.village') }}</td>
             <td>Volume</td>
             <td>:</td>
-            <td>-</td>
+            <td>{{ $rab['project']->volume ?? '-' }} {{ $rab['project']->unit ?? '-' }}</td>
         </tr>
 
     </table>
@@ -162,10 +162,10 @@
             </tr>
 
             @php $subtotalMaterial = 0; @endphp
-            @foreach ($rab['recap_material'] as $item)
+            @foreach ($rab['recap_material'] as $index => $item)
                 @php $subtotalMaterial += $item['total']; @endphp
                 <tr>
-                    <td>{{ $item['name'] }}</td>
+                    <td style="padding-left: 20px;">1.{{ $index + 1 }} {{ $item['name'] }}</td>
                     <td class="text-right">{{ $item['quantity'] }}</td>
                     <td class="text-right">{{ $item['unit'] }}</td>
                     <td class="text-right">{{ number_format($item['price']) }}</td>
@@ -184,10 +184,10 @@
             </tr>
 
             @php $subtotalTool = 0; @endphp
-            @foreach ($rab['recap_tool'] as $item)
+            @foreach ($rab['recap_tool'] as $index => $item)
                 @php $subtotalTool += $item['total']; @endphp
                 <tr>
-                    <td>{{ $item['name'] }}</td>
+                    <td style="padding-left: 20px;">2.{{ $index + 1 }} {{ $item['name'] }}</td>
                     <td class="text-right">{{ $item['quantity'] }}</td>
                     <td class="text-right">{{ $item['unit'] }}</td>
                     <td class="text-right">{{ number_format($item['price']) }}</td>
@@ -206,10 +206,10 @@
             </tr>
 
             @php $subtotalWage = 0; @endphp
-            @foreach ($rab['recap_wage'] as $item)
+            @foreach ($rab['recap_wage'] as $index => $item)
                 @php $subtotalWage += $item['total']; @endphp
                 <tr>
-                    <td>{{ $item['name'] }}</td>
+                    <td style="padding-left: 20px;">3.{{ $index + 1 }} {{ $item['name'] }}</td>
                     <td class="text-right">{{ $item['quantity'] }}</td>
                     <td class="text-right">{{ $item['unit'] }}</td>
                     <td class="text-right">{{ number_format($item['price']) }}</td>
@@ -228,10 +228,10 @@
             </tr>
 
             @php $subtotalOperational = 0; @endphp
-            @foreach ($rab['operational'] as $item)
+            @foreach ($rab['operational'] as $index => $item)
                 @php $subtotalOperational += $item['total']; @endphp
                 <tr>
-                    <td>{{ $item['name'] }}</td>
+                    <td style="padding-left: 20px;">4.{{ $index + 1 }} {{ $item['name'] }}</td>
                     <td>{{ $item['volume'] }}</td>
                     <td>{{ $item['unit'] }}</td>
                     <td class="text-right">{{ number_format($item['unit_price']) }}</td>

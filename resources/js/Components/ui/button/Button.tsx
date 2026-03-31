@@ -5,7 +5,7 @@ interface ButtonProps {
     type?: "button" | "submit" | "reset";
     children?: ReactNode;
 
-    size?: "xs" | "sm" | "md" | "lg" | "icon";
+    size?: "none" | "xs" | "sm" | "md" | "lg" | "icon";
     variant?:
     | "primary"
     | "secondary"
@@ -33,6 +33,7 @@ const BASE_CLASSES =
     "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50";
 
 const SIZE_CLASSES: Record<NonNullable<ButtonProps["size"]>, string> = {
+    none: "",
     xs: "h-8 px-3 text-xs rounded-md",
     sm: "h-9 px-4 text-sm rounded-md",
     md: "h-10 px-5 text-sm rounded-lg",
