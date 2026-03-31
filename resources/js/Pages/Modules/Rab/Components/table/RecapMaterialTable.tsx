@@ -12,6 +12,7 @@ import { EmptyTable } from "@/Components/empty/EmptyTable";
 
 import { formatCurrency } from "@/utils/formatCurrrency";
 import { formatDecimal } from "@/utils/formatDecimal";
+import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { PiPackage } from "react-icons/pi";
 
@@ -81,7 +82,7 @@ export const RecapMaterialTable = ({ materials }: RecapMaterialTableProps) => {
                                     >
                                         {/* Nama */}
                                         <TableCell className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                                            {item.name}
+                                            {capitalizeEachWord(item.name)}
                                         </TableCell>
 
                                         {/* Satuan */}

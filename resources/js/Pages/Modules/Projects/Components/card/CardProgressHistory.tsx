@@ -12,6 +12,8 @@ import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-thumbnail.css";
 
+import { capitalizedFirst } from "@/utils/capitalize";
+
 import { IoCalendarOutline } from "react-icons/io5";
 import { RxImage } from "react-icons/rx";
 
@@ -61,7 +63,7 @@ export const CardProgressHistory = ({
 
                     {/* Description */}
                     <div className="flex items-center gap-2 text-sm text-gray-900">
-                        <p>{progress.description}</p>
+                        <p>{capitalizedFirst(progress.description)}</p>
                     </div>
 
                     {/* Documents */}

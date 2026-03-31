@@ -8,9 +8,10 @@ import EmptyState from "@/Components/empty/EmptyState";
 import Badge from "@/Components/ui/badge/Badge";
 import Button from "@/Components/ui/button/Button";
 
-import { LuMapPin, LuCalendar, LuUser, LuPencil, LuTrash2 } from "react-icons/lu";
-
 import { capitalizeEachWord } from "@/utils/capitalize";
+
+import { LuMapPin, LuCalendar, LuUser, LuPencil, LuTrash2 } from "react-icons/lu";
+import { VscSymbolField } from "react-icons/vsc";
 
 const badgeColor = (status: string) => {
     switch (status) {
@@ -82,6 +83,13 @@ export const CardProject = ({
                                     <LuCalendar size={16} />
                                     <span>
                                         Tahun Anggaran {project.budget_year}
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                    <VscSymbolField size={16} />
+                                    <span>
+                                        {project.volume} {project.unit}
                                     </span>
                                 </div>
 

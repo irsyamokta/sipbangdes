@@ -13,6 +13,8 @@ class ProjectStoreRequest extends FormRequest
             'location' => 'required|string|max:255',
             'chairman' => 'required|string|max:255',
             'budget_year' => 'required|numeric',
+            'volume' => 'required|numeric|min:0',
+            'unit' => 'required|string|max:50',
             'project_status' => 'required|string',
         ];
     }

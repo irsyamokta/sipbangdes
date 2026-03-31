@@ -17,14 +17,20 @@ import { CardProject } from "./Components/card/CardProject"
 import { LuPlus } from "react-icons/lu";
 
 export default function Projects() {
-    const { props: { projects, filters: filter } } = usePage<ProjectPageProps>();
+    const {
+        props: {
+            projects,
+            unitOptions,
+            filters: filter
+        }
+    } = usePage<ProjectPageProps>();
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     const canCreateProject = can("project.create");
-    const budgetYearOptions = useBudgetYears({ startYear: 2026 });
+    const budgetYearOptions = useBudgetYears({ startYear: 2025 });
 
     const { handleDelete } = useDelete({
         routeName: "project.destroy",
@@ -63,7 +69,8 @@ export default function Projects() {
                     setIsModalOpen(false);
                     setSelectedProject(null);
                 }}
-                project={selectedProject}
+                project={selectedProject || undefined}
+                unitOptions={unitOptions}
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">

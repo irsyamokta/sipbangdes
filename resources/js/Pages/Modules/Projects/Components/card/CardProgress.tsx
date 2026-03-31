@@ -1,5 +1,7 @@
 import { ProjectProgressCardProps } from "@/types/progress";
 
+import { capitalizeEachWord } from "@/utils/capitalize";
+
 import { IoIosTrendingUp } from "react-icons/io";
 
 export const CardProgress = ({
@@ -11,7 +13,7 @@ export const CardProgress = ({
             {/* Header */}
             <h1 className="flex items-center gap-2 text-xl md:text-2xl font-semibold">
                 <span><IoIosTrendingUp /></span>
-                {project.project_name}
+                {capitalizeEachWord(project.project_name)}
             </h1>
             <p className="text-sm sm:text-base text-gray-500 mt-1">
                 Progres pelaksanaan proyek saat ini

@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $location
  * @property string $chairman
  * @property int $budget_year
+ * @property int $volume
+ * @property string $unit
  * @property string $project_status
  * @property string $rab_status
  * @property \Carbon\Carbon|null $submitted_at
@@ -35,6 +37,8 @@ class Project extends Model
         'location',
         'chairman',
         'budget_year',
+        'volume',
+        'unit',
         'project_status',
         'rab_status',
         'submitted_at',

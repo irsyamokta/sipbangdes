@@ -1,5 +1,11 @@
 import { PageProps } from ".";
 
+interface SelectOption {
+    value: string;
+    label: string;
+    filter?: any;
+}
+
 interface Project {
     id: string;
     project_name: string;
@@ -8,6 +14,8 @@ interface Project {
     project_status: string;
     progress_percentage: number;
     budget_year: string;
+    volume: number;
+    unit: string;
     created_at?: string;
     updated_at?: string;
 };
@@ -15,7 +23,8 @@ interface Project {
 interface ModalProjectProps {
     isOpen: boolean;
     onClose: () => void;
-    project?: any;
+    project?: Project;
+    unitOptions: SelectOption[];
 };
 
 interface ProjectForm {
@@ -24,6 +33,8 @@ interface ProjectForm {
     chairman: string;
     project_status: string;
     budget_year: string;
+    volume: number;
+    unit: string;
 };
 
 interface ProjectCardProps {
@@ -37,6 +48,7 @@ interface ProjectCardProps {
 
 interface ProjectPageProps extends PageProps {
     projects: Project[];
+    unitOptions: SelectOption[];
     filters: {
         search: string;
         year: string;

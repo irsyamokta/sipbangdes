@@ -18,10 +18,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             UserSeeder::class,
-            UnitSeeder::class,
-            MaterialSeeder::class,
-            ToolSeeder::class,
-            WageSeeder::class
+            // UnitSeeder::class,
+            // MaterialSeeder::class,
+            // ToolSeeder::class,
+            // WageSeeder::class
         ]);
     }
 }

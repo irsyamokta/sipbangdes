@@ -17,6 +17,7 @@ import { ModalAhspMaterial } from "../modal/ModalMaterial";
 
 import { formatCurrency } from "@/utils/formatCurrrency";
 import { formatDecimal } from "@/utils/formatDecimal";
+import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { PiPackage } from "react-icons/pi";
 import { LuPlus, LuPencil, LuTrash2 } from "react-icons/lu";
@@ -129,7 +130,7 @@ export const MaterialTable = ({
                                         <TableRow className="hover:bg-gray-50 transition">
                                             {/* Name */}
                                             <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                                {item.master_material.name}
+                                                {capitalizeEachWord(item.master_material.name)}
                                             </TableCell>
 
                                             {/* Unit */}

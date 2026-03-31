@@ -1,6 +1,7 @@
 import { RabDetailHeaderProps } from "@/types/rab";
 
 import { formatCurrency } from "@/utils/formatCurrrency";
+import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { GoChevronRight } from "react-icons/go";
 
@@ -36,10 +37,10 @@ export const RabDetailCard = ({
                             <span className="font-normal text-blue-700">
                                 {work_code}
                             </span>{" "}
-                            {work_name}
+                            {capitalizeEachWord(work_name)}
                         </div>
                         <div className="text-sm text-gray-500">
-                            {category} | {volume} {unit}
+                            {capitalizeEachWord(category)} | {volume} {unit}
                         </div>
                     </div>
                 </div>

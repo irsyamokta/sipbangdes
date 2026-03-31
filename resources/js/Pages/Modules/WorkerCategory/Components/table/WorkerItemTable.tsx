@@ -15,6 +15,8 @@ import {
 } from "@/Components/ui/table";
 import { ModalWorkerItem } from "../modal/ModalWorkerItem";
 
+import { capitalizeEachWord } from "@/utils/capitalize";
+
 import { LuPlus, LuPencil, LuTrash2 } from "react-icons/lu";
 import { PiCalculatorLight } from "react-icons/pi";
 
@@ -99,7 +101,7 @@ export const WorkerItemTable = ({
                                         <TableRow className="hover:bg-gray-50 transition">
                                             {/* Worker Name */}
                                             <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                                {item.work_name}
+                                                {capitalizeEachWord(item.work_name)}
                                             </TableCell>
 
                                             {/* Unit */}
@@ -110,7 +112,7 @@ export const WorkerItemTable = ({
                                             {/* AHSP */}
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 <div className="flex justify-end items-center gap-2">
-                                                    <PiCalculatorLight size={20}/> {item.ahsp.work_code} - {item.ahsp.work_name}
+                                                    <PiCalculatorLight size={20}/> {item.ahsp.work_code} - {capitalizeEachWord(item.ahsp.work_name)}
                                                 </div>
                                             </TableCell>
 

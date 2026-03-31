@@ -5,6 +5,7 @@ import { AhspHeaderCardProps } from "@/types/ahsp";
 import Button from "@/Components/ui/button/Button";
 
 import { formatCurrency } from "@/utils/formatCurrrency";
+import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 import { GoChevronRight } from "react-icons/go";
@@ -41,7 +42,7 @@ export const CardAhspHeader = ({
                             <span className="font-normal text-blue-700">
                                 {ahsp.work_code}
                             </span>{" "}
-                            {ahsp.work_name}
+                            {capitalizeEachWord(ahsp.work_name)}
                         </div>
                         <div className="text-sm text-gray-500">
                             Satuan: {ahsp.unit}

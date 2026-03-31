@@ -18,7 +18,7 @@ import {
 } from "@/Components/ui/table";
 import Pagination from "@/Components/ui/pagination/Pagination";
 
-import { capitalizedFirst } from "@/utils/capitalize";
+import { capitalizedFirst, capitalizeEachWord } from "@/utils/capitalize";
 import { formatDateTime } from "@/utils/formatDate";
 
 import { LuTrash2, LuPencil } from "react-icons/lu";
@@ -137,9 +137,9 @@ export default function UsersTable({
                                         key={user.id}
                                         className="hover:bg-gray-50 transition"
                                     >
-                                        {/* Nama */}
+                                        {/* Name */}
                                         <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                            {user.name}
+                                            {capitalizeEachWord(user.name)}
                                         </TableCell>
 
                                         {/* Email */}
