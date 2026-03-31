@@ -56,6 +56,11 @@ class Project extends Model
         return $this->hasMany(TakeOffSheet::class, 'project_id');
     }
 
+    public function operationalCosts()
+    {
+        return $this->hasMany(OperationalCost::class, 'project_id');
+    }
+
     public function projectProgresses()
     {
         return $this->hasMany(ProjectProgress::class, 'project_id');

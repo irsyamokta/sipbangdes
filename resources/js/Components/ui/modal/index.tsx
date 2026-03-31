@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import Button from "@/Components/ui/button/Button";
 
@@ -38,6 +38,8 @@ export const Modal: React.FC<ModalProps> = ({
     hideCancel,
 }) => {
     const modalRef = useRef<HTMLDivElement>(null);
+    const [show, setShow] = useState(isOpen);
+    const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
@@ -56,18 +58,35 @@ export const Modal: React.FC<ModalProps> = ({
     }, [isOpen, onClose]);
 
     useEffect(() => {
+        let openTimer: NodeJS.Timeout;
+        let closeTimer: NodeJS.Timeout;
+
         if (isOpen) {
+            setShow(true);
+
+            openTimer = setTimeout(() => {
+                setAnimate(true);
+            }, 10);
+
             document.body.style.overflow = "hidden";
         } else {
+            setAnimate(false);
+
+            closeTimer = setTimeout(() => {
+                setShow(false);
+            }, 200);
+
             document.body.style.overflow = "unset";
         }
 
         return () => {
+            clearTimeout(openTimer);
+            clearTimeout(closeTimer);
             document.body.style.overflow = "unset";
         };
     }, [isOpen]);
 
-    if (!isOpen) return null;
+    if (!show) return null;
 
     const contentClasses = isFullscreen
         ? "w-full h-full"
@@ -77,13 +96,22 @@ export const Modal: React.FC<ModalProps> = ({
         <div className="fixed inset-0 flex items-center justify-center overflow-y-auto modal z-99999">
             {!isFullscreen && (
                 <div
-                    className="fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
+                    className={`fixed inset-0 bg-black/40 transition-opacity duration-200 ${animate ? "opacity-100" : "opacity-0"
+                        }`}
                     onClick={onClose}
-                ></div>
+                />
             )}
             <div
                 ref={modalRef}
-                className={`${contentClasses} ${className} flex flex-col max-h-[90vh]`}
+                className={`
+                    ${contentClasses} ${className}
+                    flex flex-col max-h-[90vh]
+                    transform transition-all duration-200 ease-out
+                    ${animate
+                        ? "opacity-100 scale-100 translate-y-0"
+                        : "opacity-0 scale-95 translate-y-4"
+                    }
+                `}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}

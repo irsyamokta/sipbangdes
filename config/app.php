@@ -123,4 +123,10 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'domicile' => [
+        'province' => env('APP_PROVINCE'),
+        'regency' => env('APP_REGENCY'),
+        'district' => env('APP_DISTRICT'),
+        'village' => env('APP_VILLAGE'),
+    ],
 ];

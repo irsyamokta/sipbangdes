@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property float $volume
  * @property float|null $locked_unit_price
  * @property \Carbon\Carbon|null $locked_at
+ * @property array|null $locked_snapshot
  * @property string|null $note
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -38,12 +39,14 @@ class TakeOffSheet extends Model
         'note',
         'locked_unit_price',
         'locked_at',
+        'locked_snapshot',
     ];
 
     protected $casts = [
         'volume' => 'float',
         'locked_unit_price' => 'float',
         'locked_at' => 'datetime',
+        'locked_snapshot' => 'array',
     ];
 
     public function project()
@@ -59,5 +62,15 @@ class TakeOffSheet extends Model
     public function workerCategory()
     {
         return $this->belongsTo(WorkerCategory::class, 'worker_category_id');
+    }
+
+    public function isLocked()
+    {
+        return !is_null($this->locked_at);
+    }
+
+    public function getUnitPriceAttribute()
+    {
+        return $this->locked_unit_price ?? $this->ahsp?->subtotal ?? 0;
     }
 }

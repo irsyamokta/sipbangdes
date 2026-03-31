@@ -86,7 +86,9 @@ export default function AHSP() {
 
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
+                    {/* Filter Bar */}
                     <FilterBar
+                        className="md:max-w-sm"
                         search={{
                             value: filters.search ?? "",
                             placeholder: "Cari satuan pekerjaan...",
@@ -94,6 +96,7 @@ export default function AHSP() {
                         }}
                     />
 
+                    {/* AHSP */}
                     <div className="flex flex-col gap-4">
                         {ahsp.length === 0 ? (
                             <div className="mt-4">
