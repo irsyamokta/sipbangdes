@@ -4,22 +4,25 @@ import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { IoIosTrendingUp } from "react-icons/io";
 
-export const CardProgress = ({
+const CardProgress = ({
     project,
     totalProgress
 }: ProjectProgressCardProps) => {
     return (
         <div className="rounded-2xl border border-gray-200 bg-white p-6 transition hover:shadow-md">
+
             {/* Header */}
             <h1 className="flex items-center gap-2 text-xl md:text-2xl font-semibold">
                 <span><IoIosTrendingUp /></span>
                 {capitalizeEachWord(project.project_name)}
             </h1>
+
+            {/* Description */}
             <p className="text-sm sm:text-base text-gray-500 mt-1">
                 Progres pelaksanaan proyek saat ini
             </p>
 
-            {/* Progress */}
+            {/* Progress Bar */}
             <div className="mt-6">
                 <div className="flex justify-between text-sm mb-1">
                     <span className="text-gray-500">Progres</span>
@@ -36,3 +39,5 @@ export const CardProgress = ({
         </div>
     )
 }
+
+export default CardProgress;

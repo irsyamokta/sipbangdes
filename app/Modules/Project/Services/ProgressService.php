@@ -2,16 +2,26 @@
 
 namespace App\Modules\Project\Services;
 
+use Throwable;
 use App\Modules\Project\Repositories\ProgressRepository;
 use Illuminate\Support\Facades\DB;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProgressService
 {
+    /**
+     * Inisialisasi service dengan dependency repository.
+     */
     public function __construct(
         protected ProgressRepository $repo
     ) {}
 
+    /**
+     * Mengambil detail project beserta total progress.
+     *
+     * Catatan:
+     * - Menggabungkan beberapa sumber data menjadi response siap pakai
+     */
     public function getDetail(string $projectId): array
     {
         $project = $this->repo->getProjectDetail($projectId);
@@ -23,6 +33,17 @@ class ProgressService
         ];
     }
 
+    /**
+     * Membuat progress baru beserta upload dokumen.
+     *
+     * Aturan:
+     * - Setiap file akan di-upload ke Cloudinary
+     * - Jika salah satu upload gagal, seluruh proses dibatalkan (rollback)
+     *
+     * Catatan:
+     * - Menggunakan transaction untuk menjaga konsistensi data
+     * - Manual rollback Cloudinary dilakukan untuk menghindari orphan file
+     */
     public function createWithDocuments(array $data, array $files = [])
     {
         return DB::transaction(function () use ($data, $files) {
@@ -49,7 +70,7 @@ class ProgressService
                         'public_id'   => $uploaded['public_id'],
                     ]);
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 foreach ($uploadedPublicIds as $publicId) {
                     Cloudinary::uploadApi()->destroy($publicId);
                 }

@@ -26,7 +26,7 @@ const badgeColor = (status: string) => {
     }
 };
 
-export const CardProject = ({
+const CardProject = ({
     projects,
     deletingId,
     onEdit,
@@ -62,10 +62,13 @@ export const CardProject = ({
                     >
                         <div>
                             <div className="flex items-center gap-3">
+
+                                {/* Project Name */}
                                 <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">
                                     {capitalizeEachWord(project.project_name)}
                                 </h3>
 
+                                {/* Project Status */}
                                 <Badge
                                     color={badgeColor(project.project_status)}
                                 >
@@ -74,11 +77,14 @@ export const CardProject = ({
                             </div>
 
                             <div className="mt-3 space-y-1 text-sm text-gray-500">
-                                <div className="flex items-center gap-2">
+
+                                {/* Project Location */}
+                                <div className="flex items-center gap-2 uppercase">
                                     <LuMapPin size={16} />
                                     <span>{project.location}</span>
                                 </div>
 
+                                {/* Project Details */}
                                 <div className="flex items-center gap-2">
                                     <LuCalendar size={16} />
                                     <span>
@@ -86,6 +92,7 @@ export const CardProject = ({
                                     </span>
                                 </div>
 
+                                {/* Project Volume */}
                                 <div className="flex items-center gap-2">
                                     <VscSymbolField size={16} />
                                     <span>
@@ -93,6 +100,7 @@ export const CardProject = ({
                                     </span>
                                 </div>
 
+                                {/* Project Chairman */}
                                 <div className="flex items-center gap-2">
                                     <LuUser size={16} />
                                     <span>{capitalizeEachWord(project.chairman)}</span>
@@ -102,6 +110,8 @@ export const CardProject = ({
 
                         {/* Actions */}
                         <div className="flex -mt-1 justify-center">
+
+                            {/* Edit */}
                             {can("project.edit") && (
                                 <Button
                                     size="icon"
@@ -115,6 +125,7 @@ export const CardProject = ({
                                 </Button>
                             )}
 
+                            {/* Delete */}
                             {can("project.delete") && (
                                 <Button
                                     size="icon"
@@ -137,6 +148,8 @@ export const CardProject = ({
 
                     {/* Progress */}
                     <div className="mt-6" >
+
+                        {/* Progress Percentage */}
                         <div className="mb-1 flex items-center justify-between text-sm text-gray-600">
                             <span>Progres</span>
                             <span>{project.progress_percentage}%</span>
@@ -172,3 +185,5 @@ export const CardProject = ({
         </div >
     );
 };
+
+export default CardProject;

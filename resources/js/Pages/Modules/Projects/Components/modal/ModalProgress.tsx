@@ -8,7 +8,7 @@ import TextArea from '@/Components/form/input/TextArea';
 import Select from '@/Components/form/input/Select';
 import FileInput from '@/Components/form/input/FileInput';
 
-export const ModalProgress = ({
+const ModalProgress = ({
     isOpen,
     onClose,
     project,
@@ -19,8 +19,6 @@ export const ModalProgress = ({
         label: `${value}%`,
         disabled: value <= totalProgress,
     }));
-
-    console.log(totalProgress);
 
     const {
         data,
@@ -78,7 +76,7 @@ export const ModalProgress = ({
                     required
                 />
 
-                {/* Documents */}
+                {/* Images */}
                 <FileInput
                     label="Dokumentasi (Foto/Gambar)"
                     variant="card"
@@ -95,3 +93,5 @@ export const ModalProgress = ({
         </Modal>
     )
 }
+
+export default ModalProgress;

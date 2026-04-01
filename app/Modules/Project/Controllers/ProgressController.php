@@ -15,6 +15,12 @@ class ProgressController extends Controller
         protected ProgressService $service
     ) {}
 
+    /**
+     * Menampilkan halaman detail progress project.
+     *
+     * Catatan:
+     * - Redirect ke halaman index jika project tidak ditemukan
+     */
     public function show(string $id)
     {
         try {
@@ -31,6 +37,14 @@ class ProgressController extends Controller
         }
     }
 
+    /**
+     * Menyimpan progress baru beserta dokumen.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - User login digunakan sebagai 'reported_by'
+     * - Error bisnis dan sistem dipisahkan
+     */
     public function storeProgress(ProgressStoreRequest $request, string $id)
     {
         try {
@@ -42,7 +56,7 @@ class ProgressController extends Controller
                 ],
                 files: $request->file('documents', [])
             );
-            
+
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([

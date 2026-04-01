@@ -9,19 +9,24 @@ import { ProjectProgressPageProps } from "@/types/progress"
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import PageBreadcrumb from "@/Components/ui/breadcrumb/Breadcrumb";
 import Button from "@/Components/ui/button/Button";
-import { ModalProgress } from "./Components/modal/ModalProgress";
-import { CardProgress } from "./Components/card/CardProgress";
-import { CardProgressHistory } from "./Components/card/CardProgressHistory";
+import ModalProgress from "./Components/modal/ModalProgress";
+import CardProgress from "./Components/card/CardProgress";
+import CardProgressHistory from "./Components/card/CardProgressHistory";
 
 import { LuPlus } from "react-icons/lu";
 
 export default function Progress() {
-    const { project, totalProgress } = usePage<ProjectProgressPageProps>().props;
+    const {
+        props: {
+            project,
+            totalProgress
+        }
+    } = usePage<ProjectProgressPageProps>();
+
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const canCreateProgress = can("progress.create");
     const isRunning = project.project_status === "berjalan";
     const isFinished = totalProgress === 100;
 
@@ -29,6 +34,7 @@ export default function Progress() {
         <DashboardLayout>
             <Head title={project.project_name} />
 
+            {/* Modal */}
             <ModalProgress
                 isOpen={isModalOpen}
                 onClose={() => {
@@ -39,6 +45,7 @@ export default function Progress() {
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">
+
                 {/* Header */}
                 <div className="col-span-12 flex flex-col sm:flex-row justify-between gap-6">
                     <PageBreadcrumb
@@ -49,7 +56,7 @@ export default function Progress() {
                         ]}
                     />
 
-                    {canCreateProgress && isRunning && !isFinished && (
+                    {can("progress.create") && isRunning && !isFinished && (
                         <Button
                             startIcon={<LuPlus />}
                             className="lg:py-6"

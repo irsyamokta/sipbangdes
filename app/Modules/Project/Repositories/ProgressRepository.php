@@ -7,7 +7,15 @@ use App\Models\ProjectProgress;
 
 class ProgressRepository
 {
-    public function getProjectDetail(string $projectId): Project
+    /**
+     * Mengambil detail project beserta seluruh histori progress.
+     *
+     * Catatan:
+     * - Progress diurutkan dari terbaru
+     * - Relasi 'reportedBy' dan 'documents' di-load untuk kebutuhan tampilan detail
+     * - Menggunakan findOrFail untuk memastikan data selalu ada
+     */
+    public function getProjectDetail(string $projectId)
     {
         return Project::with([
             'projectProgresses' => function ($query) {
@@ -18,14 +26,27 @@ class ProgressRepository
         ])->findOrFail($projectId);
     }
 
-    public function getTotalProgress(string $projectId): float
+    /**
+     * Mengambil nilai progress terakhir dari project.
+     *
+     * Aturan:
+     * - Progress terbaru dianggap sebagai total progress saat ini
+     * - Jika belum ada progress, default = 0
+     */
+    public function getTotalProgress(string $projectId)
     {
         return ProjectProgress::where('project_id', $projectId)
             ->latest()
             ->value('percentage') ?? 0;
     }
 
-    public function createProgress(array $data): ProjectProgress
+    /**
+     * Menyimpan data progress baru.
+     *
+     * Catatan:
+     * - Tidak menangani relasi dokumen (ditangani di service layer)
+     */
+    public function createProgress(array $data)
     {
         return ProjectProgress::create($data);
     }

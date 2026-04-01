@@ -30,9 +30,10 @@ const percentageBadgeColor = (percentage: number) => {
     }
 };
 
-export const CardProgressHistory = ({
+const CardProgressHistory = ({
     projectProgresses,
 }: ProjectProgressCardHistoryProps) => {
+
     {/* Empty state */}
     if (!projectProgresses.length) {
         return (
@@ -44,10 +45,13 @@ export const CardProgressHistory = ({
 
     return (
         <div className="space-y-4">
+
             {/* Progress History */}
             <h1 className="font-semibold">Riwayat Progres</h1>
+
             {projectProgresses.map((progress) => (
                 <div key={progress.id} className="space-y-4 rounded-2xl border border-gray-200 bg-white p-6 transition hover:shadow-md">
+
                     {/* Header */}
                     <div className="flex items-center gap-2 border-b-2 border-gray-300 pb-4">
                         <Badge
@@ -66,12 +70,16 @@ export const CardProgressHistory = ({
                         <p>{capitalizedFirst(progress.description)}</p>
                     </div>
 
-                    {/* Documents */}
+                    {/* Images */}
                     <div className="flex flex-col gap-2 text-sm text-gray-900">
+
+                        {/* Total */}
                         <div className="flex items-center gap-2">
                             <span><RxImage /></span>
                             <span>Dokuemntasi {`(${progress.documents.length} file)`}</span>
                         </div>
+
+                        {/* Slider */}
                         <div className="mt-2">
                             <LightGallery
                                 speed={500}
@@ -99,3 +107,5 @@ export const CardProgressHistory = ({
         </div>
     )
 }
+
+export default CardProgressHistory;

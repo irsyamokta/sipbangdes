@@ -13,8 +13,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'permission:dashboard.view'])->name('dashboard');
 
-require __DIR__ . '/auth.php';
-require __DIR__.'/modules/project.php';
+require __DIR__.'/auth.php';
+require __DIR__.'/project.php';
 require __DIR__.'/modules/tos.php';
 require __DIR__.'/modules/rab.php';
 require __DIR__.'/modules/masterdata.php';

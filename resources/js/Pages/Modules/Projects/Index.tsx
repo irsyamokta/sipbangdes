@@ -11,8 +11,8 @@ import { Project, ProjectPageProps } from "@/types/project";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import HeaderTitle from "@/Components/HeaderTitle";
 import FilterBar from "@/Components/filter/FilterBar";
-import { ModalProject } from "./Components/modal/ModalProject";
-import { CardProject } from "./Components/card/CardProject"
+import ModalProject from "./Components/modal/ModalProject";
+import CardProject from "./Components/card/CardProject"
 
 import { LuPlus } from "react-icons/lu";
 
@@ -24,6 +24,7 @@ export default function Projects() {
             filters: filter
         }
     } = usePage<ProjectPageProps>();
+    
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,13 +40,13 @@ export default function Projects() {
         errorMessage: "Gagal menghapus proyek",
     });
 
-    const handleTosClick = (project: any) => {
+    const handleTosClick = (project: Project) => {
         router.get(route("tos.index"), {
             project_id: project.id,
         });
     };
 
-    const handleRabClick = (project: any) => {
+    const handleRabClick = (project: Project) => {
         router.get(route("rab.index"), {
             project_id: project.id,
         });
@@ -63,6 +64,7 @@ export default function Projects() {
         <DashboardLayout>
             <Head title="Proyek" />
 
+            {/* Modal */}
             <ModalProject
                 isOpen={isModalOpen}
                 onClose={() => {
@@ -74,8 +76,9 @@ export default function Projects() {
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">
+
                 {/* Header */}
-                <div className="col-span-12 space-y-6">
+                <div className="col-span-12">
                     <HeaderTitle
                         title="Daftar Proyek"
                         subtitle="Kelola proyek pembangunan desa"
@@ -87,6 +90,7 @@ export default function Projects() {
 
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
+
                     {/* Filter Bar */}
                     <FilterBar
                         select={{

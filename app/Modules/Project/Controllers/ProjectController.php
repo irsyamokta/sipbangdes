@@ -19,13 +19,17 @@ class ProjectController extends Controller
         protected UnitService $unitService
     ) {}
 
+    /**
+     * Menampilkan halaman daftar project.
+     *
+     * Catatan:
+     * - Data difilter berdasarkan query param (search, year)
+     * - Unit di-transform menjadi format select option untuk frontend
+     */
     public function index(Request $request)
     {
         $projects = $this->service->getProjects($request->search, $request->year);
-        $units = $this->unitService->getUnits(
-            null,
-            false
-        );
+        $units = $this->unitService->getUnits(null, false);
 
         return Inertia::render('Modules/Projects/Index', [
             'projects' => $projects,
@@ -37,6 +41,13 @@ class ProjectController extends Controller
         ]);
     }
 
+    /**
+     * Menyimpan project baru.
+     *
+     * Catatan:
+     * - Validasi input dilakukan di FormRequest
+     * - DomainException digunakan untuk error bisnis (misal duplikasi)
+     */
     public function store(ProjectStoreRequest $request)
     {
         try {
@@ -45,7 +56,7 @@ class ProjectController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                $e->getMessage()
+                'project_name' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
@@ -54,6 +65,12 @@ class ProjectController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data project.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan untuk kontrol pesan
+     */
     public function update(ProjectUpdateRequest $request, $id)
     {
         try {
@@ -62,7 +79,7 @@ class ProjectController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                $e->getMessage()
+                'project_name' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
@@ -71,6 +88,9 @@ class ProjectController extends Controller
         }
     }
 
+    /**
+     * Menghapus project.
+     */
     public function destroy($id)
     {
         try {

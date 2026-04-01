@@ -10,7 +10,7 @@ import Input from '@/Components/form/input/InputField';
 import Select from '@/Components/form/input/Select';
 import CurrencyInput from '@/Components/form/input/CurrencyInput';
 
-export const ModalProject = ({
+const ModalProject = ({
     isOpen,
     onClose,
     project,
@@ -38,6 +38,7 @@ export const ModalProject = ({
         editData: project,
         editId: project?.id,
         successMessage: "Proyek berhasil disimpan",
+        updateMessage: "Proyek berhasil diperbarui",
         storeRoute: "project.store",
         updateRoute: "project.update",
     });
@@ -61,6 +62,7 @@ export const ModalProject = ({
                 preventEnterSubmit
             >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
                     {/* Project Name */}
                     <Input
                         label="Nama Proyek"
@@ -112,6 +114,7 @@ export const ModalProject = ({
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
                     {/* Budget Year */}
                     <Select
                         label="Tahun Anggaran"
@@ -153,4 +156,4 @@ export const ModalProject = ({
     )
 }
 
-
+export default ModalProject;
