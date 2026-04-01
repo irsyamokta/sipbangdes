@@ -9,7 +9,10 @@ type CrudFormOptions<T> = {
     initialValues: T;
     editData?: Partial<T> | null;
     editId?: string | number | null;
+
     successMessage?: string;
+    updateMessage?: string;
+
     errorMessage?: string;
     storeRoute: string;
     storeParams?: any;
@@ -24,6 +27,7 @@ export function useModalForm<T extends Record<string, any>>({
     editData,
     editId,
     successMessage = "Berhasil disimpan",
+    updateMessage = "Berhasil memperbarui data",
     errorMessage = "Gagal menyimpan data",
     storeRoute,
     storeParams,
@@ -96,7 +100,9 @@ export function useModalForm<T extends Record<string, any>>({
         const config = {
             onSuccess: () => {
                 onClose();
-                toast.success(successMessage);
+                toast.success(
+                    isEditing ? updateMessage : successMessage
+                );
             },
             onError: (errors: any) => {
                 setServerErrors(errors);
