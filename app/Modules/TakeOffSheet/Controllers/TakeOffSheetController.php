@@ -7,6 +7,7 @@ use DomainException;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\WorkerItem;
 use App\Modules\Project\Services\ProjectService;
 use App\Modules\WorkerCategory\Services\WorkerCategoryService;
 use App\Modules\Ahsp\Services\AhspService;
@@ -18,16 +19,23 @@ use App\Modules\TakeOffSheet\Requests\TakeOffSheetUpdateRequest;
 class TakeOffSheetController extends Controller
 {
     public function __construct(
-        protected TakeOffSheetService $service,
+        protected TakeOffSheetService $takeOffSheetService,
         protected ProjectService $projectService,
         protected WorkerCategoryService $workerCategoryService,
         protected AhspService $ahspService,
         protected UnitService $unitService
     ) {}
 
+    /**
+     * Menampilkan halaman daftar TOS.
+     *
+     * Catatan:
+     * - AHSP diambil melalui WorkerItem untuk mendapatkan relasi kategori
+     * - Data disiapkan dalam format select option untuk frontend
+     */
     public function index(Request $request)
     {
-        $data = $this->service->getTakeOffSheets(
+        $data = $this->takeOffSheetService->getTakeOffSheets(
             $request->search,
             $request->project_id
         );
@@ -45,10 +53,13 @@ class TakeOffSheetController extends Controller
                 'label' => $workerCategory->name
             ]),
 
-            'ahspOptions' => $this->ahspService->getAhsp(null)->map(fn($ahsp) => [
-                'value' => $ahsp->id,
-                'label' => $ahsp->work_name
-            ]),
+            'ahspOptions' => WorkerItem::with('ahsp')
+                ->get()
+                ->map(fn($item) => [
+                    'value' => $item->ahsp_id,
+                    'label' => $item->ahsp->work_name,
+                    'category_id' => $item->category_id
+                ]),
 
             'unitOptions' => $this->unitService->getUnits(
                 null,
@@ -66,10 +77,17 @@ class TakeOffSheetController extends Controller
         ]);
     }
 
+    /**
+     * Menyimpan data TOS baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException digunakan untuk error bisnis (misal duplikasi)
+     */
     public function store(TakeOffSheetStoreRequest $request)
     {
         try {
-            $this->service->create($request->validated());
+            $this->takeOffSheetService->create($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -83,10 +101,16 @@ class TakeOffSheetController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data TOS.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan untuk kontrol pesan
+     */
     public function update(TakeOffSheetUpdateRequest $request, $id)
     {
         try {
-            $this->service->update($id, $request->validated());
+            $this->takeOffSheetService->update($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -100,10 +124,13 @@ class TakeOffSheetController extends Controller
         }
     }
 
+    /**
+     * Menghapus project.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->delete($id);
+            $this->takeOffSheetService->delete($id);
 
             return back();
         } catch (DomainException $e) {

@@ -9,8 +9,8 @@ import { TakeOffSheet, TakeOffSheetPageProps } from "@/types/tos";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import HeaderTitle from "@/Components/HeaderTitle";
 import FilterBar from "@/Components/filter/FilterBar";
-import { ModalTakeOffSheet } from './Components/modal/ModalTakeOffSheet';
-import { TakeOffSheetTable } from './Components/table/TakeOffSheetTable';
+import TakeOffSheetModal from './Components/modal/TakeOffSheetModal';
+import TakeOffSheetTable from './Components/table/TakeOffSheetTable';
 
 import { LuPlus } from "react-icons/lu";
 
@@ -26,7 +26,7 @@ export default function TOS() {
             filters: filter
         }
     } = usePage<TakeOffSheetPageProps>();
-
+    
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,7 +51,8 @@ export default function TOS() {
         <DashboardLayout>
             <Head title="Take off Sheet" />
 
-            <ModalTakeOffSheet
+            {/* Modal */}
+            <TakeOffSheetModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
@@ -65,8 +66,9 @@ export default function TOS() {
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">
+
                 {/* Header */}
-                <div className="col-span-12 space-y-6">
+                <div className="col-span-12">
                     <HeaderTitle
                         title="Take Off Sheet"
                         subtitle="Pengukuran volume pekerjaan per proyek"
@@ -78,6 +80,7 @@ export default function TOS() {
 
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
+
                     {/* Filter Bar */}
                     <FilterBar
                         select={{

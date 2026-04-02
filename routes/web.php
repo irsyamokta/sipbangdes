@@ -15,7 +15,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 
 require __DIR__.'/auth.php';
 require __DIR__.'/project.php';
-require __DIR__.'/modules/tos.php';
+require __DIR__.'/tos.php';
 require __DIR__.'/modules/rab.php';
 require __DIR__.'/modules/masterdata.php';
 require __DIR__.'/modules/user.php';

@@ -3,6 +3,7 @@ import { PageProps } from ".";
 interface SelectOption {
     value: string;
     label: string;
+    category_id?: string;
 }
 
 interface Project {

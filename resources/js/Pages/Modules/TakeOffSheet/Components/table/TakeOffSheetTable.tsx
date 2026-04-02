@@ -13,7 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { ModalTakeOffSheet } from "../modal/ModalTakeOffSheet";
+import TakeOffSheetModal from "../modal/TakeOffSheetModal";
 import { EmptyTable } from "@/Components/empty/EmptyTable";
 import Pagination from "@/Components/ui/pagination/Pagination";
 
@@ -23,7 +23,7 @@ import { capitalizeEachWord } from "@/utils/capitalize";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 import { PiCalculatorLight } from "react-icons/pi";
 
-export const TakeOffSheetTable = ({
+const TakeOffSheetTable = ({
     takeOffSheets,
     projectOptions,
     workerCategoryOptions,
@@ -41,13 +41,13 @@ export const TakeOffSheetTable = ({
         routeName: "tos.destroy",
         confirmTitle: "Hapus Item TOS?",
         successMessage: "TOS berhasil dihapus",
-        errorMessage: "Gagal menghapus TOS",
+        errorMessage: "Proyek sudah disetujui",
     });
 
     return (
         <div className="flex flex-col gap-4 py-2 mt-4">
             {/* Modal */}
-            <ModalTakeOffSheet
+            <TakeOffSheetModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
@@ -192,3 +192,5 @@ export const TakeOffSheetTable = ({
         </div>
     );
 };
+
+export default TakeOffSheetTable;

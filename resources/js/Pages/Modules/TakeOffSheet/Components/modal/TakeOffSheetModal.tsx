@@ -9,7 +9,7 @@ import CurrencyInput from '@/Components/form/input/CurrencyInput';
 import Select from '@/Components/form/input/Select';
 import TextArea from '@/Components/form/input/TextArea';
 
-export const ModalTakeOffSheet = ({
+const TakeOffSheetModal = ({
     isOpen,
     onClose,
     takeOffSheet,
@@ -40,9 +40,15 @@ export const ModalTakeOffSheet = ({
         editData: takeOffSheet,
         editId: takeOffSheet?.id,
         successMessage: "Take Off Sheet berhasil disimpan",
+        updateMessage: "Take Off Sheet berhasil diperbarui",
+        errorMessage: "Proyek sudah disetujui",
         storeRoute: "tos.store",
         updateRoute: "tos.update",
     });
+
+    const filteredAhspOptions = ahspOptions?.filter(
+        (ahsp) => ahsp.category_id === data.worker_category_id
+    );
 
     return (
         <Modal
@@ -60,6 +66,7 @@ export const ModalTakeOffSheet = ({
                 className="flex flex-col gap-4 p-4 md:p-6"
                 preventEnterSubmit
             >
+
                 {/* Project */}
                 <Select
                     label="Proyek"
@@ -88,7 +95,7 @@ export const ModalTakeOffSheet = ({
                         placeholder="Pilih AHSP"
                         value={data.ahsp_id}
                         onChange={(value) => setData("ahsp_id", value)}
-                        options={ahspOptions ?? []}
+                        options={filteredAhspOptions ?? []}
                         error={serverErrors.ahsp_id}
                         required
                     />
@@ -138,3 +145,5 @@ export const ModalTakeOffSheet = ({
         </Modal>
     )
 }
+
+export default TakeOffSheetModal;

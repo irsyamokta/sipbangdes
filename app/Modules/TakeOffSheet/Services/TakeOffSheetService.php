@@ -8,54 +8,96 @@ use App\Modules\TakeOffSheet\Repositories\TakeOffSheetRepository;
 
 class TakeOffSheetService
 {
+    /**
+     * Inisialisasi service dengan dependency repository.
+     */
     public function __construct(
-        protected TakeOffSheetRepository $repo
+        protected TakeOffSheetRepository $takeOffSheetRepository
     ) {}
 
+    /**
+     * Mengambil data TOS dengan filter opsional.
+     */
     public function getTakeOffSheets(?string $search = null, ?string $projectId = null)
     {
-        return $this->repo->getPaginated($search, $projectId);
+        return $this->takeOffSheetRepository->getPaginated($search, $projectId);
     }
 
+    /**
+     * Membuat data TOS baru.
+     *
+     * Aturan bisnis:
+     * - Tidak boleh menambah TOS jika project sudah approved
+     * - Nama pekerjaan harus unik
+     */
     public function create(array $data)
     {
         return DB::transaction(function () use ($data) {
 
-            if ($this->repo->existsByNameExcept(
+            $status = $this->takeOffSheetRepository->getProjectStatus($data['project_id']);
+            if ($status === 'approved') {
+                throw new DomainException('Project sudah disetujui, tidak dapat menambahkan TOS');
+            }
+
+            if ($this->takeOffSheetRepository->existsByNameExcept(
                 null,
                 $data['work_name'],
                 $data['project_id'],
                 $data['worker_category_id']
             )) {
-                throw new DomainException('Nama pekerjaan sudah digunakan pada proyek & kategori ini');
+                throw new DomainException('Nama pekerjaan sudah digunakan pada proyek & kategori ini.');
             }
 
-            return $this->repo->create($data);
+            return $this->takeOffSheetRepository->create($data);
         });
     }
 
+    /**
+     * Memperbarui data TOS.
+     *
+     * Aturan bisnis:
+     * - Tidak boleh mengubah TOS jika project sudah approved
+     * - Validasi duplikasi tetap berlaku
+     */
     public function update(string $id, array $data)
     {
-        $tos = $this->repo->find($id);
+        $tos = $this->takeOffSheetRepository->find($id);
 
-        if ($this->repo->existsByNameExcept(
+        $status = $this->takeOffSheetRepository->getProjectStatus($data['project_id']);
+        if ($status === 'approved') {
+            throw new DomainException('Project sudah disetujui, tidak dapat mengubah TOS');
+        }
+
+        if ($this->takeOffSheetRepository->existsByNameExcept(
             $id,
             $data['work_name'],
             $data['project_id'],
             $data['worker_category_id']
         )) {
-            throw new DomainException('Nama pekerjaan sudah digunakan pada proyek & kategori ini');
+            throw new DomainException('Nama pekerjaan sudah digunakan pada proyek & kategori ini.');
         }
-        
+
         return DB::transaction(function () use ($tos, $data) {
-            return $this->repo->update($tos, $data);
+            return $this->takeOffSheetRepository->update($tos, $data);
         });
     }
 
+    /**
+     * Menghapus data TOS.
+     *
+     * Catatan:
+     * - Tidak boleh menghapus TOS jika project sudah approved
+     */
     public function delete(string $id)
     {
-        $tos = $this->repo->find($id);
+        $tos = $this->takeOffSheetRepository->find($id);
 
-        return $this->repo->delete($tos);
+        $status = $this->takeOffSheetRepository->getProjectStatus($tos->project_id);
+
+        if ($status === 'approved') {
+            throw new DomainException('Project sudah disetujui, tidak dapat menghapus TOS');
+        }
+
+        return $this->takeOffSheetRepository->delete($tos);
     }
 }
