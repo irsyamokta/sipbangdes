@@ -23,6 +23,15 @@ class AhspRepository
             ->get();
     }
 
+    public function getByCategory(?string $categoryId = null)
+    {
+        return Ahsp::query()
+            ->when($categoryId, function ($query) use ($categoryId) {
+                $query->where('worker_category_id', $categoryId);
+            })
+            ->get();
+    }
+
     public function find($id)
     {
         return Ahsp::findOrFail($id);

@@ -8,17 +8,25 @@ use App\Modules\Ahsp\Repositories\AhspRepository;
 use App\Services\CodeGeneratorService;
 use Illuminate\Support\Facades\DB;
 
-class AhspService {
+class AhspService
+{
     public function __construct(
         private AhspRepository $repo,
         private CodeGeneratorService $codeGeneratorService
     ) {}
 
-    public function getAhsp(?string $search) {
+    public function getAhsp(?string $search)
+    {
         return $this->repo->getAll($search);
     }
 
-    public function createAhsp(array $data){
+    public function getByCategory(?string $categoryId)
+    {
+        return $this->repo->getByCategory($categoryId);
+    }
+
+    public function createAhsp(array $data)
+    {
         if ($this->repo->existsByName($data['work_name']))
             throw new DomainException('Nama pekerjaan sudah ada');
 
@@ -33,7 +41,8 @@ class AhspService {
         });
     }
 
-    public function updateAhsp($id, array $data){
+    public function updateAhsp($id, array $data)
+    {
         $ahsp = $this->repo->find($id);
 
         if ($this->repo->existsByNameExcept($id, $data['work_name']))
@@ -42,7 +51,8 @@ class AhspService {
         $ahsp->update($data);
     }
 
-    public function deleteAhsp($id){
+    public function deleteAhsp($id)
+    {
         $ahsp = $this->repo->find($id);
 
         $ahsp->delete();
