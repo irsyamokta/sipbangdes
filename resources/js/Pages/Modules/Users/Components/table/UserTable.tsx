@@ -1,13 +1,9 @@
-import { usePage } from "@inertiajs/react";
-
 import { useDelete } from "@/hooks/useDelete";
-import { useSearch } from "@/hooks/useSearch";
 
-import { UserPageProps, UsersTableProps } from "@/types/user";
+import { UsersTableProps } from "@/types/user";
 
 import { EmptyTable } from "@/Components/empty/EmptyTable";
 import Button from "@/Components/ui/button/Button";
-import Input from "@/Components/form/input/InputField";
 import Badge from "@/Components/ui/badge/Badge";
 import {
     Table,
@@ -22,8 +18,6 @@ import { capitalizedFirst, capitalizeEachWord } from "@/utils/capitalize";
 import { formatDateTime } from "@/utils/formatDate";
 
 import { LuTrash2, LuPencil } from "react-icons/lu";
-import { FiSearch } from "react-icons/fi";
-
 
 const roleBadgeColor = (role: string) => {
     switch (role) {
@@ -40,14 +34,13 @@ const roleBadgeColor = (role: string) => {
     }
 };
 
-export default function UsersTable({
+const UserTable = ({
     users,
     last_page,
     links,
-    onEdit
-}: UsersTableProps) {
-    const { props } = usePage<UserPageProps>();
-
+    onEdit,
+    filters
+}: UsersTableProps) => {
     const { handleDelete, deletingId } = useDelete({
         routeName: "user.destroy",
         confirmTitle: "Hapus Pengguna?",
@@ -55,27 +48,8 @@ export default function UsersTable({
         errorMessage: "Gagal menghapus pengguna",
     });
 
-    const { filters, setFilter } = useSearch({
-        routeName: "user.index",
-        initialFilters: {
-            search: props.filters.search ?? "",
-        }
-    })
-
     return (
         <div className="flex flex-col gap-4 mt-4">
-            {/* Search */}
-            <div className="flex items-center gap-2 w-full sm:w-1/3">
-                <Input
-                    type="text"
-                    startIcon={<FiSearch />}
-                    placeholder="Cari berdasarkan nama atau email..."
-                    value={filters.search}
-                    onChange={(e) => setFilter("search", (e.target.value))}
-                    className="w-full rounded-lg border-gray-300 text-sm"
-                />
-            </div>
-
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
                 {/* Table */}
                 <div className="max-w-full overflow-x-auto">
@@ -177,6 +151,7 @@ export default function UsersTable({
                                         {/* Actions */}
                                         <TableCell className="px-6 py-4">
                                             <div className="flex justify-center gap-1">
+
                                                 {/* Edit */}
                                                 <Button
                                                     size="icon"
@@ -223,3 +198,5 @@ export default function UsersTable({
         </div>
     );
 }
+
+export default UserTable;

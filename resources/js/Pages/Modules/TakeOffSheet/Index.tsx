@@ -26,13 +26,11 @@ export default function TOS() {
             filters: filter
         }
     } = usePage<TakeOffSheetPageProps>();
-    
+
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTakeOffSheet, setSelectedTakeOffSheet] = useState<TakeOffSheet | null>(null);
-
-    const canCreate = can('tos.create');
 
     const { filters, setFilter } = useSearch({
         routeName: "tos.index",
@@ -72,8 +70,8 @@ export default function TOS() {
                     <HeaderTitle
                         title="Take Off Sheet"
                         subtitle="Pengukuran volume pekerjaan per proyek"
-                        actionLabel={canCreate ? "Tambah TOS" : undefined}
-                        actionIcon={canCreate ? <LuPlus /> : undefined}
+                        actionLabel={can("tos.create") ? "Tambah TOS" : undefined}
+                        actionIcon={can("tos.create") ? <LuPlus /> : undefined}
                         onActionClick={() => setIsModalOpen(true)}
                     />
                 </div>
@@ -96,7 +94,7 @@ export default function TOS() {
                         }}
                     />
 
-                    {/* Table */}
+                    {/* Take Off Sheet Table */}
                     <TakeOffSheetTable
                         takeOffSheets={takeOffSheets.data}
                         projectOptions={projectOptions}

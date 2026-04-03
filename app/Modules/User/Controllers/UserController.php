@@ -13,13 +13,23 @@ use App\Modules\User\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected UserService $service
+        protected UserService $userService
     ) {}
 
+    /**
+     * Menampilkan halaman daftar user.
+     *
+     * Catatan:
+     * - Menggunakan pagination
+     * - Filter (search & page) dikirim ke frontend
+     */
     public function index(Request $request)
     {
-        $users = $this->service->getUsers($request->search);
+        $users = $this->userService->getUsers($request->search);
 
         return Inertia::render('Modules/Users/Index', [
             'users' => $users,
@@ -27,59 +37,71 @@ class UserController extends Controller
         ]);
     }
 
+
+    /**
+     * Menyimpan user baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis
+     */
     public function store(UserStoreRequest $request)
     {
         try {
-            $this->service->createUser($request->validated());
+            $this->userService->createUser($request->validated());
 
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'name' => $e->getMessage()
+                'email' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
+    /**
+     * Memperbarui data user.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan
+     */
     public function update(UserUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateUser($id, $request->validated());
+            $this->userService->updateUser($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'name' => $e->getMessage()
+                'email' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 
+    /**
+     * Menghapus user.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteUser($id);
+            $this->userService->deleteUser($id);
 
             return back();
+        } catch (DomainException $e) {
+            return back()->withErrors([
+                $e->getMessage()
+            ]);
         } catch (Throwable $e) {
-            report($e);
-
-            return back()->with(
-                "error",
-                "Terjadi kesalahan sistem, silakan coba lagi"
-            );
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi'
+            ]);
         }
     }
 }

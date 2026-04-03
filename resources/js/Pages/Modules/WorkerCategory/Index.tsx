@@ -24,6 +24,7 @@ export default function CategoryJob() {
             ahspOptions
         }
     } = usePage<WokerCategoryPageProps>();
+    
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,9 +71,9 @@ export default function CategoryJob() {
 
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
-                    <div className="flex flex-col gap-4">
 
-                        {/* Worker Category List */}
+                    {/* Worker Category List */}
+                    <div className="flex flex-col gap-4">
                         {workerCategories.length == 0 ? (
                             <div className="mt-4">
                                 <EmptyState

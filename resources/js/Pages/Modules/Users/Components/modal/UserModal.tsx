@@ -7,7 +7,7 @@ import Form from "@/Components/form/Form"
 import Input from "@/Components/form/input/InputField";
 import Select from "@/Components/form/input/Select";
 
-export const ModalUser = ({
+const UserModal = ({
     isOpen,
     onClose,
     user,
@@ -33,6 +33,7 @@ export const ModalUser = ({
         editData: user,
         editId: user?.id,
         successMessage: "Pengguna berhasil disimpan",
+        updateMessage: "Pengguna berhasil diperbarui",
         storeRoute: "user.store",
         updateRoute: "user.update",
     });
@@ -121,3 +122,5 @@ export const ModalUser = ({
         </Modal>
     )
 }
+
+export default UserModal;

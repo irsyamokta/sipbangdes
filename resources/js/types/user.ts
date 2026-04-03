@@ -41,12 +41,15 @@ interface UsersTableProps {
     last_page: number;
     links: any[];
     onEdit: (user: User) => void;
+    filters: {
+        search: string;
+    }
 }
 
-export type { 
-    User, 
-    ModalUserProps, 
-    UserForm, 
-    UserPageProps, 
-    UsersTableProps 
+export type {
+    User,
+    ModalUserProps,
+    UserForm,
+    UserPageProps,
+    UsersTableProps
 };

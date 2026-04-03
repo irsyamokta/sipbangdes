@@ -6,6 +6,13 @@ use App\Models\User;
 
 class UserRepository
 {
+    /**
+     * Mengambil seluruh data user dengan pagination dan filter.
+     *
+     * Catatan:
+     * - Search mencakup name, email, dan role
+     * - Query string dipertahankan untuk pagination
+     */
     public function getAll(?string $search = null)
     {
         return User::query()
@@ -20,35 +27,62 @@ class UserRepository
             ->withQueryString();
     }
 
-    public function find($id): User
+    /**
+     * Mengambil satu user berdasarkan ID.
+     *
+     * Catatan:
+     * - Menggunakan findOrFail untuk menjamin data tersedia
+     */
+    public function find($id)
     {
         return User::findOrFail($id);
     }
 
-    public function existsByEmail(string $email): bool
+    /**
+     * Mengecek apakah email sudah digunakan.
+     *
+     * Digunakan untuk proses create.
+     */
+    public function existsByEmail(string $email)
     {
         return User::where('email', $email)->exists();
     }
 
-    public function existsByEmailExcept($id, string $email): bool
+    /**
+     * Mengecek duplikasi email (exclude ID tertentu).
+     *
+     * Digunakan untuk proses update.
+     */
+    public function existsByEmailExcept($id, string $email)
     {
         return User::where('email', $email)
             ->where('id', '!=', $id)
             ->exists();
     }
 
-    public function create(array $data): User
+    /**
+     * Menyimpan user baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di layer service
+     */
+    public function create(array $data)
     {
         return User::create($data);
     }
 
-    public function update(User $user, array $data): User
+    /**
+     * Memperbarui data user.
+     */
+    public function update(User $user, array $data)
     {
-        $user->update($data);
-        return $user;
+        return $user->update($data);
     }
 
-    public function delete(User $user): bool
+    /**
+     * Menghapus user.
+     */
+    public function delete(User $user)
     {
         return $user->delete();
     }
