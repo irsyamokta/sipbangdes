@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Head } from '@inertiajs/react';
-import { usePage } from "@inertiajs/react";
+import { Head, usePage } from '@inertiajs/react';
 
 import usePermission from "@/hooks/usePermission";
 import { useSearch } from "@/hooks/useSearch";
@@ -12,12 +11,12 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import HeaderTitle from "@/Components/HeaderTitle";
 import EmptyState from "@/Components/empty/EmptyState";
 import FilterBar from "@/Components/filter/FilterBar";
-import { ModalAhsp } from "./Components/modal/ModalAhsp";
-import { AhspAccordion } from "./Components/accordion/AhspAccordion";
-import { CardSummary } from "./Components/card/CardSummary";
-import { MaterialTable } from "./Components/table/MaterialTable";
-import { WageTable } from "./Components/table/WageTable";
-import { ToolTable } from "./Components/table/ToolTable";
+import SummaryCard from "@/Components/card/SummaryCard";
+import AhspModal from "./Components/modal/AhspModal";
+import AhspAccordion from "./Components/accordion/AhspAccordion";
+import MaterialTable from "./Components/table/MaterialTable";
+import WageTable from "./Components/table/WageTable";
+import ToolTable from "./Components/table/ToolTable";
 
 import { LuPlus } from "react-icons/lu";
 
@@ -32,13 +31,12 @@ export default function AHSP() {
             filters: filter
         }
     } = usePage<AhspPageProps>();
+
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedAhsp, setSelectedAhsp] = useState<Ahsp | null>(null);
     const [openId, setOpenId] = useState<string | null>(null);
-
-    const canCreate = can("ahsp.create");
 
     const toggle = (id: string) => {
         setOpenId((prev) => (prev === id ? null : id));
@@ -62,30 +60,33 @@ export default function AHSP() {
         <DashboardLayout>
             <Head title="AHSP" />
 
-            <ModalAhsp
+            {/* Modal */}
+            <AhspModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
                     setSelectedAhsp(null);
                 }}
                 ahsp={selectedAhsp}
-                units={unitOptions}
+                unitOptions={unitOptions}
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">
+
                 {/* Header */}
-                <div className="col-span-12 space-y-6">
+                <div className="col-span-12">
                     <HeaderTitle
                         title="Analisis Harga Satuan Pekerjaan (AHSP)"
                         subtitle="Daftar AHSP standar yang dapat digunakan lintas proyek"
-                        actionLabel={canCreate ? "Tambah AHSP" : undefined}
-                        actionIcon={canCreate ? <LuPlus /> : undefined}
+                        actionLabel={can("ahsp.create") ? "Tambah AHSP" : undefined}
+                        actionIcon={can("ahsp.create") ? <LuPlus /> : undefined}
                         onActionClick={() => setIsModalOpen(true)}
                     />
                 </div>
 
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
+
                     {/* Filter Bar */}
                     <FilterBar
                         className="md:max-w-sm"
@@ -119,21 +120,29 @@ export default function AHSP() {
                                     }}
                                     onDelete={(item) => handleDelete(item.id)}
                                 >
-                                    <CardSummary
+
+                                    {/* Summary Card */}
+                                    <SummaryCard
                                         material_total={item.material_total}
                                         wage_total={item.wage_total}
                                         tool_total={item.tool_total}
                                     />
+
+                                    {/* Material Table */}
                                     <MaterialTable
                                         ahspId={item.id}
                                         materials={item.ahsp_component_materials}
                                         materialOptions={materialOptions}
                                     />
+
+                                    {/* Wage Table */}
                                     <WageTable
                                         ahspId={item.id}
                                         wages={item.ahsp_component_wages}
                                         wageOptions={wageOptions}
                                     />
+
+                                    {/* Tool Table */}
                                     <ToolTable
                                         ahspId={item.id}
                                         tools={item.ahsp_component_tools}

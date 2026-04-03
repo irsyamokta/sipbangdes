@@ -10,7 +10,7 @@ import { capitalizeEachWord } from "@/utils/capitalize";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 import { GoChevronRight } from "react-icons/go";
 
-export const CardAhspHeader = ({
+const AhspHeaderCard = ({
     ahsp,
     open,
     deletingId,
@@ -95,3 +95,5 @@ export const CardAhspHeader = ({
         </div>
     );
 };
+
+export default AhspHeaderCard;

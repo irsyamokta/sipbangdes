@@ -10,18 +10,27 @@ use App\Modules\Tool\Services\ToolService;
 use App\Modules\Ahsp\Requests\AhspToolStoreRequest;
 use App\Modules\Ahsp\Requests\AhspToolUpdateRequest;
 
-
 class AhspToolController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected AhspToolService $service,
+        protected AhspToolService $ahspToolService,
         protected ToolService $toolService
     ) {}
 
+    /**
+     * Menyimpan data alat ke dalam AHSP.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis
+     */
     public function store(AhspToolStoreRequest $request)
     {
         try {
-            $this->service->createAhspTool($request->validated());
+            $this->ahspToolService->createAhspTool($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -35,10 +44,16 @@ class AhspToolController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data alat pada AHSP.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan
+     */
     public function update(AhspToolUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateAhspTool($id, $request->validated());
+            $this->ahspToolService->updateAhspTool($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -52,10 +67,13 @@ class AhspToolController extends Controller
         }
     }
 
+    /**
+     * Menghapus alat dari AHSP.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteAhspTool($id);
+            $this->ahspToolService->deleteAhspTool($id);
 
             return back();
         } catch (DomainException $e) {

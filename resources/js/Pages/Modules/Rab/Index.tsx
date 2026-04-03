@@ -150,7 +150,7 @@ export default function RAB() {
                                 />
                             </div>
 
-                            {/* Summary */}
+                            {/* Subtotal Card */}
                             <SubtotalCard
                                 title="Total Rencana Anggaran Biaya"
                                 subtitle={`${rab.detail?.length ?? 0} item pekerjaan`}

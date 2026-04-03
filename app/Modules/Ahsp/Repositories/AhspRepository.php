@@ -6,6 +6,13 @@ use App\Models\Ahsp;
 
 class AhspRepository
 {
+    /**
+     * Mengambil seluruh data AHSP dengan relasi lengkap.
+     *
+     * Catatan:
+     * - Eager loading untuk material, upah, dan alat
+     * - Menghindari N+1 query pada tampilan detail
+     */
     public function getAll(?string $search)
     {
         return Ahsp::query()
@@ -23,6 +30,12 @@ class AhspRepository
             ->get();
     }
 
+    /**
+     * Mengambil data AHSP berdasarkan kategori pekerja.
+     *
+     * Catatan:
+     * - Filter opsional
+     */
     public function getByCategory(?string $categoryId = null)
     {
         return Ahsp::query()
@@ -32,11 +45,22 @@ class AhspRepository
             ->get();
     }
 
+    /**
+     * Mengambil satu data AHSP berdasarkan ID.
+     *
+     * Catatan:
+     * - Menggunakan findOrFail untuk menjamin data tersedia
+     */
     public function find($id)
     {
         return Ahsp::findOrFail($id);
     }
 
+    /**
+     * Mengecek duplikasi nama pekerjaan (exclude ID tertentu).
+     *
+     * Digunakan untuk proses update.
+     */
     public function existsByNameExcept($id, string $name)
     {
         return Ahsp::where('id', '!=', $id)
@@ -44,21 +68,38 @@ class AhspRepository
             ->exists();
     }
 
+    /**
+     * Mengecek apakah nama pekerjaan sudah ada.
+     *
+     * Digunakan untuk proses create.
+     */
     public function existsByName(string $name)
     {
         return Ahsp::where('work_name', $name)->exists();
     }
 
+    /**
+     * Menyimpan data AHSP baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di layer service
+     */
     public function create(array $data)
     {
         return Ahsp::create($data);
     }
 
+    /**
+     * Memperbarui data AHSP.
+     */
     public function update(Ahsp $ahsp, array $data)
     {
         return $ahsp->update($data);
     }
 
+    /**
+     * Menghapus data AHSP.
+     */
     public function delete(Ahsp $ahsp)
     {
         return $ahsp->delete();

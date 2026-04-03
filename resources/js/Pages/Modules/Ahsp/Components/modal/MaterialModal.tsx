@@ -1,19 +1,19 @@
 import { useModalForm } from "@/hooks/useModalForm";
 
-import { ModalAhspToolProps, AhspToolForm } from "@/types/ahsp";
+import { ModalAhspMaterialProps, AhspMaterialForm } from "@/types/ahsp";
 
 import { Modal } from "@/Components/ui/modal";
 import Form from "@/Components/form/Form";
 import InputCurrency from "@/Components/form/input/CurrencyInput";
 import Select from "@/Components/form/input/Select";
 
-export const ModalAhspTool = ({
+const AhspMaterialModal = ({
     isOpen,
     onClose,
     ahspId,
-    tool,
-    toolOptions
-}: ModalAhspToolProps) => {
+    material,
+    materialOptions
+}: ModalAhspMaterialProps) => {
     const {
         data,
         setData,
@@ -21,19 +21,20 @@ export const ModalAhspTool = ({
         loading,
         serverErrors,
         isEditing,
-    } = useModalForm<AhspToolForm>({
+    } = useModalForm<AhspMaterialForm>({
         isOpen,
         onClose,
         initialValues: {
             ahsp_id: ahspId,
-            tool_id: "",
+            material_id: "",
             coefficient: 0,
         },
-        editData: tool,
-        editId: tool?.id,
-        successMessage: "Alat berhasil disimpan",
-        storeRoute: "ahsp.tool.store",
-        updateRoute: "ahsp.tool.update",
+        editData: material,
+        editId: material?.id,
+        successMessage: "Material berhasil disimpan",
+        updateMessage: "Material berhasil diperbarui",
+        storeRoute: "ahsp.material.store",
+        updateRoute: "ahsp.material.update",
     });
 
     return (
@@ -41,28 +42,28 @@ export const ModalAhspTool = ({
             isOpen={isOpen}
             onClose={onClose}
             className="max-w-175 m-4"
-            title={isEditing ? "Edit Alat" : "Tambah Alat"}
-            formId="ahsp-tool-form"
+            title={isEditing ? "Edit Material" : "Tambah Material"}
+            formId="ahsp-material-form"
             loading={loading}
         >
             <Form
-                id="ahsp-tool-form"
+                id="ahsp-material-form"
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4 p-4 md:p-6"
             >
-                {/* Tool */}
+                {/* Material */}
                 <Select
-                    label="Pilih Alat"
-                    value={data.tool_id}
-                    onChange={(value) => setData("tool_id", value)}
-                    error={serverErrors.tool_id}
+                    label="Pilih Material"
+                    value={data.material_id}
+                    onChange={(value) => setData("material_id", value)}
+                    error={serverErrors.material_id}
                     required
-                    options={(toolOptions ?? [])
-                        .filter((tool: any) => tool.value)
+                    options={(materialOptions ?? [])
+                        .filter((material: any) => material.value)
                     }
                 />
 
-                {/* Coeficient */}
+                {/* Coefficient */}
                 <InputCurrency
                     label="Koefisien"
                     type="text"
@@ -76,3 +77,5 @@ export const ModalAhspTool = ({
         </Modal>
     )
 }
+
+export default AhspMaterialModal;

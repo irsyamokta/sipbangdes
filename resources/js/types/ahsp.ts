@@ -28,7 +28,7 @@ interface ModalAhspProps {
     isOpen: boolean;
     onClose: () => void;
     ahsp?: any;
-    units: SelectOption[];
+    unitOptions: SelectOption[];
     materials?: SelectOption[];
 }
 

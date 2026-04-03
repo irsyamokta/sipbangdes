@@ -13,15 +13,15 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { ModalAhspWage } from "../modal/ModalWage";
+import AhspWageModal from "../modal/WageModal";
 
 import { formatCurrency } from "@/utils/formatCurrrency";
 import { formatDecimal } from "@/utils/formatDecimal";
 import { capitalizeEachWord } from "@/utils/capitalize";
 
-import { LuPlus, LuPencil, LuTrash2, LuWallet} from "react-icons/lu";
+import { LuPlus, LuPencil, LuTrash2, LuWallet } from "react-icons/lu";
 
-export const WageTable = ({
+const WageTable = ({
     ahspId,
     wages,
     wageOptions,
@@ -40,7 +40,8 @@ export const WageTable = ({
 
     return (
         <div className="flex flex-col gap-4 py-2 mt-4">
-            <ModalAhspWage
+            {/* Modal */}
+            <AhspWageModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
@@ -52,10 +53,13 @@ export const WageTable = ({
             />
 
             <div className="flex gap-2 justify-between items-center">
+                {/* Header */}
                 <div className="flex gap-2 items-center">
                     <LuWallet size={20} className="text-warning-700" />
                     <p className="font-semibold">Upah</p>
                 </div>
+
+                {/* Button */}
                 {can("ahsp.create") && (
                     <Button
                         variant="ghost"
@@ -137,7 +141,7 @@ export const WageTable = ({
                                                 {item.master_wage.unit}
                                             </TableCell>
 
-                                            {/* Koefisien */}
+                                            {/* Coefficient */}
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 {formatDecimal(item.coefficient)}
                                             </TableCell>
@@ -196,3 +200,5 @@ export const WageTable = ({
         </div>
     )
 }
+
+export default WageTable;

@@ -10,18 +10,28 @@ use App\Modules\Material\Services\MaterialService;
 use App\Modules\Ahsp\Requests\AhspMaterialStoreRequest;
 use App\Modules\Ahsp\Requests\AhspMaterialUpdateRequest;
 
-
 class AhspMaterialController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected AhspMaterialService $service,
+        protected AhspMaterialService $ahspMaterialService,
         protected MaterialService $materialService
     ) {}
 
+    /**
+     * Menyimpan material baru ke AHSP.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis
+     * - Throwable untuk error sistem
+     */
     public function store(AhspMaterialStoreRequest $request)
     {
         try {
-            $this->service->createAhspMaterial($request->validated());
+            $this->ahspMaterialService->createAhspMaterial($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -35,10 +45,16 @@ class AhspMaterialController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data material AHSP.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan
+     */
     public function update(AhspMaterialUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateAhspMaterial($id, $request->validated());
+            $this->ahspMaterialService->updateAhspMaterial($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -52,10 +68,16 @@ class AhspMaterialController extends Controller
         }
     }
 
+    /**
+     * Menghapus material dari AHSP.
+     *
+     * Catatan:
+     * - Tidak ada response khusus selain redirect back
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteAhspMaterial($id);
+            $this->ahspMaterialService->deleteAhspMaterial($id);
 
             return back();
         } catch (DomainException $e) {

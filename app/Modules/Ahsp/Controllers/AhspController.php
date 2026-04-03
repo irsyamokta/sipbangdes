@@ -17,15 +17,25 @@ use App\Modules\Ahsp\Requests\AhspUpdateRequest;
 
 class AhspController extends Controller
 {
-
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected AhspService $service,
+        protected AhspService $ahspService,
         protected UnitService $unitService,
         protected MaterialService $materialService,
         protected WageService $wageService,
         protected ToolService $toolService
     ) {}
 
+    /**
+     * Menampilkan halaman daftar AHSP.
+     *
+     * Catatan:
+     * - Mengambil data AHSP beserta relasi
+     * - Menyediakan data master untuk dropdown (unit, material, upah, alat)
+     * - Data diformat untuk kebutuhan frontend (select options)
+     */
     public function index(AhspService $service, Request $request)
     {
         $ahsp = $service->getAhsp(request('search'));
@@ -73,10 +83,17 @@ class AhspController extends Controller
         ]);
     }
 
+    /**
+     * Menyimpan data AHSP baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis
+     */
     public function store(AhspStoreRequest $request)
     {
         try {
-            $this->service->createAhsp($request->validated());
+            $this->ahspService->createAhsp($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -90,10 +107,16 @@ class AhspController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data AHSP.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan
+     */
     public function update(AhspUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateAhsp($id, $request->validated());
+            $this->ahspService->updateAhsp($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -107,10 +130,13 @@ class AhspController extends Controller
         }
     }
 
+    /**
+     * Menghapus data AHSP.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteAhsp($id);
+            $this->ahspService->deleteAhsp($id);
 
             return back();
         } catch (DomainException $e) {

@@ -1,19 +1,19 @@
 import { useModalForm } from "@/hooks/useModalForm";
 
-import { ModalAhspMaterialProps, AhspMaterialForm } from "@/types/ahsp";
+import { ModalAhspWageProps, AhspWageForm } from "@/types/ahsp";
 
 import { Modal } from "@/Components/ui/modal";
 import Form from "@/Components/form/Form";
 import InputCurrency from "@/Components/form/input/CurrencyInput";
 import Select from "@/Components/form/input/Select";
 
-export const ModalAhspMaterial = ({
+const AhspWageModal = ({
     isOpen,
     onClose,
     ahspId,
-    material,
-    materialOptions
-}: ModalAhspMaterialProps) => {
+    wage,
+    wageOptions
+}: ModalAhspWageProps) => {
     const {
         data,
         setData,
@@ -21,19 +21,20 @@ export const ModalAhspMaterial = ({
         loading,
         serverErrors,
         isEditing,
-    } = useModalForm<AhspMaterialForm>({
+    } = useModalForm<AhspWageForm>({
         isOpen,
         onClose,
         initialValues: {
             ahsp_id: ahspId,
-            material_id: "",
+            wage_id: "",
             coefficient: 0,
         },
-        editData: material,
-        editId: material?.id,
-        successMessage: "Material berhasil disimpan",
-        storeRoute: "ahsp.material.store",
-        updateRoute: "ahsp.material.update",
+        editData: wage,
+        editId: wage?.id,
+        successMessage: "Upah berhasil disimpan",
+        updateMessage: "Upah berhasil diperbarui",
+        storeRoute: "ahsp.wage.store",
+        updateRoute: "ahsp.wage.update",
     });
 
     return (
@@ -41,28 +42,28 @@ export const ModalAhspMaterial = ({
             isOpen={isOpen}
             onClose={onClose}
             className="max-w-175 m-4"
-            title={isEditing ? "Edit Material" : "Tambah Material"}
-            formId="ahsp-material-form"
+            title={isEditing ? "Edit Upah" : "Tambah Upah"}
+            formId="ahsp-wage-form"
             loading={loading}
         >
             <Form
-                id="ahsp-material-form"
+                id="ahsp-wage-form"
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4 p-4 md:p-6"
             >
-                {/* Material */}
+                {/* Wage */}
                 <Select
-                    label="Pilih Material"
-                    value={data.material_id}
-                    onChange={(value) => setData("material_id", value)}
-                    error={serverErrors.material_id}
+                    label="Pilih Upah"
+                    value={data.wage_id}
+                    onChange={(value) => setData("wage_id", value)}
+                    error={serverErrors.wage_id}
                     required
-                    options={(materialOptions ?? [])
-                        .filter((material: any) => material.value)
+                    options={(wageOptions ?? [])
+                        .filter((wage: any) => wage.value)
                     }
                 />
 
-                {/* Coeficient */}
+                {/* Coefficient */}
                 <InputCurrency
                     label="Koefisien"
                     type="text"
@@ -76,3 +77,5 @@ export const ModalAhspMaterial = ({
         </Modal>
     )
 }
+
+export default AhspWageModal;

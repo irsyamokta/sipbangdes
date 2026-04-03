@@ -6,7 +6,7 @@ interface CardSummaryProps {
     tool_total: number;
 }
 
-export const SummaryCard = ({
+const SummaryCard = ({
     material_total,
     wage_total,
     tool_total,
@@ -28,3 +28,5 @@ export const SummaryCard = ({
         </div>
     )
 }
+
+export default SummaryCard;

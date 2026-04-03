@@ -7,11 +7,11 @@ import Form from "@/Components/form/Form";
 import Input from "@/Components/form/input/InputField";
 import Select from "@/Components/form/input/Select";
 
-export const ModalAhsp = ({
+const AhspModal = ({
     isOpen,
     onClose,
     ahsp,
-    units
+    unitOptions
 }: ModalAhspProps) => {
     const {
         data,
@@ -29,7 +29,8 @@ export const ModalAhsp = ({
         },
         editData: ahsp,
         editId: ahsp?.id,
-        successMessage: "Ahsp berhasil disimpan",
+        successMessage: "AHSP berhasil disimpan",
+        updateMessage: "AHSP berhasil diperbarui",
         storeRoute: "ahsp.store",
         updateRoute: "ahsp.update",
     });
@@ -49,6 +50,7 @@ export const ModalAhsp = ({
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4 p-4 md:p-6"
             >
+
                 {/* Work Name */}
                 <Input
                     label="Nama Pekerjaan"
@@ -61,14 +63,14 @@ export const ModalAhsp = ({
                     required
                 />
 
-                {/* unit */}
+                {/* Unit */}
                 <Select
                     label="Satuan"
                     value={data.unit}
                     onChange={(value) => setData("unit", value)}
                     error={serverErrors.unit}
                     required
-                    options={(units ?? [])
+                    options={(unitOptions ?? [])
                         .filter((unit: any) => unit?.value)
                     }
                 />
@@ -76,3 +78,5 @@ export const ModalAhsp = ({
         </Modal>
     )
 }
+
+export default AhspModal;

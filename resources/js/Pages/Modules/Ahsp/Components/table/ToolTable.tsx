@@ -13,7 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { ModalAhspTool } from "../modal/ModalTool";
+import AhspToolModal from "../modal/ToolModal";
 
 import { formatCurrency } from "@/utils/formatCurrrency";
 import { formatDecimal } from "@/utils/formatDecimal";
@@ -22,7 +22,7 @@ import { capitalizeEachWord } from "@/utils/capitalize";
 import { LiaToolsSolid } from "react-icons/lia";
 import { LuPlus, LuPencil, LuTrash2 } from "react-icons/lu";
 
-export const ToolTable = ({
+const ToolTable = ({
     ahspId,
     tools,
     toolOptions,
@@ -41,7 +41,8 @@ export const ToolTable = ({
 
     return (
         <div className="flex flex-col gap-4 py-2 mt-4">
-            <ModalAhspTool
+            {/* Modal */}
+            <AhspToolModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
@@ -53,10 +54,13 @@ export const ToolTable = ({
             />
 
             <div className="flex gap-2 justify-between items-center">
+                {/* Header */}
                 <div className="flex gap-2 items-center">
                     <LiaToolsSolid size={24} className="text-blue-700" />
                     <p className="font-semibold">Alat</p>
                 </div>
+
+                {/* Button */}
                 {can("ahsp.create") && (
                     <Button
                         variant="ghost"
@@ -138,7 +142,7 @@ export const ToolTable = ({
                                                 {item.master_tool.unit}
                                             </TableCell>
 
-                                            {/* Koefisien */}
+                                            {/* Coefficient */}
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 {formatDecimal(item.coefficient)}
                                             </TableCell>
@@ -197,3 +201,5 @@ export const ToolTable = ({
         </div>
     )
 }
+
+export default ToolTable;

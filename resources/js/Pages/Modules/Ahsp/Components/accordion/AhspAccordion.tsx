@@ -1,12 +1,12 @@
 import { ReactNode, useRef, useEffect, useState } from "react";
-import { CardAhspHeader } from "../card/CardAhspHeader";
+import AhspHeaderCard from "../card/AhspHeaderCard";
 import { AhspHeaderCardProps } from "@/types/ahsp";
 
 interface AhspAccordionProps extends AhspHeaderCardProps {
     children: ReactNode;
 }
 
-export const AhspAccordion = ({
+const AhspAccordion = ({
     children,
     ...headerProps
 }: AhspAccordionProps) => {
@@ -36,7 +36,7 @@ export const AhspAccordion = ({
     return (
         <div className="border border-gray-300 rounded-2xl overflow-hidden">
             {/* Header */}
-            <CardAhspHeader {...headerProps} />
+            <AhspHeaderCard {...headerProps} />
 
             {/* Content */}
             <div
@@ -53,3 +53,5 @@ export const AhspAccordion = ({
         </div>
     );
 };
+
+export default AhspAccordion;

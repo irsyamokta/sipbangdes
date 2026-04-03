@@ -4,6 +4,7 @@ import { RABTabsProps } from "@/types/rab";
 
 import Tabs from "@/Components/ui/tabs/Tabs";
 import EmptyState from "@/Components/empty/EmptyState";
+import SummaryCard from "@/Components/card/SummaryCard";
 import { RabDetailAccordion } from "../accordion/RabDetailAccordion";
 import { RecapMaterialTable } from "../table/RecapMaterialTable";
 import { MaterialTable } from "../table/MaterialTable";
@@ -12,9 +13,7 @@ import { WageTable } from "../table/WageTable";
 import { RecapToolTable } from "../table/RecapToolTable";
 import { ToolTable } from "../table/ToolTable";
 import { OperationalTable } from "../table/OperationalTable";
-import { SummaryCard } from "../card/SummaryCard";
 import { AIInsightCard } from "../card/AIInsightCard";
-
 
 export default function RABTabs({
     project_id,
@@ -59,7 +58,7 @@ export default function RABTabs({
                                 open={openId === item.id}
                                 toggle={() => toggle(item.id)}
                             >
-                                {/* Summary */}
+                                {/* Summary Card*/}
                                 <SummaryCard
                                     material_total={item.material_total}
                                     wage_total={item.wage_total}

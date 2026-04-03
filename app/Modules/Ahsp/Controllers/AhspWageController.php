@@ -10,18 +10,27 @@ use App\Modules\Wage\Services\WageService;
 use App\Modules\Ahsp\Requests\AhspWageStoreRequest;
 use App\Modules\Ahsp\Requests\AhspWageUpdateRequest;
 
-
 class AhspWageController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected AhspWageService $service,
+        protected AhspWageService $ahspWageService,
         protected WageService $wageService
     ) {}
 
+    /**
+     * Menyimpan data upah ke dalam AHSP.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis
+     */
     public function store(AhspWageStoreRequest $request)
     {
         try {
-            $this->service->createAhspWage($request->validated());
+            $this->ahspWageService->createAhspWage($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -35,10 +44,16 @@ class AhspWageController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data upah pada AHSP.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan
+     */
     public function update(AhspWageUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateAhspWage($id, $request->validated());
+            $this->ahspWageService->updateAhspWage($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -52,10 +67,13 @@ class AhspWageController extends Controller
         }
     }
 
+    /**
+     * Menghapus data upah dari AHSP.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteAhspWage($id);
+            $this->ahspWageService->deleteAhspWage($id);
 
             return back();
         } catch (DomainException $e) {
