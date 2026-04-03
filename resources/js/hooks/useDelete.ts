@@ -36,6 +36,9 @@ export function useDelete(options: DeleteOptions) {
         setDeletingId(id);
 
         router.delete(route(routeName, id), {
+            preserveScroll: true,
+            preserveState: true,
+            
             onSuccess: () => {
                 toast.success(successMessage);
                 setDeletingId(null);

@@ -98,6 +98,8 @@ export function useModalForm<T extends Record<string, any>>({
         const payload = shouldUseFormData ? buildFormData(data) : data;
 
         const config = {
+            preserveScroll: true,
+            preserveState: true,
             onSuccess: () => {
                 onClose();
                 toast.success(
