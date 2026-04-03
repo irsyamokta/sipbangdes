@@ -14,15 +14,26 @@ use App\Modules\WorkerCategory\Requests\WorkerCategoryUpdateRequest;
 
 class WorkerCategoryController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected WorkerCategoryService $service,
+        protected WorkerCategoryService $workerCategoryService,
         protected UnitService $unitService,
         protected AhspService $ahspService
     ) {}
 
-    public function index(WorkerCategoryService $service)
+    /**
+     * Menampilkan halaman daftar kategori pekerjaan.
+     *
+     * Catatan:
+     * - Mengambil data kategori beserta relasi
+     * - Menyediakan data AHSP dan unit untuk kebutuhan dropdown
+     * - Data diformat menjadi select option untuk frontend
+     */
+    public function index()
     {
-        $workerCategories = $service->getWorkerCategory();
+        $workerCategories = $this->workerCategoryService->getWorkerCategory();
         $ahsp = $this->ahspService->getAhsp(null);
         $units = $this->unitService->getUnits(
             null,
@@ -42,10 +53,17 @@ class WorkerCategoryController extends Controller
         ]);
     }
 
+    /**
+     * Menyimpan kategori pekerjaan baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis
+     */
     public function store(WorkerCategoryStoreRequest $request)
     {
         try {
-            $this->service->createWorkerCategory($request->validated());
+            $this->workerCategoryService->createWorkerCategory($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -59,10 +77,16 @@ class WorkerCategoryController extends Controller
         }
     }
 
+    /**
+     * Memperbarui kategori pekerjaan.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan
+     */
     public function update(WorkerCategoryUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateWorkerCategory($id, $request->validated());
+            $this->workerCategoryService->updateWorkerCategory($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -76,10 +100,13 @@ class WorkerCategoryController extends Controller
         }
     }
 
+    /**
+     * Menghapus kategori pekerjaan.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteWorkerCategory($id);
+            $this->workerCategoryService->deleteWorkerCategory($id);
 
             return back();
         } catch (DomainException $e) {

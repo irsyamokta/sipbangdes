@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Head } from '@inertiajs/react';
-import { usePage } from "@inertiajs/react";
+import { Head, usePage } from '@inertiajs/react';
 
 import usePermission from '@/hooks/usePermission';
 import { useDelete } from "@/hooks/useDelete";
@@ -11,9 +10,9 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import HeaderTitle from "@/Components/HeaderTitle";
 import Accordion from '@/Components/ui/accordion/Accordion';
 import EmptyState from "@/Components/empty/EmptyState";
-import { ModalWorkerCategory } from './Components/modal/ModalWorkerCategory';
-import { CardWorkerCategoryHeader } from './Components/card/CardWorkerCategoryHeader';
-import { WorkerItemTable } from './Components/table/WorkerItemTable';
+import WorkerCategoryModal from './Components/modal/WorkerCategoryModal';
+import WorkerCategoryHeaderCard from './Components/card/WorkerCategoryHeaderCard';
+import WorkerItemTable from './Components/table/WorkerItemTable';
 
 import { LuPlus } from "react-icons/lu";
 
@@ -31,8 +30,6 @@ export default function CategoryJob() {
     const [selectedWorkerCategory, setSelectedWorkerCategory] = useState<WorkerCategory | null>(null);
     const [openId, setOpenId] = useState<string | null>(null);
 
-    const canCreate = can('workercategory.create');
-
     const toggle = (id: string) => {
         setOpenId((prev) => (prev === id ? null : id));
     };
@@ -48,7 +45,8 @@ export default function CategoryJob() {
         <DashboardLayout>
             <Head title="Kategori Pekerjaan" />
 
-            <ModalWorkerCategory
+            {/* Modal */}
+            <WorkerCategoryModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
@@ -58,13 +56,14 @@ export default function CategoryJob() {
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">
+
                 {/* Header */}
-                <div className="col-span-12 space-y-6 xl:col-span-12">
+                <div className="col-span-12">
                     <HeaderTitle
                         title="Kategori Pekerjaan"
                         subtitle="Item pekerjaan yang dapat digunakan lintas proyek"
-                        actionLabel={canCreate ? "Tambah Kategori" : undefined}
-                        actionIcon={canCreate ? <LuPlus /> : undefined}
+                        actionLabel={can('workercategory.create') ? "Tambah Kategori" : undefined}
+                        actionIcon={can('workercategory.create') ? <LuPlus /> : undefined}
                         onActionClick={() => setIsModalOpen(true)}
                     />
                 </div>
@@ -72,6 +71,8 @@ export default function CategoryJob() {
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
                     <div className="flex flex-col gap-4">
+
+                        {/* Worker Category List */}
                         {workerCategories.length == 0 ? (
                             <div className="mt-4">
                                 <EmptyState
@@ -85,7 +86,7 @@ export default function CategoryJob() {
                                     key={item.id}
                                     open={openId === item.id}
                                     renderHeader={() => (
-                                        <CardWorkerCategoryHeader
+                                        <WorkerCategoryHeaderCard
                                             workerCategory={item}
                                             open={openId === item.id}
                                             toggle={() => toggle(item.id)}
@@ -97,6 +98,7 @@ export default function CategoryJob() {
                                         />
                                     )}
                                 >
+                                    {/* Worker Item */}
                                     <WorkerItemTable
                                         categoryId={item.id}
                                         unitOptions={unitOptions}

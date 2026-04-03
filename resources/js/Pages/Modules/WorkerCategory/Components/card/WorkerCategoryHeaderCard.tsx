@@ -10,7 +10,7 @@ import { capitalizeEachWord, capitalizedFirst } from "@/utils/capitalize";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 import { GoChevronRight } from "react-icons/go";
 
-export const CardWorkerCategoryHeader = ({
+const WorkerCategoryHeaderCard = ({
     workerCategory,
     open,
     deletingId,
@@ -32,10 +32,13 @@ export const CardWorkerCategoryHeader = ({
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
                 <div className="flex items-center gap-3">
+
+                    {/* Icon */}
                     <div className={`transition-transform shrink-0 ${open ? "rotate-90" : ""}`}>
                         <GoChevronRight size={22} />
                     </div>
 
+                    {/* Title */}
                     <div className="min-w-0">
                         <div className="font-semibold text-gray-800 word-break-words">
                             {capitalizeEachWord(workerCategory.name)}
@@ -47,8 +50,13 @@ export const CardWorkerCategoryHeader = ({
                 </div>
 
                 <div className="flex justify-between sm:justify-end items-center gap-3 sm:gap-6">
+                    {/* Badge */}
                     <Badge>{workerCategory.total_items} item pekerjaan</Badge>
+
+                    {/* Actions */}
                     <div className="flex gap-2">
+
+                        {/* Edit */}
                         {can("ahsp.edit") && (
                             <Button
                                 size="icon"
@@ -62,6 +70,7 @@ export const CardWorkerCategoryHeader = ({
                             </Button>
                         )}
 
+                        {/* Delete */}
                         {can("ahsp.delete") && (
                             <Button
                                 size="icon"
@@ -84,3 +93,5 @@ export const CardWorkerCategoryHeader = ({
         </div>
     );
 };
+
+export default WorkerCategoryHeaderCard;

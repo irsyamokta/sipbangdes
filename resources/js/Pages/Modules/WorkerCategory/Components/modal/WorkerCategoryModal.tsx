@@ -7,7 +7,7 @@ import Form from "@/Components/form/Form";
 import Input from "@/Components/form/input/InputField";
 import TextArea from "@/Components/form/input/TextArea";
 
-export const ModalWorkerCategory = ({
+const WorkerCategoryModal = ({
     isOpen,
     onClose,
     workerCategory
@@ -29,6 +29,7 @@ export const ModalWorkerCategory = ({
         editData: workerCategory,
         editId: workerCategory?.id,
         successMessage: "Kategori pekerjaan berhasil disimpan",
+        updateMessage: "Kategori pekerjaan berhasil diperbarui",
         storeRoute: "workercategory.store",
         updateRoute: "workercategory.update",
     });
@@ -74,3 +75,5 @@ export const ModalWorkerCategory = ({
         </Modal>
     )
 }
+
+export default WorkerCategoryModal;

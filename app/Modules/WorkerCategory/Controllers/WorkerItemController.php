@@ -4,7 +4,6 @@ namespace App\Modules\WorkerCategory\Controllers;
 
 use Throwable;
 use DomainException;
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Modules\WorkerCategory\Services\WorkerItemService;
 use App\Modules\WorkerCategory\Requests\WorkerItemStoreRequest;
@@ -12,10 +11,20 @@ use App\Modules\WorkerCategory\Requests\WorkerItemUpdateRequest;
 
 class WorkerItemController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
         private WorkerItemService $workerItemService
     ) {}
 
+    /**
+     * Menyimpan item pekerjaan baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis (duplikasi nama)
+     */
     public function store(WorkerItemStoreRequest $request)
     {
         try {
@@ -33,6 +42,12 @@ class WorkerItemController extends Controller
         }
     }
 
+    /**
+     * Memperbarui item pekerjaan.
+     *
+     * Catatan:
+     * - Error bisnis dan error sistem dipisahkan
+     */
     public function update(WorkerItemUpdateRequest $request, $id)
     {
         try {
@@ -50,6 +65,9 @@ class WorkerItemController extends Controller
         }
     }
 
+    /**
+     * Menghapus item pekerjaan.
+     */
     public function destroy($id)
     {
         try {

@@ -7,7 +7,7 @@ import Form from "@/Components/form/Form";
 import Input from "@/Components/form/input/InputField";
 import Select from "@/Components/form/input/Select";
 
-export const ModalWorkerItem = ({
+const WorkerItemModal = ({
     isOpen,
     onClose,
     workerItem,
@@ -34,6 +34,7 @@ export const ModalWorkerItem = ({
         editData: workerItem,
         editId: workerItem?.id,
         successMessage: "Item pekerjaan berhasil disimpan",
+        updateMessage: "Item pekerjaan berhasil diperbarui",
         storeRoute: "workeritem.store",
         updateRoute: "workeritem.update",
     });
@@ -92,3 +93,5 @@ export const ModalWorkerItem = ({
         </Modal>
     )
 }
+
+export default WorkerItemModal;

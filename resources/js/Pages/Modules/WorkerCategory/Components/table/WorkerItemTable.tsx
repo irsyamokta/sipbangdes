@@ -13,14 +13,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { ModalWorkerItem } from "../modal/ModalWorkerItem";
+import WorkerItemModal from "../modal/WorkerItemModal";
 
 import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { LuPlus, LuPencil, LuTrash2 } from "react-icons/lu";
 import { PiCalculatorLight } from "react-icons/pi";
 
-export const WorkerItemTable = ({
+const WorkerItemTable = ({
     categoryId,
     workerItems,
     ahspOptions,
@@ -40,7 +40,9 @@ export const WorkerItemTable = ({
 
     return (
         <div className="flex flex-col gap-2 py-2">
-            <ModalWorkerItem
+
+            {/* Modal */}
+            <WorkerItemModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false)
@@ -112,7 +114,7 @@ export const WorkerItemTable = ({
                                             {/* AHSP */}
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 <div className="flex justify-end items-center gap-2">
-                                                    <PiCalculatorLight size={20}/> {item.ahsp.work_code} - {capitalizeEachWord(item.ahsp.work_name)}
+                                                    <PiCalculatorLight size={20} /> {item.ahsp.work_code} - {capitalizeEachWord(item.ahsp.work_name)}
                                                 </div>
                                             </TableCell>
 
@@ -120,6 +122,7 @@ export const WorkerItemTable = ({
                                             {can('workercategory.edit') && can('workercategory.delete') && (
                                                 <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                     <div className="flex justify-end gap-1">
+
                                                         {/* Edit */}
                                                         <Button
                                                             size="icon"
@@ -172,3 +175,5 @@ export const WorkerItemTable = ({
         </div>
     )
 }
+
+export default WorkerItemTable;

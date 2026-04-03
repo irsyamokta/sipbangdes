@@ -7,37 +7,61 @@ use App\Modules\WorkerCategory\Repositories\WorkerCategoryRepository;
 
 class WorkerCategoryService
 {
+    /**
+     * Inisialisasi service dengan dependency repository.
+     */
     public function __construct(
-        private WorkerCategoryRepository $repo
+        private WorkerCategoryRepository $workerCategoryRepository
     ) {}
 
+    /**
+     * Mengambil seluruh data kategori pekerjaan.
+     *
+     * Catatan:
+     * - Digunakan untuk kebutuhan tampilan (index / dropdown)
+     */
     public function getWorkerCategory()
     {
-        return $this->repo->getAll();
+        return $this->workerCategoryRepository->getAll();
     }
 
+    /**
+     * Membuat kategori pekerjaan baru.
+     *
+     * Aturan bisnis:
+     * - Nama kategori harus unik
+     */
     public function createWorkerCategory(array $data)
     {
-        if ($this->repo->existsByName($data["name"]))
-            throw new DomainException("Kategori pekerjaan sudah ada");
+        if ($this->workerCategoryRepository->existsByName($data["name"]))
+            throw new DomainException("Kategori pekerjaan sudah ada.");
 
-        return $this->repo->create($data);
+        return $this->workerCategoryRepository->create($data);
     }
 
+    /**
+     * Memperbarui data kategori pekerjaan.
+     *
+     * Aturan bisnis:
+     * - Nama kategori harus tetap unik (kecuali data itu sendiri)
+     */
     public function updateWorkerCategory($id, array $data)
     {
-        $workerCategory = $this->repo->find($id);
+        $workerCategory = $this->workerCategoryRepository->find($id);
 
-        if ($this->repo->existsByNameExcept($id, $data["name"]))
-            throw new DomainException("Kategori pekerjaan sudah ada");
+        if ($this->workerCategoryRepository->existsByNameExcept($id, $data["name"]))
+            throw new DomainException("Kategori pekerjaan sudah ada.");
 
-        return $this->repo->update($workerCategory, $data);
+        return $this->workerCategoryRepository->update($workerCategory, $data);
     }
 
+    /**
+     * Menghapus kategori pekerjaan.
+     */
     public function deleteWorkerCategory($id)
     {
-        $workerCategory = $this->repo->find($id);
+        $workerCategory = $this->workerCategoryRepository->find($id);
 
-        return $this->repo->delete($workerCategory);
+        return $this->workerCategoryRepository->delete($workerCategory);
     }
 }
