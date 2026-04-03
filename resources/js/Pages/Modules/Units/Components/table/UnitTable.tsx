@@ -1,13 +1,9 @@
-import { usePage } from "@inertiajs/react";
-
 import { useDelete } from "@/hooks/useDelete";
-import { useSearch } from "@/hooks/useSearch";
 
-import { UnitPageProps, UnitsTableProps } from "@/types/unit";
+import { UnitsTableProps } from "@/types/unit";
 
 import { EmptyTable } from "@/Components/empty/EmptyTable";
 import Button from "@/Components/ui/button/Button";
-import Input from "@/Components/form/input/InputField";
 import {
     Table,
     TableBody,
@@ -20,16 +16,14 @@ import Pagination from "@/Components/ui/pagination/Pagination";
 import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { LuTrash2, LuPencil } from "react-icons/lu";
-import { FiSearch } from "react-icons/fi";
 
-export default function UnitsTable({
+const UnitTable = ({
     units,
     last_page,
     links,
     onEdit,
-}: UnitsTableProps) {
-    const { props } = usePage<UnitPageProps>();
-
+    filters,
+}: UnitsTableProps) => {
     const { handleDelete, deletingId } = useDelete({
         routeName: "unit.destroy",
         confirmTitle: "Hapus Satuan?",
@@ -37,27 +31,8 @@ export default function UnitsTable({
         errorMessage: "Gagal menghapus satuan",
     });
 
-    const { filters, setFilter } = useSearch({
-        routeName: "unit.index",
-        initialFilters: {
-            search: props.filters.search ?? "",
-        }
-    });
-
     return (
         <div className="flex flex-col gap-4 mt-4">
-            {/* Search */}
-            <div className="flex items-center gap-2 w-full sm:w-1/3">
-                <Input
-                    type="text"
-                    startIcon={<FiSearch />}
-                    placeholder="Cari satuan..."
-                    value={filters.search}
-                    onChange={(e) => setFilter("search", (e.target.value))}
-                    className="w-full rounded-lg border-gray-300 text-sm"
-                />
-            </div>
-
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
                 {/* Table */}
                 <div className="max-w-full overflow-x-auto">
@@ -110,7 +85,7 @@ export default function UnitsTable({
                                             {unit.code}
                                         </TableCell>
 
-                                        {/* Nama */}
+                                        {/* Name */}
                                         <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                                             {unit.name}
                                         </TableCell>
@@ -123,6 +98,7 @@ export default function UnitsTable({
                                         {/* Actions */}
                                         <TableCell className="px-6 py-4">
                                             <div className="flex justify-center gap-1">
+
                                                 {/* Edit */}
                                                 <Button
                                                     size="icon"
@@ -170,3 +146,4 @@ export default function UnitsTable({
     )
 }
 
+export default UnitTable;

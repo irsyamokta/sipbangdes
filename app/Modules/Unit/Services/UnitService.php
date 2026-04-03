@@ -10,27 +10,51 @@ use Illuminate\Support\Facades\DB;
 
 class UnitService
 {
+    /**
+     * Inisialisasi service dengan dependency repository dan code generator.
+     */
     public function __construct(
-        protected UnitRepository $repo,
+        protected UnitRepository $unitRepository,
         protected CodeGeneratorService $codeGenerator
     ) {}
 
+    /**
+     * Mengambil data satuan.
+     *
+     * Parameter:
+     * - search: filter pencarian
+     * - paginate: menentukan apakah hasil dipaginasi
+     * - perPage: jumlah data per halaman
+     *
+     * Catatan:
+     * - Fleksibel untuk kebutuhan dropdown (tanpa pagination) dan tabel (dengan pagination)
+     */
     public function getUnits(
         ?string $search = null,
         bool $paginate = true,
         int $perPage = 10
     ) {
         if ($paginate) {
-            return $this->repo->getPaginated($search, $perPage);
+            return $this->unitRepository->getPaginated($search, $perPage);
         }
 
-        return $this->repo->getAll($search);
+        return $this->unitRepository->getAll($search);
     }
 
+    /**
+     * Membuat data satuan baru.
+     *
+     * Aturan bisnis:
+     * - Nama satuan harus unik
+     *
+     * Catatan:
+     * - Code satuan di-generate otomatis dengan prefix 'SAT'
+     * - Menggunakan transaction untuk menjaga konsistensi
+     */
     public function createUnit(array $data)
     {
-        if ($this->repo->existsByName($data["name"]))
-            throw new DomainException("Nama satuan sudah ada");
+        if ($this->unitRepository->existsByName($data["name"]))
+            throw new DomainException("Nama satuan sudah ada.");
 
         return DB::transaction(function () use ($data) {
             $data["code"] = $this->codeGenerator->generate(
@@ -39,24 +63,33 @@ class UnitService
                 'SAT'
             );
 
-            return $this->repo->create($data);
+            return $this->unitRepository->create($data);
         });
     }
 
+    /**
+     * Memperbarui data satuan.
+     *
+     * Aturan bisnis:
+     * - Nama satuan harus tetap unik (kecuali data itu sendiri)
+     */
     public function updateUnit($id, array $data)
     {
-        $unit = $this->repo->find($id);
+        $unit = $this->unitRepository->find($id);
 
-        if ($this->repo->existsByNameExcept($id, $data["name"]))
-            throw new DomainException("Nama satuan sudah ada");
+        if ($this->unitRepository->existsByNameExcept($id, $data["name"]))
+            throw new DomainException("Nama satuan sudah ada.");
 
-        return $this->repo->update($unit, $data);
+        return $this->unitRepository->update($unit, $data);
     }
 
+    /**
+     * Menghapus data satuan.
+     */
     public function deleteUnit($id)
     {
-        $unit = $this->repo->find($id);
+        $unit = $this->unitRepository->find($id);
 
-        return $this->repo->delete($unit);
+        return $this->unitRepository->delete($unit);
     }
 }

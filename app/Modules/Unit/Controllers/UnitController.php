@@ -2,7 +2,6 @@
 
 namespace App\Modules\Unit\Controllers;
 
-use Exception;
 use Throwable;
 use DomainException;
 use Inertia\Inertia;
@@ -14,13 +13,23 @@ use App\Modules\Unit\Requests\UnitUpdateRequest;
 
 class UnitController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected UnitService $service
+        protected UnitService $unitService
     ) {}
 
+    /**
+     * Menampilkan halaman daftar satuan.
+     *
+     * Catatan:
+     * - Menggunakan pagination
+     * - Filter dikirim ke frontend
+     */
     public function index(Request $request)
     {
-        $units = $this->service->getUnits(
+        $units = $this->unitService->getUnits(
             $request->search,
             true,
             10
@@ -32,10 +41,17 @@ class UnitController extends Controller
         ]);
     }
 
+    /**
+     * Menyimpan data satuan baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis (duplikasi)
+     */
     public function store(UnitStoreRequest $request)
     {
         try {
-            $this->service->createUnit($request->validated());
+            $this->unitService->createUnit($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -49,10 +65,13 @@ class UnitController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data satuan.
+     */
     public function update(UnitUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateUnit($id, $request->validated());
+            $this->unitService->updateUnit($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -66,13 +85,20 @@ class UnitController extends Controller
         }
     }
 
+    /**
+     * Menghapus data satuan.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteUnit($id);
+            $this->unitService->deleteUnit($id);
 
             return back();
-        } catch (Exception $e) {
+        } catch (DomainException $e) {
+            return back()->withErrors([
+                $e->getMessage()
+            ]);
+        } catch (Throwable $e) {
             return back()->withErrors([
                 'Terjadi kesalahan, silahkan coba lagi'
             ]);

@@ -7,7 +7,7 @@ import Form from '@/Components/form/Form';
 import Input from '@/Components/form/input/InputField';
 import Select from '@/Components/form/input/Select';
 
-export const ModalUnit = ({
+const UnitModal = ({
     isOpen,
     onClose,
     unit,
@@ -29,6 +29,7 @@ export const ModalUnit = ({
         editData: unit,
         editId: unit?.id,
         successMessage: "Satuan berhasil disimpan",
+        updateMessage: "Satuan berhasil diperbarui",
         storeRoute: "unit.store",
         updateRoute: "unit.update",
     });
@@ -49,7 +50,7 @@ export const ModalUnit = ({
                 className="flex flex-col gap-4 p-4 md:p-6"
                 preventEnterSubmit
             >
-                {/* name */}
+                {/* Name */}
                 <Input
                     label="Nama Satuan"
                     type="text"
@@ -61,7 +62,7 @@ export const ModalUnit = ({
                     required
                 />
 
-                {/* category */}
+                {/* Category */}
                 <Select
                     label="Kategori"
                     value={data.category}
@@ -84,3 +85,5 @@ export const ModalUnit = ({
         </Modal>
     )
 }
+
+export default UnitModal;

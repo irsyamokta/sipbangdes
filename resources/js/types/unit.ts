@@ -35,6 +35,9 @@ interface UnitsTableProps {
     units: Unit[];
     last_page: number;
     links: any[];
+    filters: {
+        search: string;
+    }
     onEdit: (unit: Unit) => void;
 };
 

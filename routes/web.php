@@ -18,4 +18,4 @@ require __DIR__.'/project.php';
 require __DIR__.'/tos.php';
 require __DIR__.'/masterdata.php';
 require __DIR__.'/modules/rab.php';
-require __DIR__.'/modules/user.php';
+require __DIR__.'/user.php';
