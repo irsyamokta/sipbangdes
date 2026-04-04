@@ -18,6 +18,9 @@ use App\Modules\TakeOffSheet\Requests\TakeOffSheetUpdateRequest;
 
 class TakeOffSheetController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
         protected TakeOffSheetService $takeOffSheetService,
         protected ProjectService $projectService,
