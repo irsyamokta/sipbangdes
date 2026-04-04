@@ -10,6 +10,14 @@ use Illuminate\Support\Collection;
 
 class DashboardRepository
 {
+    /**
+     * Mengambil total RAB project per tahun (hanya yang approved).
+     *
+     * Catatan:
+     * - Menggunakan snapshot TOS untuk menghitung material, upah, dan alat
+     * - Ditambah biaya operasional
+     * - Hasil dikelompokkan berdasarkan tahun anggaran
+     */
     public function getApprovedRabPerYear()
     {
         $projects = Project::query()
@@ -37,26 +45,48 @@ class DashboardRepository
             ->values();
     }
 
+    /**
+     * Mengambil total seluruh project.
+     */
     public function getTotalProject()
     {
         return Project::count();
     }
 
+    /**
+     * Mengambil jumlah project aktif.
+     *
+     * Catatan:
+     * - Status 'berjalan' dianggap sebagai aktif
+     */
     public function getActiveProject()
     {
         return Project::where('project_status', 'berjalan')->count();
     }
 
+    /**
+     * Mengambil total data AHSP.
+     */
     public function getTotalAhsp()
     {
         return Ahsp::count();
     }
 
+    /**
+     * Mengambil total data Take Off Sheet (TOS).
+     */
     public function getTotalTos()
     {
         return TakeOffSheet::count();
     }
 
+    /**
+     * Mengambil daftar project terbaru.
+     *
+     * Catatan:
+     * - Mengambil 3 project terakhir
+     * - Menghitung subtotal menggunakan snapshot + biaya operasional
+     */
     public function getLatestProjects()
     {
         return Project::query()
@@ -82,6 +112,12 @@ class DashboardRepository
             });
     }
 
+    /**
+     * Mengambil 5 kategori pekerjaan teratas.
+     *
+     * Catatan:
+     * - Digunakan menampilkan top 5 kategori
+     */
     public function getTopWorkerCategories()
     {
         return WorkerCategory::query()
@@ -95,6 +131,15 @@ class DashboardRepository
             ]);
     }
 
+    /**
+     * Menghitung total biaya project.
+     *
+     * Komponen:
+     * - Material
+     * - Upah
+     * - Alat
+     * - Biaya operasional
+     */
     private function calculateProjectTotal(Project $project): float
     {
         [$materialTotal, $wageTotal, $toolTotal] =
@@ -108,6 +153,12 @@ class DashboardRepository
         return $materialTotal + $wageTotal + $toolTotal + $operationalTotal;
     }
 
+    /**
+     * Menghitung total dari snapshot TOS.
+     *
+     * Catatan:
+     * - Snapshot digunakan agar perhitungan tidak berubah walaupun data master berubah
+     */
     private function calculateFromSnapshots(Collection $tosList)
     {
         $recapMaterial = [];
@@ -132,6 +183,13 @@ class DashboardRepository
         ];
     }
 
+    /**
+     * Mengakumulasi item berdasarkan ID.
+     *
+     * Catatan:
+     * - Qty dijumlahkan
+     * - Price diambil dari snapshot
+     */
     private function accumulate(array &$target, array $items)
     {
         foreach ($items as $item) {
@@ -148,6 +206,12 @@ class DashboardRepository
         }
     }
 
+    /**
+     * Menghitung total biaya dari item.
+     *
+     * Catatan:
+     * - Qty dibulatkan ke atas (ceil)
+     */
     private function calculateTotal(array $items)
     {
         return collect($items)

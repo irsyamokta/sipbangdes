@@ -29,22 +29,30 @@ export default function Dashboard() {
         <DashboardLayout>
             <Head title="Dashboard" />
             <div className="grid grid-cols-12 gap-4 md:gap-6">
-                <div className="col-span-12 space-y-6">
+
+                {/* Header */}
+                <div className="col-span-12">
                     <HeaderTitle
                         name={auth.user.name}
                         subtitle="Kelola sistem dan pantau seluruh aktivitas"
                     />
                 </div>
 
+                {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
+
+                    {/* Subtotal */}
                     <SubtotalCard
                         title="Total Nilai RAB"
                         subtitle={`Dari ${data.rab_per_year[0].total_project} RAB yang disetujui pada tahun ini`}
-                        icon={<LuTrendingUp size={24}/>}
+                        icon={<LuTrendingUp size={24} />}
                         value={formatCurrency(data.rab_per_year.reduce((acc, curr) => acc + curr.total_rab, 0))}
                     />
 
+                    {/* Stat */}
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+
+                        {/* Total Project */}
                         <StatCard
                             variant="dashboard"
                             title="Total Proyek"
@@ -55,6 +63,7 @@ export default function Dashboard() {
                             value={data.summary.total_project}
                         />
 
+                        {/* Active Project */}
                         <StatCard
                             variant="dashboard"
                             title="Proyek Aktif"
@@ -65,6 +74,7 @@ export default function Dashboard() {
                             value={data.summary.active_project}
                         />
 
+                        {/* Total AHSP */}
                         <StatCard
                             variant="dashboard"
                             title="Total AHSP"
@@ -75,6 +85,7 @@ export default function Dashboard() {
                             value={data.summary.total_ahsp}
                         />
 
+                        {/* Total TOS */}
                         <StatCard
                             variant="dashboard"
                             title="Total TOS"
@@ -87,9 +98,18 @@ export default function Dashboard() {
 
                     </div>
 
+                    {/* Card */}
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                        <LatestProjectCard projects={data.latest_projects} />
-                        <TopCategoryCard categories={data.top_categories} />
+
+                        {/* Latest Project */}
+                        <LatestProjectCard
+                            projects={data.latest_projects}
+                        />
+
+                        {/* Top Category */}
+                        <TopCategoryCard
+                            categories={data.top_categories}
+                        />
                     </div>
                 </div>
             </div>
