@@ -13,7 +13,7 @@ interface User {
 interface ModalUserProps {
     isOpen: boolean;
     onClose: () => void;
-    user?: any;
+    user?: User | null;
 };
 
 interface UserForm {

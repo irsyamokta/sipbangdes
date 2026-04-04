@@ -2,7 +2,6 @@
 
 namespace App\Modules\Wage\Controllers;
 
-use Exception;
 use Throwable;
 use DomainException;
 use Inertia\Inertia;
@@ -15,14 +14,24 @@ use App\Modules\Wage\Requests\WageUpdateRequest;
 
 class WageController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected WageService $service,
+        protected WageService $wageService,
         protected UnitService $unitService
     ) {}
 
+    /**
+     * Menampilkan halaman daftar upah.
+     *
+     * Catatan:
+     * - Data wage menggunakan pagination
+     * - Unit digunakan untuk dropdown (non-pagination)
+     */
     public function index(Request $request)
     {
-        $wages = $this->service->getWages(
+        $wages = $this->wageService->getWages(
             $request->search,
             true,
             10
@@ -35,7 +44,7 @@ class WageController extends Controller
 
         return Inertia::render('Modules/Wages/Index', [
             'wages' => $wages,
-            'units' => $units->map(fn($unit) => [
+            'unitOptions' => $units->map(fn($unit) => [
                 'value' => $unit->name,
                 'label' => $unit->name,
             ]),
@@ -43,10 +52,17 @@ class WageController extends Controller
         ]);
     }
 
+    /**
+     * Menyimpan data upah baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis
+     */
     public function store(WageStoreRequest $request)
     {
         try {
-            $this->service->createWage($request->validated());
+            $this->wageService->createWage($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -60,10 +76,13 @@ class WageController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data upah.
+     */
     public function update(WageUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateWage($id, $request->validated());
+            $this->wageService->updateWage($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -77,13 +96,20 @@ class WageController extends Controller
         }
     }
 
+    /**
+     * Menghapus data upah.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteWage($id);
+            $this->wageService->deleteWage($id);
 
             return back();
-        } catch (Exception $e) {
+        } catch (DomainException $e) {
+            return back()->withErrors([
+                $e->getMessage()
+            ]);
+        } catch (Throwable $e) {
             return back()->withErrors([
                 'Terjadi kesalahan, silahkan coba lagi'
             ]);

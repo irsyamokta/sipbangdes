@@ -6,11 +6,20 @@ use App\Models\MasterWage;
 
 class WageRepository
 {
+    /**
+     * Mengambil seluruh data tanpa pagination.
+     */
     public function getAll(?string $search = null)
     {
         return $this->baseQuery($search)->get();
     }
 
+    /**
+     * Mengambil data dengan pagination.
+     *
+     * Catatan:
+     * - Query string dipertahankan untuk kebutuhan filter frontend
+     */
     public function getPaginated(?string $search = null, int $perPage = 10)
     {
         return $this->baseQuery($search)
@@ -18,6 +27,12 @@ class WageRepository
             ->withQueryString();
     }
 
+    /**
+     * Mengambil data dengan pagination.
+     *
+     * Catatan:
+     * - Query string dipertahankan untuk kebutuhan filter frontend
+     */
     private function baseQuery(?string $search)
     {
         return MasterWage::query()
@@ -29,35 +44,59 @@ class WageRepository
             });
     }
 
-    public function find($id): MasterWage
+    /**
+     * Mengambil satu data berdasarkan ID.
+     */
+    public function find($id)
     {
         return MasterWage::findOrFail($id);
     }
 
-    public function existsByPositionExcept($id, string $position): bool
+    /**
+     * Mengecek apakah nama jabatan sudah ada.
+     *
+     * Digunakan saat create.
+     */
+    public function existsByPosition(string $position)
+    {
+        return MasterWage::where('position', $position)->exists();
+    }
+
+    public function existsByPositionExcept($id, string $position)
     {
         return MasterWage::where('position', $position)
             ->where('id', '!=', $id)
             ->exists();
     }
 
-    public function existsByPosition(string $position): bool
-    {
-        return MasterWage::where('position', $position)->exists();
-    }
-
-    public function create(array $data): MasterWage
+    /**
+     * Mengecek duplikasi nama jabatan (exclude ID tertentu).
+     *
+     * Digunakan saat update.
+     */
+    public function create(array $data)
     {
         return MasterWage::create($data);
     }
 
-    public function update(MasterWage $wage, array $data): MasterWage
+    /**
+     * Mengecek duplikasi nama jabatan (exclude ID tertentu).
+     *
+     * Digunakan saat update.
+     */
+    public function update(MasterWage $wage, array $data)
     {
         $wage->update($data);
         return $wage;
     }
 
-    public function delete(MasterWage $wage): bool
+    /**
+     * Memperbarui data.
+     *
+     * Catatan:
+     * - Mengembalikan instance model setelah update
+     */
+    public function delete(MasterWage $wage)
     {
         return $wage->delete();
     }

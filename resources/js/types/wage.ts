@@ -1,5 +1,10 @@
 import { PageProps } from ".";
 
+interface SelectOption {
+    value: string;
+    label: string;
+};
+
 interface Wage {
     id: string;
     code: string;
@@ -13,12 +18,8 @@ interface Wage {
 interface ModalWageProps {
     isOpen: boolean;
     onClose: () => void;
-    wage?: any;
-    units: {
-        values: string;
-        labels: string;
-        filter: any;
-    }
+    wage?: Wage | null;
+    unitOptions: SelectOption[];
 };
 
 interface WageForm {
@@ -33,10 +34,7 @@ interface WagePageProps extends PageProps {
         links: any[];
         last_page: number;
     }
-    units: {
-        values: string;
-        labels: string;
-    }
+    unitOptions: SelectOption[];
     filters: {
         search: string;
     }
@@ -46,6 +44,9 @@ interface WagesTableProps {
     wages: Wage[];
     last_page: number;
     links: any[];
+    filters: {
+        search: string;
+    }
     onEdit: (wage: Wage) => void;
 };
 

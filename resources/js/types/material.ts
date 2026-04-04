@@ -18,7 +18,7 @@ interface Material {
 interface ModalMaterialProps {
     isOpen: boolean;
     onClose: () => void;
-    material?: any;
+    material?: Material | null;
     unitOptions: SelectOption[];
 };
 

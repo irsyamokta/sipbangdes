@@ -8,11 +8,11 @@ import Input from '@/Components/form/input/InputField';
 import CurrencyInput from '@/Components/form/input/CurrencyInput';
 import Select from '@/Components/form/input/Select';
 
-export const ModalWage = ({
+const WageModal = ({
     isOpen,
     onClose,
     wage,
-    units
+    unitOptions
 }: ModalWageProps) => {
     const {
         data,
@@ -32,6 +32,7 @@ export const ModalWage = ({
         editData: wage,
         editId: wage?.id,
         successMessage: "Upah berhasil disimpan",
+        updateMessage: "Upah berhasil diperbarui",
         storeRoute: "wage.store",
         updateRoute: "wage.update",
     });
@@ -52,7 +53,7 @@ export const ModalWage = ({
                 className="flex flex-col gap-4 p-4 md:p-6"
                 preventEnterSubmit
             >
-                {/* name */}
+                {/* Name */}
                 <Input
                     label="Jabatan/Tenaga Kerja"
                     type="text"
@@ -64,14 +65,14 @@ export const ModalWage = ({
                     required
                 />
 
-                {/* unit */}
+                {/* Unit */}
                 <Select
                     label="Satuan"
                     value={data.unit}
                     onChange={(value) => setData("unit", value)}
                     error={serverErrors.unit}
                     required
-                    options={(units ?? [])
+                    options={(unitOptions ?? [])
                         .filter((unit: any) => unit?.value)
                     }
                 />
@@ -90,3 +91,5 @@ export const ModalWage = ({
         </Modal>
     )
 }
+
+export default WageModal;

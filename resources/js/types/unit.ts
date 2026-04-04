@@ -12,7 +12,7 @@ interface Unit {
 interface ModalUnitProps {
     isOpen: boolean;
     onClose: () => void;
-    unit?: any;
+    unit?: Unit | null;
 };
 
 interface UnitForm {

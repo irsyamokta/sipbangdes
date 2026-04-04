@@ -10,27 +10,52 @@ use Illuminate\Support\Facades\DB;
 
 class WageService
 {
+    /**
+     * Inisialisasi service dengan dependency repository dan code generator.
+     */
     public function __construct(
-        protected WageRepository $repo,
+        protected WageRepository $wageRepository,
         protected CodeGeneratorService $codeGenerator
     ) {}
 
+    /**
+     * Mengambil data upah (wage).
+     *
+     * Parameter:
+     * - search: filter pencarian
+     * - paginate: menentukan apakah hasil dipaginasi
+     * - perPage: jumlah data per halaman
+     *
+     * Catatan:
+     * - Digunakan untuk tabel (pagination) dan dropdown (non-pagination)
+     */
     public function getWages(
         ?string $search = null,
         bool $paginate = true,
         int $perPage = 10
     ) {
         if ($paginate) {
-            return $this->repo->getPaginated($search, $perPage);
+            return $this->wageRepository->getPaginated($search, $perPage);
         }
 
-        return $this->repo->getAll($search);
+        return $this->wageRepository->getAll($search);
     }
 
+    /**
+     * Mengambil data upah (wage).
+     *
+     * Parameter:
+     * - search: filter pencarian
+     * - paginate: menentukan apakah hasil dipaginasi
+     * - perPage: jumlah data per halaman
+     *
+     * Catatan:
+     * - Digunakan untuk tabel (pagination) dan dropdown (non-pagination)
+     */
     public function createWage(array $data)
     {
-        if ($this->repo->existsByPosition($data["position"]))
-            throw new DomainException("Nama jabatan sudah ada");
+        if ($this->wageRepository->existsByPosition($data["position"]))
+            throw new DomainException("Nama jabatan sudah ada.");
 
         return DB::transaction(function () use ($data) {
             $data["code"] = $this->codeGenerator->generate(
@@ -39,24 +64,33 @@ class WageService
                 'UPH'
             );
 
-            return $this->repo->create($data);
+            return $this->wageRepository->create($data);
         });
     }
 
+    /**
+     * Memperbarui data upah.
+     *
+     * Aturan bisnis:
+     * - Nama jabatan harus tetap unik (kecuali data itu sendiri)
+     */
     public function updateWage($id, array $data)
     {
-        $wage = $this->repo->find($id);
+        $wage = $this->wageRepository->find($id);
 
-        if ($this->repo->existsByPositionExcept($id, $data["position"]))
-            throw new DomainException("Nama jabatan sudah ada");
+        if ($this->wageRepository->existsByPositionExcept($id, $data["position"]))
+            throw new DomainException("Nama jabatan sudah ada.");
 
-        return $this->repo->update($wage, $data);
+        return $this->wageRepository->update($wage, $data);
     }
 
+    /**
+     * Menghapus data upah.
+     */
     public function deleteWage($id)
     {
-        $wage = $this->repo->find($id);
+        $wage = $this->wageRepository->find($id);
 
-        return $this->repo->delete($wage);
+        return $this->wageRepository->delete($wage);
     }
 }
