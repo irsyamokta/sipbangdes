@@ -11,8 +11,11 @@ use App\Modules\Project\Requests\ProgressStoreRequest;
 
 class ProgressController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected ProgressService $service
+        protected ProgressService $progressService
     ) {}
 
     /**
@@ -24,7 +27,7 @@ class ProgressController extends Controller
     public function show(string $id)
     {
         try {
-            $data = $this->service->getDetail($id);
+            $data = $this->progressService->getDetail($id);
 
             return Inertia::render('Modules/Projects/Progress', [
                 'project' => $data['project'],
@@ -48,7 +51,7 @@ class ProgressController extends Controller
     public function storeProgress(ProgressStoreRequest $request, string $id)
     {
         try {
-            $this->service->createWithDocuments(
+            $this->progressService->createWithDocuments(
                 data: [
                     ...$request->validated(),
                     'project_id' => $id,

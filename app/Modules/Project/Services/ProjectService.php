@@ -4,7 +4,6 @@ namespace App\Modules\Project\Services;
 
 use DomainException;
 use App\Modules\Project\Repositories\ProjectRepository;
-use App\Modules\Project\Repositories\ProgressRepository;
 use Illuminate\Support\Facades\DB;
 
 class ProjectService
@@ -13,8 +12,7 @@ class ProjectService
      * Inisialisasi service dengan dependency repository.
      */
     public function __construct(
-        protected ProjectRepository $repo,
-        protected ProgressRepository $progress
+        protected ProjectRepository $projectRepository,
     ) {}
 
     /**
@@ -26,7 +24,7 @@ class ProjectService
      */
     public function getProjects(?string $search = null, ?string $year = null)
     {
-        return $this->repo->getAll($search, $year);
+        return $this->projectRepository->getAll($search, $year);
     }
 
     /**
@@ -44,7 +42,7 @@ class ProjectService
      */
     public function createProject(array $data)
     {
-        if ($this->repo->isDuplicate(
+        if ($this->projectRepository->isDuplicate(
             $data['project_name'],
             $data['budget_year'],
             $data['location']
@@ -53,7 +51,7 @@ class ProjectService
         }
 
         return DB::transaction(function () use ($data) {
-            return $this->repo->create($data);
+            return $this->projectRepository->create($data);
         });
     }
 
@@ -71,9 +69,9 @@ class ProjectService
      */
     public function updateProject($id, array $data)
     {
-        $project = $this->repo->find($id);
+        $project = $this->projectRepository->find($id);
 
-        if ($this->repo->isDuplicate(
+        if ($this->projectRepository->isDuplicate(
             $data['project_name'],
             $data['budget_year'],
             $data['location'],
@@ -82,19 +80,16 @@ class ProjectService
             throw new DomainException("Proyek tersebut sudah ada.");
         }
 
-        return $this->repo->update($project, $data);
+        return $this->projectRepository->update($project, $data);
     }
 
     /**
-     * Menghapus project berdasarkan ID.
-     *
-     * Catatan:
-     * - Tidak ada validasi tambahan (diasumsikan dikontrol di layer lain)
+     * Menghapus project.
      */
     public function deleteProject($id)
     {
-        $project = $this->repo->find($id);
+        $project = $this->projectRepository->find($id);
 
-        return $this->repo->delete($project);
+        return $this->projectRepository->delete($project);
     }
 }

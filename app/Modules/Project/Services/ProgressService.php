@@ -13,7 +13,7 @@ class ProgressService
      * Inisialisasi service dengan dependency repository.
      */
     public function __construct(
-        protected ProgressRepository $repo
+        protected ProgressRepository $progressRepository
     ) {}
 
     /**
@@ -24,8 +24,8 @@ class ProgressService
      */
     public function getDetail(string $projectId): array
     {
-        $project = $this->repo->getProjectDetail($projectId);
-        $total = $this->repo->getTotalProgress($projectId);
+        $project = $this->progressRepository->getProjectDetail($projectId);
+        $total = $this->progressRepository->getTotalProgress($projectId);
 
         return [
             'project' => $project,
@@ -48,7 +48,7 @@ class ProgressService
     {
         return DB::transaction(function () use ($data, $files) {
 
-            $progress = $this->repo->createProgress($data);
+            $progress = $this->progressRepository->createProgress($data);
 
             $uploadedPublicIds = [];
 

@@ -8,7 +8,7 @@ import TextArea from '@/Components/form/input/TextArea';
 import Select from '@/Components/form/input/Select';
 import FileInput from '@/Components/form/input/FileInput';
 
-const ModalProgress = ({
+const ProgressModal = ({
     isOpen,
     onClose,
     project,
@@ -94,4 +94,4 @@ const ModalProgress = ({
     )
 }
 
-export default ModalProgress;
+export default ProgressModal;

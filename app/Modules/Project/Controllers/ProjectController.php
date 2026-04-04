@@ -14,8 +14,11 @@ use App\Modules\Project\Requests\ProjectUpdateRequest;
 
 class ProjectController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected ProjectService $service,
+        protected ProjectService $projectService,
         protected UnitService $unitService
     ) {}
 
@@ -28,7 +31,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $projects = $this->service->getProjects($request->search, $request->year);
+        $projects = $this->projectService->getProjects($request->search, $request->year);
         $units = $this->unitService->getUnits(null, false);
 
         return Inertia::render('Modules/Projects/Index', [
@@ -51,7 +54,7 @@ class ProjectController extends Controller
     public function store(ProjectStoreRequest $request)
     {
         try {
-            $this->service->createProject($request->validated());
+            $this->projectService->createProject($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -74,7 +77,7 @@ class ProjectController extends Controller
     public function update(ProjectUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateProject($id, $request->validated());
+            $this->projectService->updateProject($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -94,7 +97,7 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         try {
-            $this->service->deleteProject($id);
+            $this->projectService->deleteProject($id);
 
             return back();
         } catch (DomainException $e) {

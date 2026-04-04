@@ -11,8 +11,8 @@ import { Project, ProjectPageProps } from "@/types/project";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import HeaderTitle from "@/Components/HeaderTitle";
 import FilterBar from "@/Components/filter/FilterBar";
-import ModalProject from "./Components/modal/ModalProject";
-import CardProject from "./Components/card/CardProject"
+import ProjectModal from "./Components/modal/ProjectModal";
+import ProjectCard from "./Components/card/ProjectCard"
 
 import { LuPlus } from "react-icons/lu";
 
@@ -24,13 +24,12 @@ export default function Projects() {
             filters: filter
         }
     } = usePage<ProjectPageProps>();
-    
+
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-    const canCreateProject = can("project.create");
     const budgetYearOptions = useBudgetYears({ startYear: 2025 });
 
     const { handleDelete } = useDelete({
@@ -65,7 +64,7 @@ export default function Projects() {
             <Head title="Proyek" />
 
             {/* Modal */}
-            <ModalProject
+            <ProjectModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
@@ -82,8 +81,8 @@ export default function Projects() {
                     <HeaderTitle
                         title="Daftar Proyek"
                         subtitle="Kelola proyek pembangunan desa"
-                        actionLabel={canCreateProject ? "Tambah Proyek" : undefined}
-                        actionIcon={canCreateProject ? <LuPlus /> : undefined}
+                        actionLabel={can("project.create") ? "Tambah Proyek" : undefined}
+                        actionIcon={can("project.create") ? <LuPlus /> : undefined}
                         onActionClick={() => setIsModalOpen(true)}
                     />
                 </div>
@@ -107,7 +106,7 @@ export default function Projects() {
                     />
 
                     {/* Cards */}
-                    <CardProject
+                    <ProjectCard
                         projects={projects}
                         onEdit={(project) => {
                             setSelectedProject(project);

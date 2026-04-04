@@ -26,7 +26,7 @@ const badgeColor = (status: string) => {
     }
 };
 
-const CardProject = ({
+const ProjectCard = ({
     projects,
     deletingId,
     onEdit,
@@ -36,7 +36,7 @@ const CardProject = ({
 }: ProjectCardProps) => {
     const { can } = usePermission();
 
-    {/* Empty State */}
+    {/* Empty State */ }
     if (!projects || projects.length === 0) {
         return (
             <div className="mt-4">
@@ -186,4 +186,4 @@ const CardProject = ({
     );
 };
 
-export default CardProject;
+export default ProjectCard;

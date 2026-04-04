@@ -9,9 +9,9 @@ import { ProjectProgressPageProps } from "@/types/progress"
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import PageBreadcrumb from "@/Components/ui/breadcrumb/Breadcrumb";
 import Button from "@/Components/ui/button/Button";
-import ModalProgress from "./Components/modal/ModalProgress";
+import ProgressModal from "./Components/modal/ProgressModal";
 import CardProgress from "./Components/card/CardProgress";
-import CardProgressHistory from "./Components/card/CardProgressHistory";
+import ProgressHistoryCard from "./Components/card/ProgressHistoryCard";
 
 import { LuPlus } from "react-icons/lu";
 
@@ -35,7 +35,7 @@ export default function Progress() {
             <Head title={project.project_name} />
 
             {/* Modal */}
-            <ModalProgress
+            <ProgressModal
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
@@ -79,7 +79,7 @@ export default function Progress() {
 
                 {/* Progress History */}
                 <div className="col-span-12 space-y-6">
-                    <CardProgressHistory
+                    <ProgressHistoryCard
                         projectProgresses={project.project_progresses}
                     />
                 </div>

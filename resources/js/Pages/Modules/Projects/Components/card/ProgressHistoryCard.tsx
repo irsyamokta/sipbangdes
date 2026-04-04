@@ -30,11 +30,11 @@ const percentageBadgeColor = (percentage: number) => {
     }
 };
 
-const CardProgressHistory = ({
+const ProgressHistoryCard = ({
     projectProgresses,
 }: ProjectProgressCardHistoryProps) => {
 
-    {/* Empty state */}
+    {/* Empty state */ }
     if (!projectProgresses.length) {
         return (
             <div className="bg-white p-10 rounded-xl border border-gray-200 text-center text-gray-500 transition hover:shadow-md">
@@ -108,4 +108,4 @@ const CardProgressHistory = ({
     )
 }
 
-export default CardProgressHistory;
+export default ProgressHistoryCard;

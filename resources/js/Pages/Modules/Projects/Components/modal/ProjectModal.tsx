@@ -10,7 +10,7 @@ import Input from '@/Components/form/input/InputField';
 import Select from '@/Components/form/input/Select';
 import CurrencyInput from '@/Components/form/input/CurrencyInput';
 
-const ModalProject = ({
+const ProjectModal = ({
     isOpen,
     onClose,
     project,
@@ -156,4 +156,4 @@ const ModalProject = ({
     )
 }
 
-export default ModalProject;
+export default ProjectModal;
