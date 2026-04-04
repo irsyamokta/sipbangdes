@@ -10,27 +10,51 @@ use Illuminate\Support\Facades\DB;
 
 class ToolService
 {
+    /**
+     * Inisialisasi service dengan dependency repository dan code generator.
+     */
     public function __construct(
-        protected ToolRepository $repo,
+        protected ToolRepository $toolRepository,
         protected CodeGeneratorService $codeGenerator
     ) {}
 
+    /**
+     * Mengambil data alat (tool).
+     *
+     * Parameter:
+     * - search: filter pencarian
+     * - paginate: menentukan apakah hasil dipaginasi
+     * - perPage: jumlah data per halaman
+     *
+     * Catatan:
+     * - Digunakan untuk tabel (pagination) dan dropdown (non-pagination)
+     */
     public function getTools(
         ?string $search = null,
         bool $paginate = true,
         int $perPage = 10
     ) {
         if ($paginate) {
-            return $this->repo->getPaginated($search, $perPage);
+            return $this->toolRepository->getPaginated($search, $perPage);
         }
 
-        return $this->repo->getAll($search);
+        return $this->toolRepository->getAll($search);
     }
 
+    /**
+     * Membuat data alat baru.
+     *
+     * Aturan bisnis:
+     * - Nama alat harus unik
+     *
+     * Catatan:
+     * - Code di-generate otomatis dengan prefix 'TL'
+     * - Menggunakan transaction untuk menjaga konsistensi data
+     */
     public function createTool(array $data)
     {
-        if ($this->repo->existsByName($data["name"]))
-            throw new DomainException("Nama alat sudah ada");
+        if ($this->toolRepository->existsByName($data["name"]))
+            throw new DomainException("Nama alat sudah ada.");
 
         return DB::transaction(function () use ($data) {
             $data["code"] = $this->codeGenerator->generate(
@@ -39,24 +63,33 @@ class ToolService
                 'TL'
             );
 
-            return $this->repo->create($data);
+            return $this->toolRepository->create($data);
         });
     }
 
+    /**
+     * Memperbarui data alat.
+     *
+     * Aturan bisnis:
+     * - Nama alat harus tetap unik (kecuali data itu sendiri)
+     */
     public function updateTool($id, array $data)
     {
-        $tool = $this->repo->find($id);
+        $tool = $this->toolRepository->find($id);
 
-        if ($this->repo->existsByNameExcept($id, $data["name"]))
-            throw new DomainException("Nama alat sudah ada");
+        if ($this->toolRepository->existsByNameExcept($id, $data["name"]))
+            throw new DomainException("Nama alat sudah ada.");
 
-        return $this->repo->update($tool, $data);
+        return $this->toolRepository->update($tool, $data);
     }
 
+    /**
+     * Menghapus data alat.
+     */
     public function deleteTool($id)
     {
-        $tool = $this->repo->find($id);
+        $tool = $this->toolRepository->find($id);
 
-        return $this->repo->delete($tool);
+        return $this->toolRepository->delete($tool);
     }
 }

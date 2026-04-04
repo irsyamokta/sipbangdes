@@ -28,10 +28,11 @@ class WageRepository
     }
 
     /**
-     * Mengambil data dengan pagination.
+     * Base query untuk MasterWage.
      *
      * Catatan:
-     * - Query string dipertahankan untuk kebutuhan filter frontend
+     * - Digunakan ulang untuk konsistensi query
+     * - Mendukung filter dinamis
      */
     private function baseQuery(?string $search)
     {
@@ -62,6 +63,11 @@ class WageRepository
         return MasterWage::where('position', $position)->exists();
     }
 
+    /**
+     * Mengecek duplikasi nama jabatan (exclude ID tertentu).
+     *
+     * Digunakan saat update.
+     */
     public function existsByPositionExcept($id, string $position)
     {
         return MasterWage::where('position', $position)
@@ -70,9 +76,7 @@ class WageRepository
     }
 
     /**
-     * Mengecek duplikasi nama jabatan (exclude ID tertentu).
-     *
-     * Digunakan saat update.
+     * Menyimpan data baru.
      */
     public function create(array $data)
     {
@@ -80,9 +84,10 @@ class WageRepository
     }
 
     /**
-     * Mengecek duplikasi nama jabatan (exclude ID tertentu).
+     * Memperbarui data.
      *
-     * Digunakan saat update.
+     * Catatan:
+     * - Mengembalikan instance model setelah update
      */
     public function update(MasterWage $wage, array $data)
     {
@@ -91,10 +96,7 @@ class WageRepository
     }
 
     /**
-     * Memperbarui data.
-     *
-     * Catatan:
-     * - Mengembalikan instance model setelah update
+     * Menghapus data.
      */
     public function delete(MasterWage $wage)
     {

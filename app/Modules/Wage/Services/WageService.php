@@ -42,15 +42,14 @@ class WageService
     }
 
     /**
-     * Mengambil data upah (wage).
+     * Membuat data upah baru.
      *
-     * Parameter:
-     * - search: filter pencarian
-     * - paginate: menentukan apakah hasil dipaginasi
-     * - perPage: jumlah data per halaman
+     * Aturan bisnis:
+     * - Nama jabatan (position) harus unik
      *
      * Catatan:
-     * - Digunakan untuk tabel (pagination) dan dropdown (non-pagination)
+     * - Code di-generate otomatis dengan prefix 'UPH'
+     * - Menggunakan transaction untuk menjaga konsistensi data
      */
     public function createWage(array $data)
     {

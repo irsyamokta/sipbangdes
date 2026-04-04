@@ -2,7 +2,6 @@
 
 namespace App\Modules\Tool\Controllers;
 
-use Exception;
 use Throwable;
 use DomainException;
 use Inertia\Inertia;
@@ -15,14 +14,24 @@ use App\Modules\Tool\Requests\ToolUpdateRequest;
 
 class ToolController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected ToolService $service,
+        protected ToolService $toolService,
         protected UnitService $unitService
     ) {}
 
+    /**
+     * Menampilkan halaman daftar alat.
+     *
+     * Catatan:
+     * - Data Tool menggunakan pagination
+     * - Unit digunakan untuk dropdown (non-pagination)
+     */
     public function index(Request $request)
     {
-        $tools = $this->service->getTools(
+        $tools = $this->toolService->getTools(
             $request->search,
             true,
             10
@@ -35,7 +44,7 @@ class ToolController extends Controller
 
         return Inertia::render('Modules/Tools/Index', [
             'tools' => $tools,
-            'units' => $units->map(fn($unit) => [
+            'unitOptions' => $units->map(fn($unit) => [
                 'value' => $unit->name,
                 'label' => $unit->name,
             ]),
@@ -43,10 +52,17 @@ class ToolController extends Controller
         ]);
     }
 
+    /**
+     * Menyimpan data alat baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk error bisnis
+     */
     public function store(ToolStoreRequest $request)
     {
         try {
-            $this->service->createTool($request->validated());
+            $this->toolService->createTool($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -60,10 +76,13 @@ class ToolController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data upah.
+     */
     public function update(ToolUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateTool($id, $request->validated());
+            $this->toolService->updateTool($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -77,13 +96,20 @@ class ToolController extends Controller
         }
     }
 
+    /**
+     * Menghapus data upah.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteTool($id);
+            $this->toolService->deleteTool($id);
 
             return back();
-        } catch (Exception $e) {
+        } catch (DomainException $e) {
+            return back()->withErrors([
+                $e->getMessage()
+            ]);
+        } catch (Throwable $e) {
             return back()->withErrors([
                 'Terjadi kesalahan, silahkan coba lagi'
             ]);

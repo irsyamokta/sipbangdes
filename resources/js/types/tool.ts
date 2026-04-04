@@ -1,5 +1,10 @@
 import { PageProps } from ".";
 
+interface SelectOption {
+    value: string;
+    label: string;
+}
+
 interface Tool {
     id: string;
     code: string;
@@ -13,12 +18,8 @@ interface Tool {
 interface ModalToolProps {
     isOpen: boolean;
     onClose: () => void;
-    tool?: any;
-    units: {
-        values: string;
-        labels: string;
-        filter: any;
-    }
+    tool?: Tool | null;
+    unitOptions: SelectOption[];
 };
 
 interface ToolForm {
@@ -33,10 +34,7 @@ interface ToolPageProps extends PageProps {
         links: any[];
         last_page: number;
     }
-    units: {
-        values: string;
-        labels: string;
-    }
+    unitOptions: SelectOption[];
     filters: {
         search: string;
     }
@@ -46,6 +44,9 @@ interface ToolsTableProps {
     tools: Tool[];
     last_page: number;
     links: any[];
+    filters: {
+        search: string;
+    }
     onEdit: (tool: Tool) => void;
 };
 

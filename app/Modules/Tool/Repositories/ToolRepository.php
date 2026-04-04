@@ -6,11 +6,20 @@ use App\Models\MasterTool;
 
 class ToolRepository
 {
+    /**
+     * Mengambil seluruh data tanpa pagination.
+     */
     public function getAll(?string $search = null)
     {
         return $this->baseQuery($search)->get();
     }
 
+    /**
+     * Mengambil data dengan pagination.
+     *
+     * Catatan:
+     * - Query string dipertahankan untuk kebutuhan filter frontend
+     */
     public function getPaginated(?string $search = null, int $perPage = 10)
     {
         return $this->baseQuery($search)
@@ -18,6 +27,13 @@ class ToolRepository
             ->withQueryString();
     }
 
+    /**
+     * Base query untuk MasterTool.
+     *
+     * Catatan:
+     * - Digunakan ulang untuk konsistensi query
+     * - Mendukung filter dinamis
+     */
     private function baseQuery(?string $search)
     {
         return MasterTool::query()
@@ -29,35 +45,60 @@ class ToolRepository
             });
     }
 
-    public function find($id): MasterTool
+    /**
+     * Mengambil satu data berdasarkan ID.
+     */
+    public function find($id)
     {
         return MasterTool::findOrFail($id);
     }
 
-    public function existsByNameExcept($id, string $name): bool
+    /**
+     * Mengecek apakah nama alat sudah ada.
+     *
+     * Digunakan saat create.
+     */
+    public function existsByName(string $name)
+    {
+        return MasterTool::where('name', $name)->exists();
+    }
+
+    /**
+     * Mengecek duplikasi nama alat (exclude ID tertentu).
+     *
+     * Digunakan saat update.
+     */
+    public function existsByNameExcept($id, string $name)
     {
         return MasterTool::where('name', $name)
             ->where('id', '!=', $id)
             ->exists();
     }
 
-    public function existsByName(string $name): bool
-    {
-        return MasterTool::where('name', $name)->exists();
-    }
-
-    public function create(array $data): MasterTool
+    /**
+     * Menyimpan data baru.
+     */
+    public function create(array $data)
     {
         return MasterTool::create($data);
     }
 
-    public function update(MasterTool $tool, array $data): MasterTool
+    /**
+     * Memperbarui data.
+     *
+     * Catatan:
+     * - Mengembalikan instance model setelah update
+     */
+    public function update(MasterTool $tool, array $data)
     {
         $tool->update($data);
         return $tool;
     }
 
-    public function delete(MasterTool $tool): bool
+    /**
+     * Menghapus data.
+     */
+    public function delete(MasterTool $tool)
     {
         return $tool->delete();
     }

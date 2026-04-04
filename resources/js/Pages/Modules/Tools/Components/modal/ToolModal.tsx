@@ -8,11 +8,11 @@ import Input from '@/Components/form/input/InputField';
 import CurrencyInput from '@/Components/form/input/CurrencyInput';
 import Select from '@/Components/form/input/Select';
 
-export const ModalTool = ({
+const ToolModal = ({
     isOpen,
     onClose,
     tool,
-    units
+    unitOptions
 }: ModalToolProps) => {
     const {
         data,
@@ -32,6 +32,7 @@ export const ModalTool = ({
         editData: tool,
         editId: tool?.id,
         successMessage: "Alat berhasil disimpan",
+        updateMessage: "Alat berhasil diperbarui",
         storeRoute: "tool.store",
         updateRoute: "tool.update",
     });
@@ -52,7 +53,7 @@ export const ModalTool = ({
                 className="flex flex-col gap-4 p-4 md:p-6"
                 preventEnterSubmit
             >
-                {/* name */}
+                {/* Name */}
                 <Input
                     label="Nama Alat"
                     type="text"
@@ -64,14 +65,14 @@ export const ModalTool = ({
                     required
                 />
 
-                {/* unit */}
+                {/* Unit */}
                 <Select
                     label="Satuan"
                     value={data.unit}
                     onChange={(value) => setData("unit", value)}
                     error={serverErrors.unit}
                     required
-                    options={(units ?? [])
+                    options={(unitOptions ?? [])
                         .filter((unit: any) => unit?.value)
                     }
                 />
@@ -90,3 +91,5 @@ export const ModalTool = ({
         </Modal>
     )
 }
+
+export default ToolModal;
