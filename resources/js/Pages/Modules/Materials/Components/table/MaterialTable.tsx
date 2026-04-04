@@ -1,13 +1,9 @@
-import { usePage } from "@inertiajs/react";
-
 import { useDelete } from "@/hooks/useDelete";
-import { useSearch } from "@/hooks/useSearch";
 
-import { MaterialPageProps, MaterialsTableProps } from "@/types/material";
+import { MaterialsTableProps } from "@/types/material";
 
 import { EmptyTable } from "@/Components/empty/EmptyTable";
 import Button from "@/Components/ui/button/Button";
-import Input from "@/Components/form/input/InputField";
 import {
     Table,
     TableBody,
@@ -22,16 +18,14 @@ import { formatCurrency } from "@/utils/formatCurrrency";
 import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { LuTrash2, LuPencil } from "react-icons/lu";
-import { FiSearch } from "react-icons/fi";
 
-export default function MaterialsTable({
+const MaterialTable = ({
     materials,
     last_page,
     links,
+    filters,
     onEdit
-}: MaterialsTableProps) {
-    const { props } = usePage<MaterialPageProps>();
-
+}: MaterialsTableProps) => {
     const { handleDelete, deletingId } = useDelete({
         routeName: "material.destroy",
         confirmTitle: "Hapus Material?",
@@ -39,27 +33,8 @@ export default function MaterialsTable({
         errorMessage: "Gagal menghapus material",
     });
 
-    const { filters, setFilter } = useSearch({
-        routeName: "material.index",
-        initialFilters: {
-            search: props.filters.search ?? "",
-        },
-    });
-
     return (
         <div className="flex flex-col gap-4 mt-4">
-            {/* Search */}
-            <div className="flex items-center gap-2 w-full sm:w-1/3">
-                <Input
-                    type="text"
-                    startIcon={<FiSearch />}
-                    placeholder="Cari material..."
-                    value={filters.search}
-                    onChange={(e) => setFilter("search", (e.target.value))}
-                    className="w-full rounded-lg border-gray-300 text-sm"
-                />
-            </div>
-
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
                 {/* Table */}
                 <div className="max-w-full overflow-x-auto">
@@ -136,12 +111,12 @@ export default function MaterialsTable({
                                             {material.unit}
                                         </TableCell>
 
-                                        {/* price */}
+                                        {/* Price */}
                                         <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                                             {formatCurrency(material.price)}
                                         </TableCell>
 
-                                        {/* updated_at */}
+                                        {/* Updated */}
                                         <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                                             {formatDateTime(material.updated_at as string)}
                                         </TableCell>
@@ -149,6 +124,7 @@ export default function MaterialsTable({
                                         {/* Actions */}
                                         <TableCell className="px-6 py-4">
                                             <div className="flex justify-center gap-1">
+
                                                 {/* Edit */}
                                                 <Button
                                                     size="icon"
@@ -195,3 +171,5 @@ export default function MaterialsTable({
         </div>
     )
 }
+
+export default MaterialTable;

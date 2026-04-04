@@ -10,27 +10,51 @@ use Illuminate\Support\Facades\DB;
 
 class MaterialService
 {
+    /**
+     * Inisialisasi service dengan dependency repository dan code generator.
+     */
     public function __construct(
-        protected MaterialRepository $repo,
+        protected MaterialRepository $materialRepository,
         protected CodeGeneratorService $codeGenerator
     ) {}
 
+    /**
+     * Mengambil data material.
+     *
+     * Parameter:
+     * - search: filter pencarian
+     * - paginate: menentukan apakah hasil dipaginasi
+     * - perPage: jumlah data per halaman
+     *
+     * Catatan:
+     * - Digunakan untuk kebutuhan tabel (pagination) dan dropdown (non-pagination)
+     */
     public function getMaterials(
         ?string $search = null,
         bool $paginate = true,
         int $perPage = 10
     ) {
         if ($paginate) {
-            return $this->repo->getPaginated($search, $perPage);
+            return $this->materialRepository->getPaginated($search, $perPage);
         }
 
-        return $this->repo->getAll($search);
+        return $this->materialRepository->getAll($search);
     }
 
+    /**
+     * Membuat data material baru.
+     *
+     * Aturan bisnis:
+     * - Nama material harus unik
+     *
+     * Catatan:
+     * - Code material di-generate otomatis dengan prefix 'MAT'
+     * - Menggunakan transaction untuk menjaga konsistensi data
+     */
     public function createMaterial(array $data)
     {
-        if ($this->repo->existsByName($data["name"]))
-            throw new DomainException("Nama material sudah ada");
+        if ($this->materialRepository->existsByName($data["name"]))
+            throw new DomainException("Nama material sudah ada.");
 
         return DB::transaction(function () use ($data) {
             $data["code"] = $this->codeGenerator->generate(
@@ -39,24 +63,33 @@ class MaterialService
                 'MAT'
             );
 
-            return $this->repo->create($data);
+            return $this->materialRepository->create($data);
         });
     }
 
+    /**
+     * Memperbarui data material.
+     *
+     * Aturan bisnis:
+     * - Nama material harus tetap unik (kecuali data itu sendiri)
+     */
     public function updateMaterial($id, array $data)
     {
-        $material = $this->repo->find($id);
+        $material = $this->materialRepository->find($id);
 
-        if ($this->repo->existsByNameExcept($id, $data["name"]))
-            throw new DomainException("Nama material sudah ada");
+        if ($this->materialRepository->existsByNameExcept($id, $data["name"]))
+            throw new DomainException("Nama material sudah ada.");
 
-        return $this->repo->update($material, $data);
+        return $this->materialRepository->update($material, $data);
     }
 
+    /**
+     * Menghapus data material.
+     */
     public function deleteMaterial($id)
     {
-        $material = $this->repo->find($id);
+        $material = $this->materialRepository->find($id);
 
-        return $this->repo->delete($material);
+        return $this->materialRepository->delete($material);
     }
 }

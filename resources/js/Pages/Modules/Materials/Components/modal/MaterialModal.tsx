@@ -8,11 +8,11 @@ import Input from '@/Components/form/input/InputField';
 import CurrencyInput from '@/Components/form/input/CurrencyInput';
 import Select from '@/Components/form/input/Select';
 
-export const ModalMaterial = ({
+const MaterialModal = ({
     isOpen,
     onClose,
     material,
-    units
+    unitOptions
 }: ModalMaterialProps) => {
     const {
         data,
@@ -32,6 +32,7 @@ export const ModalMaterial = ({
         editData: material,
         editId: material?.id,
         successMessage: "Material berhasil disimpan",
+        updateMessage: "Material berhasil diperbarui",
         storeRoute: "material.store",
         updateRoute: "material.update",
     });
@@ -52,7 +53,7 @@ export const ModalMaterial = ({
                 className="flex flex-col gap-4 p-4 md:p-6"
                 preventEnterSubmit
             >
-                {/* name */}
+                {/* Name */}
                 <Input
                     label="Nama Material"
                     type="text"
@@ -64,14 +65,14 @@ export const ModalMaterial = ({
                     required
                 />
 
-                {/* unit */}
+                {/* Unit */}
                 <Select
                     label="Satuan"
                     value={data.unit}
                     onChange={(value) => setData("unit", value)}
                     error={serverErrors.unit}
                     required
-                    options={(units ?? [])
+                    options={(unitOptions ?? [])
                         .filter((unit: any) => unit?.value)
                     }
                 />
@@ -90,3 +91,5 @@ export const ModalMaterial = ({
         </Modal>
     )
 }
+
+export default MaterialModal;

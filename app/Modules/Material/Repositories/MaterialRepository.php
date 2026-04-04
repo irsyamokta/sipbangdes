@@ -6,11 +6,20 @@ use App\Models\MasterMaterial;
 
 class MaterialRepository
 {
+    /**
+     * Mengambil seluruh data material tanpa pagination.
+     */
     public function getAll(?string $search = null)
     {
         return $this->baseQuery($search)->get();
     }
 
+    /**
+     * Mengambil data material dengan pagination.
+     *
+     * Catatan:
+     * - Query string dipertahankan untuk kebutuhan filter di frontend
+     */
     public function getPaginated(?string $search = null, int $perPage = 10)
     {
         return $this->baseQuery($search)
@@ -18,6 +27,13 @@ class MaterialRepository
             ->withQueryString();
     }
 
+    /**
+     * Base query untuk MasterMaterial.
+     *
+     * Catatan:
+     * - Digunakan ulang untuk konsistensi query
+     * - Mendukung filter dinamis
+     */
     private function baseQuery(?string $search)
     {
         return MasterMaterial::query()
@@ -29,35 +45,60 @@ class MaterialRepository
             });
     }
 
-    public function find($id): MasterMaterial
+    /**
+     * Mengambil satu data material berdasarkan ID.
+     */
+    public function find($id)
     {
         return MasterMaterial::findOrFail($id);
     }
 
-    public function existsByNameExcept($id, string $name): bool
+    /**
+     * Mengecek apakah nama material sudah ada.
+     *
+     * Digunakan saat create.
+     */
+    public function existsByName(string $name)
+    {
+        return MasterMaterial::where('name', $name)->exists();
+    }
+
+    /**
+     * Mengecek duplikasi nama material (exclude ID tertentu).
+     *
+     * Digunakan saat update.
+     */
+    public function existsByNameExcept($id, string $name)
     {
         return MasterMaterial::where('name', $name)
             ->where('id', '!=', $id)
             ->exists();
     }
 
-    public function existsByName(string $name): bool
-    {
-        return MasterMaterial::where('name', $name)->exists();
-    }
-
-    public function create(array $data): MasterMaterial
+    /**
+     * Menyimpan data material baru.
+     */
+    public function create(array $data)
     {
         return MasterMaterial::create($data);
     }
 
-    public function update(MasterMaterial $material, array $data): MasterMaterial
+    /**
+     * Memperbarui data material.
+     *
+     * Catatan:
+     * - Mengembalikan instance model setelah update
+     */
+    public function update(MasterMaterial $material, array $data)
     {
         $material->update($data);
         return $material;
     }
 
-    public function delete(MasterMaterial $material): bool
+    /**
+     * Menghapus data material.
+     */
+    public function delete(MasterMaterial $material)
     {
         return $material->delete();
     }

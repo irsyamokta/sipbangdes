@@ -2,7 +2,6 @@
 
 namespace App\Modules\Material\Controllers;
 
-use Exception;
 use Throwable;
 use DomainException;
 use Inertia\Inertia;
@@ -15,14 +14,24 @@ use App\Modules\Material\Requests\MaterialUpdateRequest;
 
 class MaterialController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected MaterialService $service,
+        protected MaterialService $materialService,
         protected UnitService $unitService
     ) {}
 
+    /**
+     * Menampilkan halaman daftar material.
+     *
+     * Catatan:
+     * - Data material menggunakan pagination
+     * - Unit digunakan sebagai dropdown (non-pagination)
+     */
     public function index(Request $request)
     {
-        $materials = $this->service->getMaterials(
+        $materials = $this->materialService->getMaterials(
             $request->search,
             true,
             10
@@ -35,7 +44,7 @@ class MaterialController extends Controller
 
         return Inertia::render('Modules/Materials/Index', [
             'materials' => $materials,
-            'units' => $units->map(fn($unit) => [
+            'unitOptions' => $units->map(fn($unit) => [
                 'value' => $unit->name,
                 'label' => $unit->name,
             ]),
@@ -43,10 +52,17 @@ class MaterialController extends Controller
         ]);
     }
 
+    /**
+     * Menyimpan data material baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan di FormRequest
+     * - DomainException untuk validasi bisnis
+     */
     public function store(MaterialStoreRequest $request)
     {
         try {
-            $this->service->createMaterial($request->validated());
+            $this->materialService->createMaterial($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -60,10 +76,13 @@ class MaterialController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data material.
+     */
     public function update(MaterialUpdateRequest $request, $id)
     {
         try {
-            $this->service->updateMaterial($id, $request->validated());
+            $this->materialService->updateMaterial($id, $request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -77,13 +96,20 @@ class MaterialController extends Controller
         }
     }
 
+    /**
+     * Menghapus data material.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->deleteMaterial($id);
+            $this->materialService->deleteMaterial($id);
 
             return back();
-        } catch (Exception $e) {
+        } catch (DomainException $e) {
+            return back()->withErrors([
+                $e->getMessage()
+            ]);
+        } catch (Throwable $e) {
             return back()->withErrors([
                 'Terjadi kesalahan, silahkan coba lagi'
             ]);

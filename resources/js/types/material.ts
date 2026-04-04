@@ -1,5 +1,10 @@
 import { PageProps } from ".";
 
+interface SelectOption {
+    value: string;
+    label: string;
+};
+
 interface Material {
     id: string;
     code: string;
@@ -14,11 +19,7 @@ interface ModalMaterialProps {
     isOpen: boolean;
     onClose: () => void;
     material?: any;
-    units: {
-        values: string;
-        labels: string;
-        filter: any;
-    }
+    unitOptions: SelectOption[];
 };
 
 interface MaterialForm {
@@ -33,10 +34,7 @@ interface MaterialPageProps extends PageProps {
         links: any[];
         last_page: number;
     }
-    units: {
-        values: string;
-        labels: string;
-    }
+    unitOptions: SelectOption[];
     filters: {
         search: string;
     }
@@ -46,6 +44,9 @@ interface MaterialsTableProps {
     materials: Material[];
     last_page: number;
     links: any[];
+    filters: {
+        search: string;
+    }
     onEdit: (material: Material) => void;
 };
 
