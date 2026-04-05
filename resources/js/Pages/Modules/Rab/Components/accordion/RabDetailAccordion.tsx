@@ -1,12 +1,12 @@
 import { ReactNode, useRef, useEffect, useState } from "react";
-import { RabDetailCard } from "../card/RabDetailCard";
 import { RabDetailHeaderProps } from "@/types/rab";
+import RabDetailCard from "../card/RabDetailCard";
 
 interface RabDetailAccordionProps extends RabDetailHeaderProps {
     children: ReactNode;
 }
 
-export const RabDetailAccordion = ({
+const RabDetailAccordion = ({
     children,
     ...headerProps
 }: RabDetailAccordionProps) => {
@@ -53,3 +53,5 @@ export const RabDetailAccordion = ({
         </div>
     );
 };
+
+export default RabDetailAccordion;

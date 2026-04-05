@@ -122,6 +122,15 @@ interface RabToolRecap {
     total: number;
 }
 
+interface RabInsight {
+    id?: string;
+    project_id: string;
+    insight_content?: string;
+    is_active?: boolean;
+    created_at?: string;
+    updated_at?: string;
+}
+
 interface Rab {
     project: Project;
 
@@ -135,6 +144,8 @@ interface Rab {
 
     operational: RabOperational[];
 
+    insight: RabInsight | null;
+
     history: RabHistory[];
 }
 
@@ -143,6 +154,8 @@ interface RabPageProps extends PageProps {
 
     projectOptions: SelectOption[];
     unitOptions: SelectOption[];
+
+    insight: RabInsight | null;
 
     filters: {
         project_id?: string;
@@ -157,6 +170,7 @@ interface RABTabsProps {
     recapWage: RabWageRecap[];
     recapTool: RabToolRecap[];
     operational: RabOperational[];
+    insight: RabInsight | null;
 
     unitOptions: SelectOption[];
 }
@@ -235,6 +249,7 @@ export type {
     ToolTableProps,
     RabOperational,
     OperationalTableProps,
+    RabInsight,
     RabCommentForm,
     ModalRabCommentProps,
     OperationalCostForm,

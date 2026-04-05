@@ -5,17 +5,17 @@ import { RABTabsProps } from "@/types/rab";
 import Tabs from "@/Components/ui/tabs/Tabs";
 import EmptyState from "@/Components/empty/EmptyState";
 import SummaryCard from "@/Components/card/SummaryCard";
-import { RabDetailAccordion } from "../accordion/RabDetailAccordion";
-import { RecapMaterialTable } from "../table/RecapMaterialTable";
-import { MaterialTable } from "../table/MaterialTable";
-import { RecapWageTable } from "../table/RecapWageTable";
-import { WageTable } from "../table/WageTable";
-import { RecapToolTable } from "../table/RecapToolTable";
-import { ToolTable } from "../table/ToolTable";
-import { OperationalTable } from "../table/OperationalTable";
-import { AIInsightCard } from "../card/AIInsightCard";
+import RabDetailAccordion from "../accordion/RabDetailAccordion";
+import RecapMaterialTable from "../table/RecapMaterialTable";
+import MaterialTable from "../table/MaterialTable";
+import RecapWageTable from "../table/RecapWageTable";
+import WageTable from "../table/WageTable";
+import RecapToolTable from "../table/RecapToolTable";
+import ToolTable from "../table/ToolTable";
+import OperationalTable from "../table/OperationalTable";
+import AIInsightCard from "../card/AIInsightCard";
 
-export default function RABTabs({
+const RABTabs = ({
     project_id,
     rab_status,
     detail,
@@ -23,8 +23,9 @@ export default function RABTabs({
     recapWage,
     recapTool,
     operational,
+    insight,
     unitOptions
-}: RABTabsProps) {
+}: RABTabsProps) => {
     const [openId, setOpenId] = useState<string | null>(null);
 
     const toggle = (id: string) => {
@@ -97,12 +98,21 @@ export default function RABTabs({
         {
             key: "operasional",
             label: "Biaya Operasional",
-            content: <OperationalTable project_id={project_id} rab_status={rab_status} operationals={operational} unitOptions={unitOptions}/>,
+            content: <OperationalTable
+                project_id={project_id}
+                rab_status={rab_status}
+                operationals={operational}
+                unitOptions={unitOptions}
+            />,
         },
         {
             key: "insight",
             label: "Insight",
-            content: <AIInsightCard />,
+            content: <AIInsightCard
+                projectId={project_id}
+                hasInsight={insight !== null}
+                insight={insight}
+            />,
         },
     ];
 
@@ -114,3 +124,5 @@ export default function RABTabs({
         />
     );
 }
+
+export default RABTabs;

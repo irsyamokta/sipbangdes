@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import Button from "@/Components/ui/button/Button";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
-import { RabCommentModal } from "../modal/RabCommentModal";
+import RabCommentModal from "../modal/RabCommentModal";
 
 import roleActions from "@/config/RoleAction";
 import { confirmConfig, successMessage } from "@/config/ConfirmDialog";
@@ -22,6 +22,7 @@ const RabActionButtons = ({ role, projectId, status }: Props) => {
 
     if (!projectId) return null;
 
+    // Check if action is disabled
     const isDisabled = (action: ActionType) => {
         switch (role) {
             case "planner":
@@ -39,11 +40,13 @@ const RabActionButtons = ({ role, projectId, status }: Props) => {
     };
 
     const handleClick = async (action: ActionType, useModal?: boolean) => {
+        // Open modal
         if (useModal) {
             setSelectedAction(action);
             return;
         }
 
+        // Confirm
         if (["send", "forward", "approve"].includes(action)) {
             const confirm = await ConfirmationDialog({
                 title: confirmConfig[action].title,
@@ -55,6 +58,7 @@ const RabActionButtons = ({ role, projectId, status }: Props) => {
             if (!confirm) return;
         }
 
+        // Process
         router.post(
             route("rab.action"),
             {
@@ -76,6 +80,7 @@ const RabActionButtons = ({ role, projectId, status }: Props) => {
 
     return (
         <>
+            {/* Buttons */}
             <div className="flex gap-3">
                 {actions.map((btn, index) => (
                     <Button
@@ -91,6 +96,7 @@ const RabActionButtons = ({ role, projectId, status }: Props) => {
                 ))}
             </div>
 
+            {/* Modal */}
             <RabCommentModal
                 isOpen={!!selectedAction}
                 onClose={() => setSelectedAction(null)}

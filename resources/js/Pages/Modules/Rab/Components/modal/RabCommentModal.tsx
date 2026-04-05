@@ -9,7 +9,7 @@ import TextArea from "@/Components/form/input/TextArea";
 import modalConfig from "@/config/RabModalConfig";
 import { successMessage } from "@/config/ConfirmDialog";
 
-export const RabCommentModal = ({
+const RabCommentModal = ({
     isOpen,
     onClose,
     projectId,
@@ -65,3 +65,5 @@ export const RabCommentModal = ({
         </Modal>
     );
 };
+
+export default RabCommentModal;

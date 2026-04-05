@@ -58,7 +58,9 @@ export const Modal: React.FC<ModalProps> = ({
     }, [isOpen, onClose]);
 
     useEffect(() => {
+        // @ts-ignore
         let openTimer: NodeJS.Timeout;
+        // @ts-ignore
         let closeTimer: NodeJS.Timeout;
 
         if (isOpen) {

@@ -8,7 +8,7 @@ import Input from "@/Components/form/input/InputField";
 import Select from "@/Components/form/input/Select";
 import CurrencyInput from "@/Components/form/input/CurrencyInput";
 
-export const OperationalCostModal = ({
+const OperationalCostModal = ({
     isOpen,
     onClose,
     projectId,
@@ -108,3 +108,5 @@ export const OperationalCostModal = ({
         </Modal>
     );
 };
+
+export default OperationalCostModal;

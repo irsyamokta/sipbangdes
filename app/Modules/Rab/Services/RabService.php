@@ -8,13 +8,31 @@ use Illuminate\Support\Facades\Auth;
 
 class RabService
 {
+    /**
+     * Inisialisasi service dengan dependency repository.
+     */
     public function __construct(
-        protected RabRepository $repo
+        protected RabRepository $rabRepository
     ) {}
 
+    /**
+     * Generate data RAB berdasarkan project.
+     *
+     * Proses:
+     * - Mengambil data project beserta relasi (TOS, AHSP, dll)
+     * - Menghitung total material, upah, alat, dan operasional
+     * - Menyusun detail per pekerjaan (TOS)
+     * - Membuat rekap global (material, upah, alat)
+     * - Menyusun summary total keseluruhan
+     * - Mengambil histori komentar dan approver
+     *
+     * Catatan:
+     * - Jika TOS sudah di-lock, maka menggunakan snapshot
+     * - Jika belum, maka dihitung dari AHSP
+     */
     public function generate(string $projectId)
     {
-        $project = $this->repo->getProjectWithRelations($projectId);
+        $project = $this->rabRepository->getProjectWithRelations($projectId);
         $operationalCosts = $project->operationalCosts ?? collect();
 
         $operationalTotal = 0;
@@ -289,7 +307,7 @@ class RabService
             $summary['operational_total'];
 
 
-        $comments = $this->repo->getComments($projectId);
+        $comments = $this->rabRepository->getComments($projectId);
         $history = $comments->map(function ($item) {
             return [
                 'id' => $item->id,
@@ -301,7 +319,7 @@ class RabService
             ];
         });
 
-        $approver = $this->repo->getApprover();
+        $approver = $this->rabRepository->getApprover();
 
         return [
             'project' => $project,
@@ -318,9 +336,24 @@ class RabService
         ];
     }
 
+    /**
+     * Menangani aksi workflow RAB (send, review, approve, revision).
+     *
+     * Alur:
+     * - Validasi role dan status saat ini
+     * - Menentukan status baru
+     * - Update status RAB
+     * - Lock harga jika sudah approved
+     * - Simpan komentar histori
+     *
+     * Role:
+     * - planner
+     * - reviewer
+     * - approver
+     */
     public function handleAction(array $data)
     {
-        $project = $this->repo->getProjectWithRelations($data['project_id']);
+        $project = $this->rabRepository->getProjectWithRelations($data['project_id']);
 
         $role = Auth::user()->role;
         $status = $project->rab_status;
@@ -334,13 +367,13 @@ class RabService
         };
 
         $newStatus = $this->resolveStatus($role, $action);
-        $this->repo->updateStatus($project->id, $newStatus);
+        $this->rabRepository->updateStatus($project->id, $newStatus);
 
         if ($newStatus === 'approved') {
             $this->lockPrices($project);
         }
 
-        $this->repo->storeComment([
+        $this->rabRepository->storeComment([
             'project_id' => $project->id,
             'user_id' => Auth::id(),
             'action' => $action,
@@ -348,6 +381,13 @@ class RabService
         ]);
     }
 
+    /**
+     * Validasi aksi oleh planner.
+     *
+     * Aturan:
+     * - Tidak bisa aksi jika sudah approved
+     * - Hanya bisa kirim saat status draft/revision
+     */
     private function handlePlanner($action, $status)
     {
         if ($status === 'approved') {
@@ -359,6 +399,13 @@ class RabService
         }
     }
 
+    /**
+     * Validasi aksi oleh reviewer.
+     *
+     * Aturan:
+     * - Hanya bisa saat status submitted/revision
+     * - Aksi yang diperbolehkan: revision, forward
+     */
     private function handleReviewer($action, $status)
     {
         if (!in_array($status, ['submitted', 'revision'])) {
@@ -370,6 +417,13 @@ class RabService
         }
     }
 
+    /**
+     * Validasi aksi oleh approver.
+     *
+     * Aturan:
+     * - Hanya bisa saat status reviewed
+     * - Aksi yang diperbolehkan: approve, revision
+     */
     private function handleApprover($action, $status)
     {
         if (!in_array($status, ['reviewed'])) {
@@ -381,6 +435,16 @@ class RabService
         }
     }
 
+    /**
+     * Menentukan status baru berdasarkan role dan aksi.
+     *
+     * Mapping:
+     * - planner + send → submitted
+     * - reviewer + forward → reviewed
+     * - reviewer + revision → revision
+     * - approver + approve → approved
+     * - approver + revision → revision
+     */
     private function resolveStatus($role, $action)
     {
         return match (true) {
@@ -396,6 +460,9 @@ class RabService
         };
     }
 
+    /**
+     * Menentukan default komentar jika user tidak mengisi.
+     */
     private function resolveDefaultComment($action, $comment)
     {
         if (!empty($comment)) {
@@ -409,6 +476,19 @@ class RabService
         };
     }
 
+    /**
+     * Mengunci harga pada setiap TOS ketika RAB disetujui.
+     *
+     * Proses:
+     * - Mengambil data dari AHSP
+     * - Menghitung ulang material, upah, alat
+     * - Menyimpan snapshot (JSON)
+     * - Menyimpan unit price terkunci
+     *
+     * Catatan:
+     * - Data snapshot digunakan untuk menjaga konsistensi harga
+     *   meskipun harga master berubah di masa depan
+     */
     private function lockPrices($project)
     {
         foreach ($project->takeOffSheets as $tos) {

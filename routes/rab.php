@@ -1,9 +1,9 @@
 <?php
 
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Modules\Rab\Controllers\RabController;
 use App\Modules\Rab\Controllers\OperationalCostController;
+use App\Modules\Rab\Controllers\GenerateInsightController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('rab')->group(function () {
@@ -16,5 +16,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::patch('/{id}', [OperationalCostController::class, 'update'])->name('operational.update');
             Route::delete('/{id}', [OperationalCostController::class, 'destroy'])->name('operational.destroy');
         });
+
+        Route::post('/insight/generate', [GenerateInsightController::class, 'generate'])
+            ->middleware('permission:rab.create')
+            ->name('rab.insight.store');
     });
 });

@@ -1,4 +1,3 @@
-import React from "react";
 import rabStatusMap from "@/config/RabStatusMap";
 import Badge from "@/Components/ui/badge/Badge";
 import { capitalizeEachWord } from "@/utils/capitalize";
@@ -11,13 +10,13 @@ interface ProjectInfoCardProps {
     status: string;
 };
 
-const ProjectInfoCard: React.FC<ProjectInfoCardProps> = ({
+const ProjectInfoCard = ({
     name,
     location,
     leader,
     year,
     status,
-}) => {
+}: ProjectInfoCardProps) => {
     const statusConfig = rabStatusMap[status] || {
         label: status,
         color: "info",
@@ -27,25 +26,25 @@ const ProjectInfoCard: React.FC<ProjectInfoCardProps> = ({
         <div className="w-full rounded-2xl border border-gray-300 bg-white py-8 px-4 hover:shadow-md">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-center">
 
-                {/* Nama Proyek */}
+                {/* Project Name */}
                 <div className="flex flex-col gap-1">
                     <p className="text-gray-600 text-sm">Nama Proyek</p>
                     <p className="font-semibold text-gray-800">{capitalizeEachWord(name)}</p>
                 </div>
 
-                {/* Lokasi */}
+                {/* Location */}
                 <div className="flex flex-col gap-1">
                     <p className="text-gray-600 text-sm">Lokasi</p>
                     <p className="font-semibold text-gray-800">{location}</p>
                 </div>
 
-                {/* Ketua TPK */}
+                {/* Chairman */}
                 <div className="flex flex-col gap-1">
                     <p className="text-gray-600 text-sm">Ketua TPK</p>
                     <p className="font-semibold text-gray-800">{capitalizeEachWord(leader)}</p>
                 </div>
 
-                {/* Tahun */}
+                {/* Year */}
                 <div className="flex flex-col gap-1">
                     <p className="text-gray-600 text-sm">Tahun Anggaran</p>
                     <p className="font-semibold text-gray-800">{year}</p>

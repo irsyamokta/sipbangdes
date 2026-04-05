@@ -108,7 +108,7 @@ export function useModalForm<T extends Record<string, any>>({
             },
             onError: (errors: any) => {
                 setServerErrors(errors);
-                toast.error(errorMessage);
+                toast.error(errors[0] ?? errorMessage);
             },
             onFinish: () => {
                 setLoading(false);

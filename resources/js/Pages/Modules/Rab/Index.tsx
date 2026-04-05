@@ -30,6 +30,7 @@ export default function RAB() {
             rab,
             projectOptions,
             unitOptions,
+            insight,
             filters: filter
         }
     } = usePage<RabPageProps>();
@@ -74,6 +75,7 @@ export default function RAB() {
                 <div className="col-span-12 space-y-6 mt-4">
 
                     <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+
                         {/* Filter */}
                         <FilterBar
                             className="md:max-w-sm"
@@ -117,6 +119,8 @@ export default function RAB() {
 
                             {/* Stat Cards */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+
+                                {/* Summary Material */}
                                 <StatCard
                                     title="Total Material"
                                     value={formatCurrency(rab.summary?.material_total ?? 0)}
@@ -125,6 +129,7 @@ export default function RAB() {
                                     iconColor="text-green-600"
                                 />
 
+                                {/* Summary Wage */}
                                 <StatCard
                                     title="Total Upah"
                                     value={formatCurrency(rab.summary?.wage_total ?? 0)}
@@ -133,6 +138,7 @@ export default function RAB() {
                                     iconColor="text-warning-600"
                                 />
 
+                                {/* Summary Tool */}
                                 <StatCard
                                     title="Total Alat"
                                     value={formatCurrency(rab.summary?.tool_total ?? 0)}
@@ -141,9 +147,10 @@ export default function RAB() {
                                     iconColor="text-blue-600"
                                 />
 
+                                {/* Summary Operational */}
                                 <StatCard
                                     title="Total Biaya Operasional"
-                                    value={formatCurrency(rab.summary?.tool_total ?? 0)}
+                                    value={formatCurrency(rab.summary?.operational_total ?? 0)}
                                     icon={<GrMoney />}
                                     iconBgColor="bg-yellow-100"
                                     iconColor="text-yellow-600"
@@ -167,6 +174,7 @@ export default function RAB() {
                                 recapWage={rab.recap_wage}
                                 recapTool={rab.recap_tool}
                                 operational={rab.operational}
+                                insight={insight}
                                 unitOptions={unitOptions}
                             />
 
