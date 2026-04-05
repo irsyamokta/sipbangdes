@@ -78,28 +78,27 @@ const TakeOffSheetModal = ({
                     required
                 />
 
-                {/* Category & AHSP */}
-                <div className="grid md:grid-cols-2 gap-4">
-                    <Select
-                        label="Kategori"
-                        placeholder="Pilih Kategori"
-                        value={data.worker_category_id}
-                        onChange={(value) => setData("worker_category_id", value)}
-                        options={workerCategoryOptions ?? []}
-                        error={serverErrors.worker_category_id}
-                        required
-                    />
+                {/* Category */}
+                <Select
+                    label="Kategori"
+                    placeholder="Pilih Kategori"
+                    value={data.worker_category_id}
+                    onChange={(value) => setData("worker_category_id", value)}
+                    options={workerCategoryOptions ?? []}
+                    error={serverErrors.worker_category_id}
+                    required
+                />
 
-                    <Select
-                        label="Referensi AHSP"
-                        placeholder="Pilih AHSP"
-                        value={data.ahsp_id}
-                        onChange={(value) => setData("ahsp_id", value)}
-                        options={filteredAhspOptions ?? []}
-                        error={serverErrors.ahsp_id}
-                        required
-                    />
-                </div>
+                {/* AHSP */}
+                <Select
+                    label="Referensi AHSP"
+                    placeholder="Pilih AHSP"
+                    value={data.ahsp_id}
+                    onChange={(value) => setData("ahsp_id", value)}
+                    options={filteredAhspOptions ?? []}
+                    error={serverErrors.ahsp_id}
+                    required
+                />
 
                 {/* Worker Name */}
                 <Input

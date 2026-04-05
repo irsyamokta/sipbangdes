@@ -70,7 +70,7 @@ class TakeOffSheetRepository
      */
     public function getProjectStatus(?string $projectId)
     {
-        return Project::where('id', $projectId)->value('status');
+        return Project::where('id', $projectId)->value('rab_status');
     }
 
     /**

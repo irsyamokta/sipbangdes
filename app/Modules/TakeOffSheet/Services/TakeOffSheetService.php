@@ -35,9 +35,8 @@ class TakeOffSheetService
         return DB::transaction(function () use ($data) {
 
             $status = $this->takeOffSheetRepository->getProjectStatus($data['project_id']);
-            if ($status === 'approved') {
-                throw new DomainException('Project sudah disetujui, tidak dapat menambahkan TOS');
-            }
+
+            $this->ensureApproved($status);
 
             if ($this->takeOffSheetRepository->existsByNameExcept(
                 null,
@@ -64,9 +63,8 @@ class TakeOffSheetService
         $tos = $this->takeOffSheetRepository->find($id);
 
         $status = $this->takeOffSheetRepository->getProjectStatus($data['project_id']);
-        if ($status === 'approved') {
-            throw new DomainException('Project sudah disetujui, tidak dapat mengubah TOS');
-        }
+
+        $this->ensureApproved($status);
 
         if ($this->takeOffSheetRepository->existsByNameExcept(
             $id,
@@ -94,10 +92,15 @@ class TakeOffSheetService
 
         $status = $this->takeOffSheetRepository->getProjectStatus($tos->project_id);
 
-        if ($status === 'approved') {
-            throw new DomainException('Project sudah disetujui, tidak dapat menghapus TOS');
-        }
+        $this->ensureApproved($status);
 
         return $this->takeOffSheetRepository->delete($tos);
+    }
+
+    private function ensureApproved($status)
+    {
+        if ($status === 'approved') {
+            throw new DomainException('Proyek sudah disetujui, tidak dapat menghapus TOS');
+        }
     }
 }

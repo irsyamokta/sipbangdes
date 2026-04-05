@@ -48,7 +48,7 @@ const AIInsightCard = ({
     });
 
     return (
-        <div className="border border-gray-300 rounded-2xl p-4 bg-whit mt-4">
+        <div className="border border-gray-300 rounded-2xl p-4 bg-white mt-4">
             {/* Header */}
             <div className="flex flex-col md:flex-row items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
