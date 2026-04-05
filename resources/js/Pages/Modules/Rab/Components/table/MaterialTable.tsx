@@ -14,12 +14,14 @@ import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { PiPackage } from "react-icons/pi";
 
-export const MaterialTable = ({
+const MaterialTable = ({
     materials
 }: MaterialTableProps) => {
 
     return (
         <div className="flex flex-col gap-4 py-2 mt-4">
+
+            {/* Header */}
             <div className="flex gap-2 justify-between items-center">
                 <div className="flex gap-2 items-center">
                     <PiPackage size={24} className="text-green-700" />
@@ -95,7 +97,7 @@ export const MaterialTable = ({
                                                 {item.unit}
                                             </TableCell>
 
-                                            {/* Koefisien */}
+                                            {/* Coefficient */}
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 {formatDecimal(item.coefficient)}
                                             </TableCell>
@@ -125,3 +127,5 @@ export const MaterialTable = ({
         </div>
     )
 }
+
+export default MaterialTable;

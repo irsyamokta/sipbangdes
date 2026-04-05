@@ -11,16 +11,33 @@ use App\Http\Controllers\Controller;
 use App\Modules\Rab\Services\RabService;
 use App\Modules\Rab\Requests\RabCommentStoreRequest;
 use App\Modules\Project\Services\ProjectService;
+use App\Modules\Rab\Repositories\GenerateInsightRepository;
 use App\Modules\Unit\Services\UnitService;
 
 class RabController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service dan repository.
+     */
     public function __construct(
-        protected RabService $service,
+        protected RabService $rabService,
         protected ProjectService $projectService,
-        protected UnitService $unitService
+        protected UnitService $unitService,
+        protected GenerateInsightRepository $rabInsightRepository
     ) {}
 
+    /**
+     * Menampilkan halaman RAB.
+     *
+     * Fitur:
+     * - Menampilkan dropdown project
+     * - Menampilkan unit untuk kebutuhan form
+     * - Generate data RAB jika project dipilih
+     * - Menampilkan AI insight jika tersedia
+     *
+     * Catatan:
+     * - Jika project belum dipilih, data default kosong
+     */
     public function index(Request $request)
     {
         $projectId = $request->project_id;
@@ -30,8 +47,12 @@ class RabController extends Controller
             false
         );
 
+        $insight = $projectId
+            ? $this->rabInsightRepository->getActive($projectId)
+            : null;
+
         $rab = $projectId
-            ? $this->service->generate($projectId)
+            ? $this->rabService->generate($projectId)
             : [
                 'project' => null,
                 'summary' => [
@@ -59,16 +80,25 @@ class RabController extends Controller
                 'label' => $unit->name,
             ]),
 
+            'insight' => $insight,
+
             'filters' => [
                 'project_id' => $projectId
             ],
         ]);
     }
 
+    /**
+     * Menangani aksi workflow RAB (comment, approve, revision, dll).
+     *
+     * Catatan:
+     * - Validasi menggunakan FormRequest
+     * - Error bisnis menggunakan DomainException
+     */
     public function action(RabCommentStoreRequest $request)
     {
         try {
-            $this->service->handleAction($request->validated());
+            $this->rabService->handleAction($request->validated());
 
             return back();
         } catch (DomainException $e) {
@@ -82,6 +112,17 @@ class RabController extends Controller
         }
     }
 
+    /**
+     * Generate dan menampilkan PDF RAB.
+     *
+     * Proses:
+     * - Generate data RAB
+     * - Render ke HTML blade
+     * - Convert ke PDF menggunakan Browsershot
+     *
+     * Output:
+     * - PDF ditampilkan inline di browser
+     */
     public function pdf(Request $request)
     {
         $projectId = $request->project_id;
@@ -90,7 +131,7 @@ class RabController extends Controller
             abort(404);
         }
 
-        $rab = $this->service->generate($projectId);
+        $rab = $this->rabService->generate($projectId);
         $html = view('pdf.rab', compact('rab'))->render();
 
         $pdf = Browsershot::html($html)

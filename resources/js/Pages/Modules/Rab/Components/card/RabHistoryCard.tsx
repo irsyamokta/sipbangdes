@@ -21,9 +21,13 @@ const getRoleLabel = (role: string) => {
     return roleLabelMap[role] || role;
 };
 
-export default function RabHistoryCard({ history }: Props) {
+const RabHistoryCard = ({
+    history
+}: Props) => {
+
     return (
         <div className="w-full rounded-2xl border border-gray-300 bg-white p-6">
+
             {/* Header */}
             <div className="flex items-center gap-2 mb-6">
                 <BsChatLeftText className="text-gray-600" />
@@ -32,6 +36,7 @@ export default function RabHistoryCard({ history }: Props) {
                 </h3>
             </div>
 
+            {/* History List */}
             {history.length === 0 ? (
                 <p className="text-gray-600 text-center text-sm py-10">
                     Belum ada riwayat atau catatan untuk RAB ini.
@@ -44,6 +49,7 @@ export default function RabHistoryCard({ history }: Props) {
 
                         return (
                             <div key={item.id} className="flex gap-4">
+
                                 {/* Timeline */}
                                 <div className="flex flex-col items-center">
                                     <div
@@ -59,6 +65,7 @@ export default function RabHistoryCard({ history }: Props) {
 
                                 {/* Content */}
                                 <div className="flex-1">
+
                                     {/* Badge + Date */}
                                     <div className="flex items-center gap-3 mb-2">
                                         <Badge
@@ -98,3 +105,5 @@ export default function RabHistoryCard({ history }: Props) {
         </div>
     );
 }
+
+export default RabHistoryCard;

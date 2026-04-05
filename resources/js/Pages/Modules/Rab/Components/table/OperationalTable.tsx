@@ -14,7 +14,7 @@ import {
 } from "@/Components/ui/table";
 import Button from "@/Components/ui/button/Button";
 import { EmptyTable } from "@/Components/empty/EmptyTable";
-import { OperationalCostModal } from "../modal/OperationalCostModal";
+import OperationalCostModal from "../modal/OperationalCostModal";
 
 import { formatCurrency } from "@/utils/formatCurrrency";
 import { formatDecimal } from "@/utils/formatDecimal";
@@ -23,7 +23,7 @@ import { capitalizeEachWord } from "@/utils/capitalize";
 import { GrMoney } from "react-icons/gr";
 import { LuPlus, LuPencil, LuTrash2 } from "react-icons/lu";
 
-export const OperationalTable = ({
+const OperationalTable = ({
     project_id,
     rab_status,
     operationals = [],
@@ -57,7 +57,8 @@ export const OperationalTable = ({
     });
 
     return (
-        <div className="flex flex-col gap-4 py-2 mt-4">
+        <div>
+
             {/* Modal */}
             <OperationalCostModal
                 isOpen={isModalOpen}
@@ -138,17 +139,17 @@ export const OperationalTable = ({
                                         key={`${item.name}-${index}`}
                                         className="hover:bg-gray-50 transition"
                                     >
-                                        {/* Nama */}
+                                        {/* Name */}
                                         <TableCell className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             {capitalizeEachWord(item.name)}
                                         </TableCell>
 
-                                        {/* Satuan */}
+                                        {/* Unit */}
                                         <TableCell className="px-6 py-4 text-sm text-end text-gray-900">
                                             {item.unit}
                                         </TableCell>
 
-                                        {/* Kebutuhan */}
+                                        {/* Volume */}
                                         <TableCell className="px-6 py-4 text-sm text-end text-gray-900 whitespace-nowrap">
                                             {formatDecimal(item.volume)}
                                         </TableCell>
@@ -158,7 +159,7 @@ export const OperationalTable = ({
                                             {formatCurrency(item.unit_price)}
                                         </TableCell>
 
-                                        {/* Total */}
+                                        {/* Total Price */}
                                         <TableCell className="px-6 py-4 text-sm text-end text-gray-900 font-semibold whitespace-nowrap">
                                             {formatCurrency(item.total)}
                                         </TableCell>
@@ -167,6 +168,7 @@ export const OperationalTable = ({
                                         {can('rab.create') && rab_status !== "approved" && (
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 <div className="flex justify-end gap-1">
+
                                                     {/* Edit */}
                                                     <Button
                                                         size="icon"
@@ -215,3 +217,5 @@ export const OperationalTable = ({
         </div>
     );
 };
+
+export default OperationalTable;

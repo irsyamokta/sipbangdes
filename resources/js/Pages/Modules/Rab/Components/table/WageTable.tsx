@@ -14,12 +14,14 @@ import { capitalizeEachWord } from "@/utils/capitalize";
 
 import { LuWallet } from "react-icons/lu";
 
-export const WageTable = ({
+const WageTable = ({
     wages
 }: WageTableProps) => {
 
     return (
         <div className="flex flex-col gap-4 py-2 mt-4">
+
+            {/* Header */}
             <div className="flex gap-2 justify-between items-center">
                 <div className="flex gap-2 items-center">
                     <LuWallet size={20} className="text-warning-700" />
@@ -95,7 +97,7 @@ export const WageTable = ({
                                                 {item.unit}
                                             </TableCell>
 
-                                            {/* Koefisien */}
+                                            {/* Coefficient */}
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 {formatDecimal(item.coefficient)}
                                             </TableCell>
@@ -125,3 +127,5 @@ export const WageTable = ({
         </div>
     )
 }
+
+export default WageTable

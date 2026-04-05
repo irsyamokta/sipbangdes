@@ -10,14 +10,24 @@ use App\Modules\Rab\Services\OperationalCostService;
 
 class OperationalCostController extends Controller
 {
+    /**
+     * Inisialisasi controller dengan dependency service.
+     */
     public function __construct(
-        protected OperationalCostService $service
+        protected OperationalCostService $operationalCostService
     ) {}
 
+    /**
+     * Menyimpan data biaya operasional baru.
+     *
+     * Catatan:
+     * - Validasi dilakukan melalui FormRequest
+     * - Error bisnis ditangani menggunakan DomainException
+     */
     public function store(OperationalCostRequest $request)
     {
         try {
-            $this->service->store($request->validated());
+            $this->operationalCostService->store($request->validated());
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
@@ -30,10 +40,17 @@ class OperationalCostController extends Controller
         }
     }
 
+    /**
+     * Memperbarui data biaya operasional.
+     *
+     * Catatan:
+     * - Validasi dilakukan melalui FormRequest
+     * - Error bisnis ditangani menggunakan DomainException
+     */
     public function update(OperationalCostRequest $request, $id)
     {
         try {
-            $this->service->update($id, $request->validated());
+            $this->operationalCostService->update($id, $request->validated());
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
@@ -46,10 +63,13 @@ class OperationalCostController extends Controller
         }
     }
 
+    /**
+     * Menghapus data biaya operasional.
+     */
     public function destroy($id)
     {
         try {
-            $this->service->destroy($id);
+            $this->operationalCostService->destroy($id);
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
