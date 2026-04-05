@@ -36,7 +36,7 @@ const TopCategoryCard = ({ categories }: Props) => {
 
             {/* Content */}
             {isEmpty ? (
-                <div className="py-6">
+                <div className="flex justify-center mt-16 py-6">
                     <EmptyTable
                         colspan={1}
                         description="Belum ada kategori"

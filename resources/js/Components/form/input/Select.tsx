@@ -66,6 +66,10 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
 
         const selected = options.find((opt) => opt.value === value);
 
+        const filteredOptions = options.filter(
+            (opt) => opt.value !== undefined && opt.value !== null
+        );
+
         useEffect(() => {
             const handleClickOutside = (event: MouseEvent) => {
                 if (
@@ -150,9 +154,12 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                             className="absolute z-20 mt-2 w-full rounded-lg border border-gray-200 bg-white shadow-lg overflow-y-auto"
                             style={{ maxHeight: `${3 * 40}px` }}
                         >
-                            {options
-                                .filter(opt => opt.value !== undefined && opt.value !== null)
-                                .map((opt, index) => {
+                            {filteredOptions.length === 0 ? (
+                                <li className="px-4 py-2 text-sm text-gray-400 cursor-not-allowed">
+                                    Tidak ada data
+                                </li>
+                            ) : (
+                                filteredOptions.map((opt, index) => {
                                     const isDisabled = opt.disabled;
 
                                     return (
@@ -168,15 +175,15 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                             px-4 py-2 text-sm transition
                             ${isDisabled
                                                     ? "cursor-not-allowed text-gray-400 bg-gray-50"
-                                                    : "cursor-pointer hover:bg-secondary hover:text-white"
-                                                }
+                                                    : "cursor-pointer hover:bg-secondary hover:text-white"}
                             ${value === opt.value ? "bg-gray-100 font-medium" : ""}
                         `}
                                         >
                                             {opt.label}
                                         </li>
                                     );
-                                })}
+                                })
+                            )}
                         </ul>
                     )}
                 </div>

@@ -44,7 +44,7 @@ export default function Dashboard() {
                     {/* Subtotal */}
                     <SubtotalCard
                         title="Total Nilai RAB"
-                        subtitle={`Dari ${data.rab_per_year[0].total_project} RAB yang disetujui pada tahun ini`}
+                        subtitle={`Dari ${data.rab_per_year[0]?.total_project ?? 0} RAB yang disetujui pada tahun ini`}
                         icon={<LuTrendingUp size={24} />}
                         value={formatCurrency(data.rab_per_year.reduce((acc, curr) => acc + curr.total_rab, 0))}
                     />

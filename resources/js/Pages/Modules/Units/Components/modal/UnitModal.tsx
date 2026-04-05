@@ -66,6 +66,7 @@ const UnitModal = ({
                 <Select
                     label="Kategori"
                     value={data.category}
+                    placeholder="Pilih Kategori"
                     onChange={(value) => setData("category", value)}
                     error={serverErrors.category}
                     required

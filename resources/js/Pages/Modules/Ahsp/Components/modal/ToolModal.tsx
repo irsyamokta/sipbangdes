@@ -55,6 +55,7 @@ const AhspToolModal = ({
                 <Select
                     label="Pilih Alat"
                     value={data.tool_id}
+                    placeholder="Pilih Alat"
                     onChange={(value) => setData("tool_id", value)}
                     error={serverErrors.tool_id}
                     required

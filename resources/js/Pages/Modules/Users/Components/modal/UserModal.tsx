@@ -93,8 +93,9 @@ const UserModal = ({
 
                 {/* Role */}
                 <Select
-                    label="Role"
+                    label="Peran"
                     value={data.role}
+                    placeholder="Pilih Peran"
                     onChange={(value) => setData("role", value)}
                     error={serverErrors.role}
                     required
@@ -110,6 +111,7 @@ const UserModal = ({
                 <Select
                     label="Status"
                     value={data.is_active}
+                    placeholder="Pilih Status"
                     onChange={(value) => setData("is_active", value)}
                     error={serverErrors.is_active ? "Status wajib diisi" : ""}
                     required

@@ -55,6 +55,7 @@ const AhspWageModal = ({
                 <Select
                     label="Pilih Upah"
                     value={data.wage_id}
+                    placeholder="Pilih Upah"
                     onChange={(value) => setData("wage_id", value)}
                     error={serverErrors.wage_id}
                     required

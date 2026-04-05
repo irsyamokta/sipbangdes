@@ -67,6 +67,7 @@ const AhspModal = ({
                 <Select
                     label="Satuan"
                     value={data.unit}
+                    placeholder="Pilih Satuan"
                     onChange={(value) => setData("unit", value)}
                     error={serverErrors.unit}
                     required

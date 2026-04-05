@@ -55,6 +55,7 @@ const AhspMaterialModal = ({
                 <Select
                     label="Pilih Material"
                     value={data.material_id}
+                    placeholder="Pilih Material"
                     onChange={(value) => setData("material_id", value)}
                     error={serverErrors.material_id}
                     required

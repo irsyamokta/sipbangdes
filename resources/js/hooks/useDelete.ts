@@ -38,13 +38,13 @@ export function useDelete(options: DeleteOptions) {
         router.delete(route(routeName, id), {
             preserveScroll: true,
             preserveState: true,
-            
+
             onSuccess: () => {
                 toast.success(successMessage);
                 setDeletingId(null);
             },
-            onError: () => {
-                toast.error(errorMessage);
+            onError: (errors) => {
+                toast.error(errorMessage ?? errors[0]);
                 setDeletingId(null);
             },
         });
