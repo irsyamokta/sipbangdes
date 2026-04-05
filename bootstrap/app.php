@@ -49,16 +49,24 @@ return Application::configure(basePath: dirname(__DIR__))
             if (in_array($status, [403, 404, 419, 500])) {
                 return Inertia::render("Errors/$status", [
                     'status' => $status,
-                    'message' => [
-                        403 => 'Forbidden',
-                        404 => 'Not Found',
-                        419 => 'Page Expired',
-                        500 => 'Server Error',
-                    ][$status] ?? 'Something went wrong',
+                    'message' => config('app.debug')
+                        ? $e->getMessage()
+                        : match ($status) {
+                            403 => 'Forbidden',
+                            404 => 'Not Found',
+                            419 => 'Page Expired',
+                            500 => 'Internal Server Error',
+                            default => 'Something went wrong',
+                        },
                 ])->toResponse($request)->setStatusCode($status);
             }
 
-            return null;
+            return Inertia::render("Errors/500", [
+                'status' => 500,
+                'message' => config('app.debug')
+                    ? $e->getMessage()
+                    : 'Something went wrong',
+            ])->toResponse($request)->setStatusCode(500);
         });
     })
     ->create();
