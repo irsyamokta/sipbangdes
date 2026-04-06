@@ -25,6 +25,8 @@ RUN apk add --no-cache nginx bash chromium nss freetype harfbuzz ttf-freefont \
     nodejs npm libpng-dev libjpeg-turbo-dev freetype-dev zip unzip \
     && docker-php-ext-install pdo_mysql
 
+ENV CHROME_PATH=/usr/bin/chromium-browser
+
 WORKDIR /var/www/html
 
 # Copy seluruh source Laravel
