@@ -22,7 +22,7 @@ jobs:
 
       - name: Build & Push Docker Image
         run: |
-          IMAGE=ghcr.io/${{ github.repository_owner }}/intera:latest
+          IMAGE=ghcr.io/${{ github.repository_owner }}/sipbangdes:latest
           docker build -t $IMAGE .
           docker push $IMAGE
 
