@@ -134,10 +134,23 @@ class RabController extends Controller
         $rab = $this->rabService->generate($projectId);
         $html = view('pdf.rab', compact('rab'))->render();
 
-        $pdf = Browsershot::html($html)
+        $browsershot = Browsershot::html($html)
             ->format('A4')
-            ->showBackground()
-            ->pdf();
+            ->showBackground();
+
+        if (app()->environment('production')) {
+            $browsershot
+                ->setNodeBinary('/usr/bin/node')
+                ->setChromePath('/usr/bin/chromium')
+                ->noSandbox()
+                ->addChromiumArguments([
+                    '--disable-dev-shm-usage',
+                    '--no-sandbox',
+                    '--disable-gpu',
+                ]);
+        }
+
+        $pdf = $browsershot->pdf();
 
         return response($pdf, 200)
             ->header('Content-Type', 'application/pdf')
