@@ -27,6 +27,10 @@ RUN apk add --no-cache nginx bash chromium nss freetype harfbuzz ttf-freefont \
 
 ENV CHROME_PATH=/usr/bin/chromium-browser
 
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+RUN npm install -g puppeteer
+
 WORKDIR /var/www/html
 
 # Copy seluruh source Laravel
