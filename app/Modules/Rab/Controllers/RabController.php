@@ -152,8 +152,27 @@ class RabController extends Controller
 
         $pdf = $browsershot->pdf();
 
+        $filename = $this->generatePdfFilename($rab);
+
         return response($pdf, 200)
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'inline; filename="rab.pdf"');
+            ->header('Content-Disposition', "inline; filename=\"{$filename}\"");
+    }
+
+    /**
+     * Generate nama file PDF RAB.
+     */
+    private function generatePdfFilename(array $rab): string
+    {
+        $projectName = $rab['project']->project_name ?? 'project';
+        $year = $rab['project']->created_at->year ?? now()->year;
+
+        $safeProjectName = preg_replace(
+            '/[^A-Za-z0-9\- ]/',
+            '',
+            $projectName
+        );
+
+        return "RAB_{$safeProjectName}_{$year}.pdf";
     }
 }

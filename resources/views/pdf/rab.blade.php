@@ -29,6 +29,7 @@
 
 <head>
     <meta charset="utf-8">
+    <title>RAB {{ $rab['project']->project_name ?? '' }}</title>
 
     <style>
         @page {
