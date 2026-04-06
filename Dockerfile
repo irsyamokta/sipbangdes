@@ -21,7 +21,8 @@ RUN npm run build
 # =====================
 FROM php:8.3-fpm-alpine
 
-RUN apk add --no-cache nginx bash \
+RUN apk add --no-cache nginx bash chromium nss freetype harfbuzz ttf-freefont \
+    nodejs npm libpng-dev libjpeg-turbo-dev freetype-dev zip unzip \
     && docker-php-ext-install pdo_mysql
 
 WORKDIR /var/www/html
