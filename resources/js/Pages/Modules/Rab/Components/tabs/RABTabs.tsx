@@ -35,7 +35,7 @@ const RABTabs = ({
     const tabs = [
         {
             key: "detail",
-            label: "Detail RAB",
+            label: "Item Pekerjaan",
             content: (
                 <div className="flex flex-col gap-4 mt-4">
                     {detail.length === 0 ? (

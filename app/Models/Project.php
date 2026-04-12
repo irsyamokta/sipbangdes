@@ -75,6 +75,11 @@ class Project extends Model
         return $this->hasMany(ProjectDocument::class, 'project_id');
     }
 
+    public function projectExpenditures()
+    {
+        return $this->hasMany(ProjectExpenditure::class, 'project_id');
+    }
+
     public function rabAiInsights()
     {
         return $this->hasMany(RabAiInsight::class, 'project_id');

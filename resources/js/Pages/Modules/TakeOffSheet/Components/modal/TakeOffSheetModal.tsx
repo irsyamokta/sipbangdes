@@ -139,6 +139,7 @@ const TakeOffSheetModal = ({
                     value={data.note ?? ""}
                     onChange={(value) => setData("note", value)}
                     error={serverErrors.note}
+                    optional
                 />
             </Form>
         </Modal>
