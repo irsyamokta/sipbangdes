@@ -20,7 +20,7 @@ class ProjectRepository
             ->when($search, function ($query) use ($search) {
                 $query->where('project_name', 'like', "%{$search}%");
             })
-            ->when($year, function ($query) use ($year) {
+            ->when($year && $year !== 'all', function ($query) use ($year) {
                 $query->where('budget_year', $year);
             })
             ->latest()

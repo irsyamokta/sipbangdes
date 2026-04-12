@@ -30,7 +30,7 @@ export default function Projects() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-    const budgetYearOptions = useBudgetYears({ startYear: 2025 });
+    const budgetYearOptions = useBudgetYears({ startYear: 2025, includeAll: true });
 
     const { handleDelete } = useDelete({
         routeName: "project.destroy",
