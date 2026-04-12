@@ -54,21 +54,17 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
     ) => {
         const generatedId = useId();
         const selectId = id ?? generatedId;
-        const hintId = hint ? `${selectId}-hint` : undefined;
 
         const [open, setOpen] = useState(false);
+        const [search, setSearch] = useState("");
 
         const [internalError, setInternalError] = useState<string | null>(null);
 
-        const hasError = error || !!internalError;
-
         const wrapperRef = useRef<HTMLDivElement>(null);
 
-        const selected = options.find((opt) => opt.value === value);
+        const hasError = error || !!internalError;
 
-        const filteredOptions = options.filter(
-            (opt) => opt.value !== undefined && opt.value !== null
-        );
+        const selected = options.find((opt) => opt.value === value);
 
         useEffect(() => {
             const handleClickOutside = (event: MouseEvent) => {
@@ -77,11 +73,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                     !wrapperRef.current.contains(event.target as Node)
                 ) {
                     setOpen(false);
-
-                    // Required validation saat dropdown ditutup
-                    if (required && !value) {
-                        setInternalError(null);
-                    }
+                    setSearch("");
                 }
             };
 
@@ -89,7 +81,11 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
             return () => {
                 document.removeEventListener("mousedown", handleClickOutside);
             };
-        }, [required, value]);
+        }, []);
+
+        const filteredOptions = options.filter((opt) =>
+            opt.label.toLowerCase().includes(search.toLowerCase())
+        );
 
         const stateClasses = disabled
             ? "bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed"
@@ -100,53 +96,41 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                     : "border-gray-300 focus:ring-primary/20 focus:border-primary";
 
         return (
-            <div
-                ref={wrapperRef}
-                className={`w-full space-y-1.5 ${className}`}
-            >
+            <div ref={wrapperRef} className={`w-full space-y-1.5 ${className}`}>
                 {/* Label */}
                 {label && (
                     <label className="block text-sm font-medium text-gray-800">
                         {label}
-                        {required && (
-                            <span className="ml-1 text-error-500">*</span>
-                        )}
-                        {!required && optional && (
-                            <span className="ml-2 text-xs text-gray-400">
-                                (Optional)
-                            </span>
-                        )}
                     </label>
                 )}
 
-                {/* Trigger */}
                 <div className="relative">
-                    <button
-                        ref={ref}
-                        id={selectId}
-                        type="button"
-                        disabled={disabled}
-                        aria-invalid={hasError ? true : false}
-                        aria-describedby={hintId}
-                        aria-expanded={open}
-                        onClick={() => !disabled && setOpen((prev) => !prev)}
-                        className={`flex h-11 w-full items-center justify-between rounded-lg border bg-transparent px-4 py-2 text-sm transition focus:outline-none focus:ring-1 ${stateClasses}`}
+
+                    {/* Trigger / Input */}
+                    <div
+                        className={`flex h-11 w-full items-center justify-between rounded-lg border px-3 py-2 text-sm ${stateClasses}`}
+                        onClick={() => !disabled && setOpen(true)}
                     >
-                        <span
-                            className={
-                                selected ? "text-gray-800" : "text-gray-400"
-                            }
-                        >
-                            {selected ? selected.label : placeholder}
-                        </span>
+                        <input
+                            ref={ref as any}
+                            disabled={disabled}
+                            value={open ? search : selected?.label ?? ""}
+                            placeholder={placeholder}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                if (!open) setOpen(true);
+                            }}
+                            className="w-full outline-none bg-transparent text-sm"
+                        />
 
                         {!hideChevron && (
                             <LuChevronDown
-                                className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""
-                                    }`}
+                                className={`h-4 w-4 transition-transform ${
+                                    open ? "rotate-180" : ""
+                                }`}
                             />
                         )}
-                    </button>
+                    </div>
 
                     {/* Dropdown */}
                     {open && !disabled && (
@@ -155,7 +139,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                             style={{ maxHeight: `${3 * 40}px` }}
                         >
                             {filteredOptions.length === 0 ? (
-                                <li className="px-4 py-2 text-sm text-gray-400 cursor-not-allowed">
+                                <li className="px-4 py-2 text-sm text-gray-400">
                                     Tidak ada data
                                 </li>
                             ) : (
@@ -168,16 +152,23 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                                             onClick={() => {
                                                 if (isDisabled) return;
                                                 onChange(opt.value);
-                                                setInternalError(null);
                                                 setOpen(false);
+                                                setSearch("");
+                                                setInternalError(null);
                                             }}
                                             className={`
-                            px-4 py-2 text-sm transition
-                            ${isDisabled
-                                                    ? "cursor-not-allowed text-gray-400 bg-gray-50"
-                                                    : "cursor-pointer hover:bg-secondary hover:text-white"}
-                            ${value === opt.value ? "bg-gray-100 font-medium" : ""}
-                        `}
+                                                px-4 py-2 text-sm transition
+                                                ${
+                                                    isDisabled
+                                                        ? "cursor-not-allowed text-gray-400"
+                                                        : "cursor-pointer hover:bg-secondary hover:text-white"
+                                                }
+                                                ${
+                                                    value === opt.value
+                                                        ? "bg-gray-100 font-medium"
+                                                        : ""
+                                                }
+                                            `}
                                         >
                                             {opt.label}
                                         </li>
@@ -188,16 +179,15 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                     )}
                 </div>
 
-                {/* Hint / Error */}
                 {(hint || error || internalError) && (
                     <p
-                        id={hintId}
-                        className={`text-xs ${hasError
-                            ? "text-error-500"
-                            : success
-                                ? "text-success-500"
-                                : "text-gray-500"
-                            }`}
+                        className={`text-xs ${
+                            hasError
+                                ? "text-error-500"
+                                : success
+                                    ? "text-success-500"
+                                    : "text-gray-500"
+                        }`}
                     >
                         {error ?? internalError ?? hint}
                     </p>
