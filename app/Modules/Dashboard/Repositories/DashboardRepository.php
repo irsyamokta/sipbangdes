@@ -23,7 +23,10 @@ class DashboardRepository
         $projects = Project::query()
             ->where('rab_status', 'approved')
             ->with([
-                'takeOffSheets:id,project_id,locked_snapshot',
+                'takeOffSheets:id,project_id,ahsp_id,volume,locked_snapshot',
+                'takeOffSheets.ahsp.ahspComponentMaterials.masterMaterial',
+                'takeOffSheets.ahsp.ahspComponentWages.masterWage',
+                'takeOffSheets.ahsp.ahspComponentTools.masterTool',
                 'operationalCosts:id,project_id,volume,unit_price'
             ])
             ->get();
@@ -92,7 +95,10 @@ class DashboardRepository
         return Project::query()
             ->withCount('takeOffSheets')
             ->with([
-                'takeOffSheets:id,project_id,locked_snapshot',
+                'takeOffSheets:id,project_id,ahsp_id,volume,locked_snapshot',
+                'takeOffSheets.ahsp.ahspComponentMaterials.masterMaterial',
+                'takeOffSheets.ahsp.ahspComponentWages.masterWage',
+                'takeOffSheets.ahsp.ahspComponentTools.masterTool',
                 'operationalCosts:id,project_id,volume,unit_price'
             ])
             ->latest()
@@ -143,7 +149,7 @@ class DashboardRepository
     private function calculateProjectTotal(Project $project): float
     {
         [$materialTotal, $wageTotal, $toolTotal] =
-            $this->calculateFromSnapshots($project->takeOffSheets ?? collect());
+            $this->calculateFromSources($project->takeOffSheets ?? collect());
 
         $operationalTotal = ($project->operationalCosts ?? collect())
             ->sum(function ($op) {
@@ -154,12 +160,13 @@ class DashboardRepository
     }
 
     /**
-     * Menghitung total dari snapshot TOS.
+     * Menghitung total dari berbagai sumber TOS.
      *
      * Catatan:
+     * - Menghitung total material, upah, dan alat
      * - Snapshot digunakan agar perhitungan tidak berubah walaupun data master berubah
      */
-    private function calculateFromSnapshots(Collection $tosList)
+    private function calculateFromSources(Collection $tosList)
     {
         $recapMaterial = [];
         $recapWage = [];
@@ -167,13 +174,90 @@ class DashboardRepository
 
         foreach ($tosList as $tos) {
 
-            if (!$tos->locked_snapshot) continue;
+            if ($tos->isLocked()) {
 
-            $snapshot = $tos->locked_snapshot;
+                if (!$tos->locked_snapshot) {
+                    continue;
+                }
 
-            $this->accumulate($recapMaterial, $snapshot['materials'] ?? []);
-            $this->accumulate($recapWage, $snapshot['wages'] ?? []);
-            $this->accumulate($recapTool, $snapshot['tools'] ?? []);
+                $snapshot = $tos->locked_snapshot;
+
+                $this->accumulate(
+                    $recapMaterial,
+                    $snapshot['materials'] ?? []
+                );
+
+                $this->accumulate(
+                    $recapWage,
+                    $snapshot['wages'] ?? []
+                );
+
+                $this->accumulate(
+                    $recapTool,
+                    $snapshot['tools'] ?? []
+                );
+
+                continue;
+            }
+
+            $ahsp = $tos->ahsp;
+            if (!$ahsp) continue;
+
+            $volume = $tos->volume;
+
+            // MATERIAL
+            foreach ($ahsp->ahspComponentMaterials as $item) {
+
+                $qty =
+                    $item->coefficient *
+                    $volume;
+
+                $price =
+                    $item->masterMaterial->price ?? 0;
+
+                $this->accumulateLive(
+                    $recapMaterial,
+                    $item->material_id,
+                    $price,
+                    $qty
+                );
+            }
+
+            // WAGE
+            foreach ($ahsp->ahspComponentWages as $item) {
+
+                $qty =
+                    $item->coefficient *
+                    $volume;
+
+                $price =
+                    $item->masterWage->price ?? 0;
+
+                $this->accumulateLive(
+                    $recapWage,
+                    $item->wage_id,
+                    $price,
+                    $qty
+                );
+            }
+
+            // TOOL
+            foreach ($ahsp->ahspComponentTools as $item) {
+
+                $qty =
+                    $item->coefficient *
+                    $volume;
+
+                $price =
+                    $item->masterTool->price ?? 0;
+
+                $this->accumulateLive(
+                    $recapTool,
+                    $item->tool_id,
+                    $price,
+                    $qty
+                );
+            }
         }
 
         return [
@@ -204,6 +288,30 @@ class DashboardRepository
 
             $target[$key]['qty'] += $item['qty'];
         }
+    }
+
+    /**
+     * Summary of accumulateLive
+     * @param array $target
+     * @param mixed $key
+     * @param mixed $price
+     * @param mixed $qty
+     * @return void
+     */
+    private function accumulateLive(
+        array &$target,
+        $key,
+        $price,
+        $qty
+    ) {
+        if (!isset($target[$key])) {
+            $target[$key] = [
+                'price' => $price,
+                'qty' => 0,
+            ];
+        }
+
+        $target[$key]['qty'] += $qty;
     }
 
     /**

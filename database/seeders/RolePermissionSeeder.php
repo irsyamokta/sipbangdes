@@ -97,56 +97,7 @@ class RolePermissionSeeder extends Seeder
         $approver = Role::firstOrCreate(['name' => 'approver']);
 
         /* Admin Permissions */
-        $admin->givePermissionTo([
-            'dashboard.view',
-
-            'project.view',
-
-            'tos.view',
-            'tos.create',
-            'tos.edit',
-            'tos.delete',
-
-            'rab.view',
-            'rab.download',
-
-            'material.view',
-            'material.create',
-            'material.edit',
-            'material.delete',
-
-            'tool.view',
-            'tool.create',
-            'tool.edit',
-            'tool.delete',
-
-            'wage.view',
-            'wage.create',
-            'wage.edit',
-            'wage.delete',
-
-            'unit.view',
-            'unit.create',
-            'unit.edit',
-            'unit.delete',
-
-            'workercategory.view',
-            'workercategory.create',
-            'workercategory.edit',
-            'workercategory.delete',
-
-            'ahsp.view',
-            'ahsp.create',
-            'ahsp.edit',
-            'ahsp.delete',
-
-            'progress.view',
-
-            'users.view',
-            'users.create',
-            'users.edit',
-            'users.delete',
-        ]);
+        $admin->givePermissionTo(permission::all());
 
         /* Planner Permissions */
         $planner->givePermissionTo([

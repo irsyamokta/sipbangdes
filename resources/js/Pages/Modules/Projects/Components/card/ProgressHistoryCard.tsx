@@ -45,10 +45,6 @@ const ProgressHistoryCard = ({
 
     return (
         <div className="space-y-4">
-
-            {/* Progress History */}
-            <h1 className="font-semibold">Riwayat Progres</h1>
-
             {projectProgresses.map((progress) => (
                 <div key={progress.id} className="space-y-4 rounded-2xl border border-gray-200 bg-white p-6 transition hover:shadow-md">
 

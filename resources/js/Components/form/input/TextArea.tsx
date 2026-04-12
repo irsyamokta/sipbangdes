@@ -78,7 +78,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
                         {!required && optional && (
                             <span className="ml-2 text-xs text-gray-400">
-                                (Optional)
+                                (Opsional)
                             </span>
                         )}
                     </label>

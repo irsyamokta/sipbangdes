@@ -1,5 +1,17 @@
 import { PageProps } from ".";
 
+interface ProjectDetailTabsProps {
+    project: ProjectProgress;
+    expenditures: ProjectExpenditure[];
+    totalProgress: number;
+    percentageBudget: number;
+    totalBudget: number;
+    totalRealization: number;
+    remainingBudget: number;
+    onOpenProgressModal: () => void;
+    onOpenExpenditureModal: () => void;
+}
+
 interface ProjectProgress {
     id: string;
     project_name: string;
@@ -41,14 +53,55 @@ interface ProjectProgressCardHistoryProps {
 
 interface ProjectProgressPageProps extends PageProps {
     project: ProjectProgress;
+    expenditures: ProjectExpenditure[];
     totalProgress: number;
+    percentageBudget: number;
+    totalBudget: number;
+    totalRealization: number;
+    remainingBudget: number;
+}
+
+interface ProjectExpenditure {
+    id: string;
+    project_id: string;
+    description: string;
+    nominal: number;
+    date: string;
+    information: string;
+    created_at: string;
+    updated_at: string;
+}
+
+interface ProjectExpenditureForm {
+    description: string;
+    nominal: number;
+    date: string;
+    information: string;
+}
+
+interface ModalProjectExpenditureProps {
+    isOpen: boolean;
+    onClose: () => void;
+    project?: any;
+    expenditure?: ProjectExpenditure,
+    remainingBudget?: number
+}
+
+interface ExpenditureTableProps {
+    expenditures: ProjectExpenditure[];
+    remainingBudget: number
 }
 
 export type {
+    ProjectDetailTabsProps,
     ProjectProgress,
     ModalProjectProgressProps,
     ProjectProgressForm,
     ProjectProgressCardProps,
     ProjectProgressCardHistoryProps,
     ProjectProgressPageProps,
+    ProjectExpenditure,
+    ProjectExpenditureForm,
+    ModalProjectExpenditureProps,
+    ExpenditureTableProps
 }
