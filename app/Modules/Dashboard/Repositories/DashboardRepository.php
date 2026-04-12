@@ -11,11 +11,13 @@ use Illuminate\Support\Collection;
 class DashboardRepository
 {
     /**
-     * Mengambil total RAB project per tahun (hanya yang approved).
+     * Mengambil total nilai RAB project per tahun.
      *
      * Catatan:
-     * - Menggunakan snapshot TOS untuk menghitung material, upah, dan alat
-     * - Ditambah biaya operasional
+     * - Hanya project dengan status RAB = approved
+     * - Perhitungan menggunakan:
+     *   - Snapshot TOS (material, upah, alat)
+     *   - Biaya operasional
      * - Hasil dikelompokkan berdasarkan tahun anggaran
      */
     public function getApprovedRabPerYear()
@@ -23,10 +25,7 @@ class DashboardRepository
         $projects = Project::query()
             ->where('rab_status', 'approved')
             ->with([
-                'takeOffSheets:id,project_id,ahsp_id,volume,locked_snapshot',
-                'takeOffSheets.ahsp.ahspComponentMaterials.masterMaterial',
-                'takeOffSheets.ahsp.ahspComponentWages.masterWage',
-                'takeOffSheets.ahsp.ahspComponentTools.masterTool',
+                'takeOffSheets:id,project_id,volume,locked_snapshot,locked_at',
                 'operationalCosts:id,project_id,volume,unit_price'
             ])
             ->get();
@@ -87,18 +86,22 @@ class DashboardRepository
      * Mengambil daftar project terbaru.
      *
      * Catatan:
-     * - Mengambil 3 project terakhir
-     * - Menghitung subtotal menggunakan snapshot + biaya operasional
+     * - Mengambil 3 project terakhir (latest)
+     * - Menyertakan jumlah item TOS
+     * - Menghitung subtotal menggunakan:
+     *   - Snapshot (jika approved)
+     *   - Data live (jika belum approved)
+     *   - Biaya operasional
      */
     public function getLatestProjects()
     {
         return Project::query()
             ->withCount('takeOffSheets')
             ->with([
-                'takeOffSheets:id,project_id,ahsp_id,volume,locked_snapshot',
-                'takeOffSheets.ahsp.ahspComponentMaterials.masterMaterial',
-                'takeOffSheets.ahsp.ahspComponentWages.masterWage',
-                'takeOffSheets.ahsp.ahspComponentTools.masterTool',
+                'takeOffSheets:id,project_id,ahsp_id,volume,locked_snapshot,locked_at',
+                'takeOffSheets.ahsp.ahspComponentMaterials.masterMaterial:id,price',
+                'takeOffSheets.ahsp.ahspComponentWages.masterWage:id,price',
+                'takeOffSheets.ahsp.ahspComponentTools.masterTool:id,price',
                 'operationalCosts:id,project_id,volume,unit_price'
             ])
             ->latest()
@@ -119,10 +122,11 @@ class DashboardRepository
     }
 
     /**
-     * Mengambil 5 kategori pekerjaan teratas.
+     * Mengambil 5 kategori pekerjaan dengan jumlah item terbanyak.
      *
      * Catatan:
-     * - Digunakan menampilkan top 5 kategori
+     * - Berdasarkan jumlah relasi workerItems
+     * - Digunakan untuk menampilkan top kategori
      */
     public function getTopWorkerCategories()
     {
@@ -138,35 +142,59 @@ class DashboardRepository
     }
 
     /**
-     * Menghitung total biaya project.
+     * Menghitung total biaya suatu project.
      *
-     * Komponen:
+     * Komponen biaya:
      * - Material
      * - Upah
      * - Alat
      * - Biaya operasional
+     *
+     * Behavior:
+     * - Jika project approved → gunakan snapshot
+     * - Jika belum → gunakan data live (relasi AHSP)
      */
     private function calculateProjectTotal(Project $project): float
     {
-        [$materialTotal, $wageTotal, $toolTotal] =
-            $this->calculateFromSources($project->takeOffSheets ?? collect());
+        if ($project->rab_status === 'approved') {
+
+            [$materialTotal, $wageTotal, $toolTotal] =
+                $this->calculateFromSnapshots(
+                    $project->takeOffSheets ?? collect()
+                );
+        } else {
+
+            [$materialTotal, $wageTotal, $toolTotal] =
+                $this->calculateFromLive(
+                    $project->takeOffSheets ?? collect()
+                );
+        }
 
         $operationalTotal = ($project->operationalCosts ?? collect())
-            ->sum(function ($op) {
-                return ($op->volume ?? 0) * ($op->unit_price ?? 0);
-            });
+            ->sum(
+                fn($op) => ($op->volume ?? 0) *
+                    ($op->unit_price ?? 0)
+            );
 
-        return $materialTotal + $wageTotal + $toolTotal + $operationalTotal;
+        return
+            $materialTotal +
+            $wageTotal +
+            $toolTotal +
+            $operationalTotal;
     }
 
     /**
-     * Menghitung total dari berbagai sumber TOS.
+     * Menghitung total biaya dari snapshot TOS.
      *
      * Catatan:
-     * - Menghitung total material, upah, dan alat
-     * - Snapshot digunakan agar perhitungan tidak berubah walaupun data master berubah
+     * - Snapshot bersifat immutable (tidak berubah)
+     * - Digunakan untuk menjaga konsistensi perhitungan setelah approved
+     * - Wajib tersedia untuk setiap TOS
+     *
+     * Exception:
+     * - Akan melempar error jika snapshot tidak ditemukan
      */
-    private function calculateFromSources(Collection $tosList)
+    private function calculateFromSnapshots(Collection $tosList)
     {
         $recapMaterial = [];
         $recapWage = [];
@@ -174,46 +202,63 @@ class DashboardRepository
 
         foreach ($tosList as $tos) {
 
-            if ($tos->isLocked()) {
-
-                if (!$tos->locked_snapshot) {
-                    continue;
-                }
-
-                $snapshot = $tos->locked_snapshot;
-
-                $this->accumulate(
-                    $recapMaterial,
-                    $snapshot['materials'] ?? []
+            if (!$tos->locked_snapshot) {
+                throw new \Exception(
+                    "Snapshot missing on approved project: {$tos->id}"
                 );
-
-                $this->accumulate(
-                    $recapWage,
-                    $snapshot['wages'] ?? []
-                );
-
-                $this->accumulate(
-                    $recapTool,
-                    $snapshot['tools'] ?? []
-                );
-
-                continue;
             }
+
+            $snapshot = $tos->locked_snapshot;
+
+            $this->accumulate(
+                $recapMaterial,
+                $snapshot['materials'] ?? []
+            );
+
+            $this->accumulate(
+                $recapWage,
+                $snapshot['wages'] ?? []
+            );
+
+            $this->accumulate(
+                $recapTool,
+                $snapshot['tools'] ?? []
+            );
+        }
+
+        return [
+            $this->calculateTotal($recapMaterial),
+            $this->calculateTotal($recapWage),
+            $this->calculateTotal($recapTool),
+        ];
+    }
+
+    /**
+     * Menghitung total biaya dari data live (relasi AHSP).
+     *
+     * Catatan:
+     * - Digunakan untuk project yang belum approved
+     * - Perhitungan berdasarkan:
+     *   qty = coefficient × volume TOS
+     *   total = qty × harga master
+     */
+    private function calculateFromLive(Collection $tosList)
+    {
+        $recapMaterial = [];
+        $recapWage = [];
+        $recapTool = [];
+
+        foreach ($tosList as $tos) {
 
             $ahsp = $tos->ahsp;
             if (!$ahsp) continue;
 
             $volume = $tos->volume;
 
-            // MATERIAL
             foreach ($ahsp->ahspComponentMaterials as $item) {
+                $qty = $item->coefficient * $volume;
 
-                $qty =
-                    $item->coefficient *
-                    $volume;
-
-                $price =
-                    $item->masterMaterial->price ?? 0;
+                $price = $item->masterMaterial->price ?? 0;
 
                 $this->accumulateLive(
                     $recapMaterial,
@@ -223,15 +268,10 @@ class DashboardRepository
                 );
             }
 
-            // WAGE
             foreach ($ahsp->ahspComponentWages as $item) {
+                $qty = $item->coefficient * $volume;
 
-                $qty =
-                    $item->coefficient *
-                    $volume;
-
-                $price =
-                    $item->masterWage->price ?? 0;
+                $price = $item->masterWage->price ?? 0;
 
                 $this->accumulateLive(
                     $recapWage,
@@ -241,15 +281,10 @@ class DashboardRepository
                 );
             }
 
-            // TOOL
             foreach ($ahsp->ahspComponentTools as $item) {
+                $qty = $item->coefficient * $volume;
 
-                $qty =
-                    $item->coefficient *
-                    $volume;
-
-                $price =
-                    $item->masterTool->price ?? 0;
+                $price = $item->masterTool->price ?? 0;
 
                 $this->accumulateLive(
                     $recapTool,
@@ -268,11 +303,12 @@ class DashboardRepository
     }
 
     /**
-     * Mengakumulasi item berdasarkan ID.
+     * Mengakumulasi data dari snapshot.
      *
-     * Catatan:
+     * Behavior:
+     * - Mengelompokkan berdasarkan ID item
      * - Qty dijumlahkan
-     * - Price diambil dari snapshot
+     * - Price diambil dari snapshot (tidak berubah)
      */
     private function accumulate(array &$target, array $items)
     {
@@ -291,12 +327,12 @@ class DashboardRepository
     }
 
     /**
-     * Summary of accumulateLive
-     * @param array $target
-     * @param mixed $key
-     * @param mixed $price
-     * @param mixed $qty
-     * @return void
+     * Mengakumulasi data dari perhitungan live.
+     *
+     * Behavior:
+     * - Mengelompokkan berdasarkan ID item
+     * - Qty dijumlahkan
+     * - Price mengikuti harga master terbaru
      */
     private function accumulateLive(
         array &$target,
@@ -315,10 +351,13 @@ class DashboardRepository
     }
 
     /**
-     * Menghitung total biaya dari item.
+     * Menghitung total biaya dari kumpulan item.
+     *
+     * Rumus:
+     * - total = ceil(qty) × price
      *
      * Catatan:
-     * - Qty dibulatkan ke atas (ceil)
+     * - Qty dibulatkan ke atas untuk menghindari kekurangan material
      */
     private function calculateTotal(array $items)
     {
