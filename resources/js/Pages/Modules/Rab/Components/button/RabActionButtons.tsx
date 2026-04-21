@@ -69,8 +69,8 @@ const RabActionButtons = ({ role, projectId, status }: Props) => {
                 onSuccess: () => {
                     toast.success(successMessage[action]);
                 },
-                onError: () => {
-                    toast.error("Gagal memproses");
+                onError: (errors) => {
+                    toast.error(errors[0]);
                 },
             }
         );

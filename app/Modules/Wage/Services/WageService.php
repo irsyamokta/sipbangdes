@@ -44,18 +44,12 @@ class WageService
     /**
      * Membuat data upah baru.
      *
-     * Aturan bisnis:
-     * - Nama jabatan (position) harus unik
-     *
      * Catatan:
      * - Code di-generate otomatis dengan prefix 'UPH'
      * - Menggunakan transaction untuk menjaga konsistensi data
      */
     public function createWage(array $data)
     {
-        if ($this->wageRepository->existsByPosition($data["position"]))
-            throw new DomainException("Nama jabatan sudah ada.");
-
         return DB::transaction(function () use ($data) {
             $data["code"] = $this->codeGenerator->generate(
                 MasterWage::class,
@@ -69,16 +63,10 @@ class WageService
 
     /**
      * Memperbarui data upah.
-     *
-     * Aturan bisnis:
-     * - Nama jabatan harus tetap unik (kecuali data itu sendiri)
      */
     public function updateWage($id, array $data)
     {
         $wage = $this->wageRepository->find($id);
-
-        if ($this->wageRepository->existsByPositionExcept($id, $data["position"]))
-            throw new DomainException("Nama jabatan sudah ada.");
 
         return $this->wageRepository->update($wage, $data);
     }

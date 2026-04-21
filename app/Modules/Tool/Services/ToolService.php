@@ -44,18 +44,12 @@ class ToolService
     /**
      * Membuat data alat baru.
      *
-     * Aturan bisnis:
-     * - Nama alat harus unik
-     *
      * Catatan:
      * - Code di-generate otomatis dengan prefix 'TL'
      * - Menggunakan transaction untuk menjaga konsistensi data
      */
     public function createTool(array $data)
     {
-        if ($this->toolRepository->existsByName($data["name"]))
-            throw new DomainException("Nama alat sudah ada.");
-
         return DB::transaction(function () use ($data) {
             $data["code"] = $this->codeGenerator->generate(
                 MasterTool::class,
@@ -69,16 +63,10 @@ class ToolService
 
     /**
      * Memperbarui data alat.
-     *
-     * Aturan bisnis:
-     * - Nama alat harus tetap unik (kecuali data itu sendiri)
      */
     public function updateTool($id, array $data)
     {
         $tool = $this->toolRepository->find($id);
-
-        if ($this->toolRepository->existsByNameExcept($id, $data["name"]))
-            throw new DomainException("Nama alat sudah ada.");
 
         return $this->toolRepository->update($tool, $data);
     }

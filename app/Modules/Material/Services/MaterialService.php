@@ -44,18 +44,12 @@ class MaterialService
     /**
      * Membuat data material baru.
      *
-     * Aturan bisnis:
-     * - Nama material harus unik
-     *
      * Catatan:
      * - Code material di-generate otomatis dengan prefix 'MAT'
      * - Menggunakan transaction untuk menjaga konsistensi data
      */
     public function createMaterial(array $data)
     {
-        if ($this->materialRepository->existsByName($data["name"]))
-            throw new DomainException("Nama material sudah ada.");
-
         return DB::transaction(function () use ($data) {
             $data["code"] = $this->codeGenerator->generate(
                 MasterMaterial::class,
@@ -69,16 +63,10 @@ class MaterialService
 
     /**
      * Memperbarui data material.
-     *
-     * Aturan bisnis:
-     * - Nama material harus tetap unik (kecuali data itu sendiri)
      */
     public function updateMaterial($id, array $data)
     {
         $material = $this->materialRepository->find($id);
-
-        if ($this->materialRepository->existsByNameExcept($id, $data["name"]))
-            throw new DomainException("Nama material sudah ada.");
 
         return $this->materialRepository->update($material, $data);
     }

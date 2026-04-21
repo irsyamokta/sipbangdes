@@ -95,7 +95,7 @@ class RabService
                 foreach ($materials as $item) {
                     $key = $item['id'];
 
-                    if (!isset($recapMaterial[$key])) {
+                    if (! isset($recapMaterial[$key])) {
                         $recapMaterial[$key] = [
                             'name' => $item['name'],
                             'unit' => $item['unit'],
@@ -111,7 +111,7 @@ class RabService
                 foreach ($wages as $item) {
                     $key = $item['id'];
 
-                    if (!isset($recapWage[$key])) {
+                    if (! isset($recapWage[$key])) {
                         $recapWage[$key] = [
                             'name' => $item['name'],
                             'unit' => $item['unit'],
@@ -127,7 +127,7 @@ class RabService
                 foreach ($tools as $item) {
                     $key = $item['id'];
 
-                    if (!isset($recapTool[$key])) {
+                    if (! isset($recapTool[$key])) {
                         $recapTool[$key] = [
                             'name' => $item['name'],
                             'unit' => $item['unit'],
@@ -142,7 +142,9 @@ class RabService
             } else {
 
                 $ahsp = $tos->ahsp;
-                if (!$ahsp) continue;
+                if (! $ahsp) {
+                    continue;
+                }
 
                 // Material
                 foreach ($ahsp->ahspComponentMaterials as $item) {
@@ -155,7 +157,7 @@ class RabService
 
                     $key = $item->material_id;
 
-                    if (!isset($recapMaterial[$key])) {
+                    if (! isset($recapMaterial[$key])) {
                         $recapMaterial[$key] = [
                             'name' => $item->masterMaterial->name,
                             'unit' => $item->masterMaterial->unit,
@@ -190,7 +192,7 @@ class RabService
 
                     $key = $item->wage_id;
 
-                    if (!isset($recapWage[$key])) {
+                    if (! isset($recapWage[$key])) {
                         $recapWage[$key] = [
                             'name' => $item->masterWage->position,
                             'unit' => $item->masterWage->unit,
@@ -225,7 +227,7 @@ class RabService
 
                     $key = $item->tool_id;
 
-                    if (!isset($recapTool[$key])) {
+                    if (! isset($recapTool[$key])) {
                         $recapTool[$key] = [
                             'name' => $item->masterTool->name,
                             'unit' => $item->masterTool->unit,
@@ -306,7 +308,6 @@ class RabService
             $summary['tool_total'] +
             $summary['operational_total'];
 
-
         $comments = $this->rabRepository->getComments($projectId);
         $history = $comments->map(function ($item) {
             return [
@@ -360,7 +361,7 @@ class RabService
         $action = $data['action'];
 
         match ($role) {
-            'planner' => $this->handlePlanner($action, $status),
+            'planner' => $this->handlePlanner($project, $action, $status),
             'reviewer' => $this->handleReviewer($action, $status),
             'approver' => $this->handleApprover($action, $status),
             default => throw new DomainException('Role tidak valid')
@@ -388,14 +389,42 @@ class RabService
      * - Tidak bisa aksi jika sudah approved
      * - Hanya bisa kirim saat status draft/revision
      */
-    private function handlePlanner($action, $status)
+    private function handlePlanner($project, $action, $status)
     {
         if ($status === 'approved') {
             throw new DomainException('RAB sudah disetujui');
         }
 
-        if ($action === 'send' && !in_array($status, ['draft', 'revision'])) {
-            throw new DomainException('RAB tidak bisa dikirim');
+        if ($action === 'send') {
+
+            if (! in_array($status, ['draft', 'revision'])) {
+                throw new DomainException('RAB tidak bisa dikirim');
+            }
+
+            if ($project->takeOffSheets->isEmpty()) {
+                throw new DomainException('Item RAB belum ada');
+            }
+
+            foreach ($project->takeOffSheets as $tos) {
+
+                if (! $tos->ahsp) {
+                    throw new DomainException(
+                        "Pekerjaan {$tos->work_name} belum memiliki AHSP"
+                    );
+                }
+
+                $ahsp = $tos->ahsp;
+
+                if (
+                    $ahsp->ahspComponentMaterials->isEmpty() &&
+                    $ahsp->ahspComponentWages->isEmpty() &&
+                    $ahsp->ahspComponentTools->isEmpty()
+                ) {
+                    throw new DomainException(
+                        "AHSP pada pekerjaan {$tos->work_name} belum memiliki item"
+                    );
+                }
+            }
         }
     }
 
@@ -408,11 +437,11 @@ class RabService
      */
     private function handleReviewer($action, $status)
     {
-        if (!in_array($status, ['submitted', 'revision'])) {
+        if (! in_array($status, ['submitted', 'revision'])) {
             throw new DomainException('Belum bisa direview');
         }
 
-        if (!in_array($action, ['revision', 'forward'])) {
+        if (! in_array($action, ['revision', 'forward'])) {
             throw new DomainException('Aksi tidak valid');
         }
     }
@@ -426,11 +455,11 @@ class RabService
      */
     private function handleApprover($action, $status)
     {
-        if (!in_array($status, ['reviewed'])) {
+        if (! in_array($status, ['reviewed'])) {
             throw new DomainException('Belum bisa diapprove');
         }
 
-        if (!in_array($action, ['revision', 'approve'])) {
+        if (! in_array($action, ['revision', 'approve'])) {
             throw new DomainException('Aksi tidak valid');
         }
     }
@@ -465,7 +494,7 @@ class RabService
      */
     private function resolveDefaultComment($action, $comment)
     {
-        if (!empty($comment)) {
+        if (! empty($comment)) {
             return $comment;
         }
 
@@ -493,10 +522,14 @@ class RabService
     {
         foreach ($project->takeOffSheets as $tos) {
 
-            if ($tos->isLocked()) continue;
+            if ($tos->isLocked()) {
+                continue;
+            }
 
             $ahsp = $tos->ahsp;
-            if (!$ahsp) continue;
+            if (! $ahsp) {
+                continue;
+            }
 
             $volume = $tos->volume;
 

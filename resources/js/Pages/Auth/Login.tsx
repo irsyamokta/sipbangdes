@@ -127,7 +127,7 @@ export default function Login({
 
                 {/* Right Side */}
                 <div className="w-1/2 h-screen py-3 px-3 hidden lg:flex">
-                    <div className="bg-primary flex flex-col justify-center items-center rounded-xl p-10">
+                    <div className="w-full bg-primary flex flex-col justify-center items-center rounded-xl p-10">
                         {/* Illustration */}
                         <img
                             src={Illustration}
