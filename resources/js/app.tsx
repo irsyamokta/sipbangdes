@@ -8,7 +8,7 @@ import { Toaster } from 'sonner';
 import { DebugProvider } from "@/Context/DebugContext";
 import DebugPanel from "@/Components/debug/DebugPanel";
 
-const appName = import.meta.env.PROD || 'Sipbangdes';
+const appName = "Sipbangdes";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
