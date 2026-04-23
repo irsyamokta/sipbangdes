@@ -2,20 +2,20 @@
 
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
-use Mockery;
-
-use Illuminate\Support\Facades\DB;
-
+use App\Contracts\CodeGeneratorInterface;
 use App\Models\MasterTool;
-use App\Modules\Tool\Services\ToolService;
 use App\Modules\Tool\Repositories\ToolRepository;
-use App\Services\CodeGeneratorService;
+use App\Modules\Tool\Services\ToolService;
+use Illuminate\Support\Facades\DB;
+use Mockery;
+use Tests\TestCase;
 
 class ToolServiceTest extends TestCase
 {
     protected $toolRepository;
+
     protected $codeGenerator;
+
     protected $toolService;
 
     protected function setUp(): void
@@ -26,7 +26,7 @@ class ToolServiceTest extends TestCase
             Mockery::mock(ToolRepository::class);
 
         $this->codeGenerator =
-            Mockery::mock(CodeGeneratorService::class);
+            Mockery::mock(CodeGeneratorInterface::class);
 
         $this->toolService = new ToolService(
             $this->toolRepository,
@@ -40,6 +40,18 @@ class ToolServiceTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * Test pengambilan data alat menggunakan pagination.
+     *
+     * Skenario:
+     * - Parameter pencarian (search) diberikan.
+     * - Pagination diaktifkan dengan jumlah data per halaman tertentu.
+     * - Repository memanggil method getPaginated.
+     *
+     * Ekspektasi:
+     * - Service mengembalikan hasil pagination
+     *   yang sama dengan hasil dari repository.
+     */
     public function test_get_tools_with_pagination()
     {
         $search = 'bor';
@@ -63,6 +75,18 @@ class ToolServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pengambilan seluruh data alat tanpa pagination.
+     *
+     * Skenario:
+     * - Parameter pencarian (search) diberikan.
+     * - Pagination dinonaktifkan.
+     * - Repository memanggil method getAll.
+     *
+     * Ekspektasi:
+     * - Service mengembalikan seluruh data alat
+     *   sesuai hasil dari repository.
+     */
     public function test_get_tools_without_pagination()
     {
         $search = 'bor';
@@ -84,12 +108,27 @@ class ToolServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pembuatan data alat baru berhasil.
+     *
+     * Skenario:
+     * - Database transaction dijalankan.
+     * - Code generator menghasilkan kode alat unik.
+     * - Repository membuat data alat baru
+     *   dengan kode yang telah dihasilkan.
+     *
+     * Ekspektasi:
+     * - Data alat berhasil dibuat.
+     * - Kode alat otomatis tersimpan dalam data.
+     * - Method createTool mengembalikan instance alat
+     *   hasil dari repository.
+     */
     public function test_create_tool_successfully()
     {
         $data = [
             'name' => 'Bor Tangan',
             'unit' => 'hari',
-            'price' => 85000
+            'price' => 85000,
         ];
 
         DB::shouldReceive('transaction')
@@ -129,6 +168,18 @@ class ToolServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pembaruan data alat berhasil.
+     *
+     * Skenario:
+     * - Data alat ditemukan berdasarkan ID.
+     * - Repository menjalankan proses update
+     *   dengan data baru yang diberikan.
+     *
+     * Ekspektasi:
+     * - Method updateTool mengembalikan nilai true
+     *   sebagai indikasi bahwa proses update berhasil.
+     */
     public function test_update_tool_successfully()
     {
         $toolId = '550e8400-e29b-41d4-a716-446655440020';
@@ -136,7 +187,7 @@ class ToolServiceTest extends TestCase
         $data = [
             'name' => 'Bor Listrik',
             'unit' => 'hari',
-            'price' => 95000
+            'price' => 95000,
         ];
 
         $toolMock =
@@ -160,11 +211,23 @@ class ToolServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * Test penghapusan data alat berhasil.
+     *
+     * Skenario:
+     * - Data alat ditemukan berdasarkan ID.
+     * - Repository menjalankan proses delete
+     *   terhadap data alat tersebut.
+     *
+     * Ekspektasi:
+     * - Method deleteTool mengembalikan nilai true
+     *   sebagai indikasi bahwa proses penghapusan berhasil.
+     */
     public function test_delete_tool_successfully()
     {
         $toolId = '550e8400-e29b-41d4-a716-446655440021';
 
-        $tool = new MasterTool();
+        $tool = new MasterTool;
 
         $this->toolRepository
             ->shouldReceive('find')

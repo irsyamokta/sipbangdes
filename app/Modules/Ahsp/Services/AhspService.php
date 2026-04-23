@@ -5,7 +5,7 @@ namespace App\Modules\Ahsp\Services;
 use DomainException;
 use App\Models\Ahsp;
 use App\Modules\Ahsp\Repositories\AhspRepository;
-use App\Services\CodeGeneratorService;
+use App\Services\CodeGenerators\DotCodeGenerator;
 use Illuminate\Support\Facades\DB;
 
 class AhspService
@@ -15,7 +15,7 @@ class AhspService
      */
     public function __construct(
         private AhspRepository $ahspRepository,
-        private CodeGeneratorService $codeGeneratorService
+        private DotCodeGenerator $codeGenerator
     ) {}
 
     /**
@@ -58,7 +58,7 @@ class AhspService
             throw new DomainException('Nama pekerjaan sudah ada');
 
         return DB::transaction(function () use ($data) {
-            $data['work_code'] = $this->codeGeneratorService->generateDotCode(
+            $data['work_code'] = $this->codeGenerator->generate(
                 Ahsp::class,
                 'work_code',
                 'A'

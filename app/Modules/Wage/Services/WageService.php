@@ -2,10 +2,9 @@
 
 namespace App\Modules\Wage\Services;
 
-use DomainException;
 use App\Models\MasterWage;
 use App\Modules\Wage\Repositories\WageRepository;
-use App\Services\CodeGeneratorService;
+use App\Contracts\CodeGeneratorInterface;
 use Illuminate\Support\Facades\DB;
 
 class WageService
@@ -15,7 +14,7 @@ class WageService
      */
     public function __construct(
         protected WageRepository $wageRepository,
-        protected CodeGeneratorService $codeGenerator
+        protected CodeGeneratorInterface $codeGenerator
     ) {}
 
     /**

@@ -5,7 +5,7 @@ namespace App\Modules\Unit\Services;
 use DomainException;
 use App\Models\MasterUnit;
 use App\Modules\Unit\Repositories\UnitRepository;
-use App\Services\CodeGeneratorService;
+use App\Contracts\CodeGeneratorInterface;
 use Illuminate\Support\Facades\DB;
 
 class UnitService
@@ -15,7 +15,7 @@ class UnitService
      */
     public function __construct(
         protected UnitRepository $unitRepository,
-        protected CodeGeneratorService $codeGenerator
+        protected CodeGeneratorInterface $codeGenerator
     ) {}
 
     /**

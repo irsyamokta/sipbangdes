@@ -2,20 +2,20 @@
 
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
-use Mockery;
-
-use Illuminate\Support\Facades\DB;
-
+use App\Contracts\CodeGeneratorInterface;
 use App\Models\MasterWage;
-use App\Modules\Wage\Services\WageService;
 use App\Modules\Wage\Repositories\WageRepository;
-use App\Services\CodeGeneratorService;
+use App\Modules\Wage\Services\WageService;
+use Illuminate\Support\Facades\DB;
+use Mockery;
+use Tests\TestCase;
 
 class WageServiceTest extends TestCase
 {
     protected $wageRepository;
+
     protected $codeGenerator;
+
     protected $wageService;
 
     protected function setUp(): void
@@ -26,7 +26,7 @@ class WageServiceTest extends TestCase
             Mockery::mock(WageRepository::class);
 
         $this->codeGenerator =
-            Mockery::mock(CodeGeneratorService::class);
+            Mockery::mock(CodeGeneratorInterface::class);
 
         $this->wageService = new WageService(
             $this->wageRepository,
@@ -40,6 +40,18 @@ class WageServiceTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * Test pengambilan data upah menggunakan pagination.
+     *
+     * Skenario:
+     * - Parameter pencarian (search) diberikan.
+     * - Pagination diaktifkan dengan jumlah data per halaman tertentu.
+     * - Repository memanggil method getPaginated.
+     *
+     * Ekspektasi:
+     * - Service mengembalikan hasil pagination
+     *   yang sama dengan hasil dari repository.
+     */
     public function test_get_wages_with_pagination()
     {
         $search = 'tukang';
@@ -63,6 +75,18 @@ class WageServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pengambilan seluruh data upah tanpa pagination.
+     *
+     * Skenario:
+     * - Parameter pencarian (search) diberikan.
+     * - Pagination dinonaktifkan.
+     * - Repository memanggil method getAll.
+     *
+     * Ekspektasi:
+     * - Service mengembalikan seluruh data upah
+     *   sesuai hasil dari repository.
+     */
     public function test_get_wages_without_pagination()
     {
         $search = 'tukang';
@@ -84,12 +108,27 @@ class WageServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pembuatan data upah baru berhasil.
+     *
+     * Skenario:
+     * - Database transaction dijalankan.
+     * - Code generator menghasilkan kode upah unik.
+     * - Repository membuat data upah baru
+     *   dengan kode yang telah dihasilkan.
+     *
+     * Ekspektasi:
+     * - Data upah berhasil dibuat.
+     * - Kode upah otomatis tersimpan dalam data.
+     * - Method createWage mengembalikan
+     *   instance upah hasil repository.
+     */
     public function test_create_wage_successfully()
     {
         $data = [
             'name' => 'Tukang Batu',
             'unit' => 'OH',
-            'price' => 125000
+            'price' => 125000,
         ];
 
         DB::shouldReceive('transaction')
@@ -129,6 +168,18 @@ class WageServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pembaruan data upah berhasil.
+     *
+     * Skenario:
+     * - Data upah ditemukan berdasarkan ID.
+     * - Repository menjalankan proses update
+     *   dengan data baru yang diberikan.
+     *
+     * Ekspektasi:
+     * - Method updateWage mengembalikan nilai true
+     *   sebagai indikasi bahwa proses update berhasil.
+     */
     public function test_update_wage_successfully()
     {
         $wageId = '550e8400-e29b-41d4-a716-446655440030';
@@ -136,7 +187,7 @@ class WageServiceTest extends TestCase
         $data = [
             'name' => 'Mandor',
             'unit' => 'OH',
-            'price' => 135000
+            'price' => 135000,
         ];
 
         $wageMock =
@@ -160,11 +211,23 @@ class WageServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * Test penghapusan data upah berhasil.
+     *
+     * Skenario:
+     * - Data upah ditemukan berdasarkan ID.
+     * - Repository menjalankan proses delete
+     *   terhadap data upah tersebut.
+     *
+     * Ekspektasi:
+     * - Method deleteWage mengembalikan nilai true
+     *   sebagai indikasi bahwa proses penghapusan berhasil.
+     */
     public function test_delete_wage_successfully()
     {
         $wageId = '550e8400-e29b-41d4-a716-446655440031';
 
-        $wage = new MasterWage();
+        $wage = new MasterWage;
 
         $this->wageRepository
             ->shouldReceive('find')

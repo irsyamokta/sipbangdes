@@ -34,7 +34,17 @@ class UserServiceTest extends TestCase
         parent::tearDown();
     }
 
-
+    /**
+     * Test bahwa proses pembuatan user akan melempar DomainException
+     * ketika email yang digunakan sudah terdaftar di sistem.
+     *
+     * Skenario:
+     * - Repository mengembalikan nilai true saat pengecekan email.
+     * - Service dipanggil untuk membuat user dengan email tersebut.
+     *
+     * Ekspektasi:
+     * - DomainException dilempar dengan pesan bahwa email sudah terdaftar.
+     */
     public function test_create_user_throw_exception_if_email_exists()
     {
         $data = [
@@ -56,6 +66,19 @@ class UserServiceTest extends TestCase
         $this->userService->createUser($data);
     }
 
+    /**
+     * Test bahwa user berhasil dibuat ketika email belum terdaftar.
+     *
+     * Skenario:
+     * - Repository mengembalikan false pada pengecekan email.
+     * - Transaksi database dijalankan.
+     * - Repository membuat user baru.
+     * - Role diberikan ke user yang baru dibuat.
+     *
+     * Ekspektasi:
+     * - Method createUser mengembalikan instance User
+     *   yang sama dengan hasil dari repository.
+     */
     public function test_create_user_successfully()
     {
         $data = [
@@ -98,7 +121,17 @@ class UserServiceTest extends TestCase
         $this->assertEquals($userMock, $result);
     }
 
-
+    /**
+     * Test bahwa proses update user akan melempar DomainException
+     * ketika email yang diinput sudah digunakan oleh user lain.
+     *
+     * Skenario:
+     * - User ditemukan berdasarkan ID.
+     * - Repository mengembalikan true saat pengecekan email duplikat.
+     *
+     * Ekspektasi:
+     * - DomainException dilempar dengan pesan bahwa email sudah terdaftar.
+     */
     public function test_update_user_throw_exception_if_email_duplicate()
     {
         $userId = 1;
@@ -127,6 +160,19 @@ class UserServiceTest extends TestCase
         $this->userService->updateUser($userId, $data);
     }
 
+    /**
+     * Test bahwa update user berhasil tanpa mengubah password
+     * ketika field password kosong.
+     *
+     * Skenario:
+     * - User ditemukan berdasarkan ID.
+     * - Email tidak duplikat.
+     * - Repository melakukan update tanpa menyertakan field password.
+     *
+     * Ekspektasi:
+     * - Method updateUser mengembalikan nilai true.
+     * - Password tidak termasuk dalam data update.
+     */
     public function test_update_user_without_password()
     {
         $userId = 1;
@@ -164,6 +210,19 @@ class UserServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * Test bahwa update user berhasil dengan mengubah password
+     * ketika field password diisi.
+     *
+     * Skenario:
+     * - User ditemukan berdasarkan ID.
+     * - Email tidak duplikat.
+     * - Repository melakukan update dengan menyertakan password baru.
+     *
+     * Ekspektasi:
+     * - Method updateUser mengembalikan nilai true.
+     * - Password termasuk dalam data update.
+     */
     public function test_update_user_with_password()
     {
         $userId = 1;
@@ -201,6 +260,17 @@ class UserServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * Test bahwa user tidak dapat menghapus akunnya sendiri.
+     *
+     * Skenario:
+     * - ID user yang akan dihapus sama dengan ID user yang sedang login.
+     * - Repository menemukan user berdasarkan ID.
+     *
+     * Ekspektasi:
+     * - DomainException dilempar dengan pesan bahwa akun sendiri
+     *   tidak dapat dihapus.
+     */
     public function test_delete_user_cannot_delete_self()
     {
         $userId = '550e8400-e29b-41d4-a716-446655440000';
@@ -224,6 +294,17 @@ class UserServiceTest extends TestCase
         $this->userService->deleteUser($userId);
     }
 
+    /**
+     * Test bahwa user berhasil dihapus ketika bukan user yang sedang login.
+     *
+     * Skenario:
+     * - ID user yang akan dihapus berbeda dengan ID user login.
+     * - Repository menemukan user.
+     * - Repository menjalankan proses delete.
+     *
+     * Ekspektasi:
+     * - Method deleteUser mengembalikan nilai true.
+     */
     public function test_delete_user_successfully()
     {
         $userId = '550e8400-e29b-41d4-a716-446655440001';

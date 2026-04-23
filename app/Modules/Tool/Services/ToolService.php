@@ -2,10 +2,9 @@
 
 namespace App\Modules\Tool\Services;
 
-use DomainException;
 use App\Models\MasterTool;
 use App\Modules\Tool\Repositories\ToolRepository;
-use App\Services\CodeGeneratorService;
+use App\Contracts\CodeGeneratorInterface;
 use Illuminate\Support\Facades\DB;
 
 class ToolService
@@ -15,7 +14,7 @@ class ToolService
      */
     public function __construct(
         protected ToolRepository $toolRepository,
-        protected CodeGeneratorService $codeGenerator
+        protected CodeGeneratorInterface $codeGenerator
     ) {}
 
     /**
@@ -51,7 +50,7 @@ class ToolService
     public function createTool(array $data)
     {
         return DB::transaction(function () use ($data) {
-            $data["code"] = $this->codeGenerator->generate(
+            $data['code'] = $this->codeGenerator->generate(
                 MasterTool::class,
                 'code',
                 'TL'

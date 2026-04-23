@@ -2,20 +2,20 @@
 
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
-use Mockery;
-
-use Illuminate\Support\Facades\DB;
-
+use App\Contracts\CodeGeneratorInterface;
 use App\Models\MasterMaterial;
-use App\Modules\Material\Services\MaterialService;
 use App\Modules\Material\Repositories\MaterialRepository;
-use App\Services\CodeGeneratorService;
+use App\Modules\Material\Services\MaterialService;
+use Illuminate\Support\Facades\DB;
+use Mockery;
+use Tests\TestCase;
 
 class MaterialServiceTest extends TestCase
 {
     protected $materialRepository;
+
     protected $codeGenerator;
+
     protected $materialService;
 
     protected function setUp(): void
@@ -26,7 +26,7 @@ class MaterialServiceTest extends TestCase
             Mockery::mock(MaterialRepository::class);
 
         $this->codeGenerator =
-            Mockery::mock(CodeGeneratorService::class);
+            Mockery::mock(CodeGeneratorInterface::class);
 
         $this->materialService = new MaterialService(
             $this->materialRepository,
@@ -40,6 +40,18 @@ class MaterialServiceTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * Test pengambilan data material menggunakan pagination.
+     *
+     * Skenario:
+     * - Parameter pencarian (search) diberikan.
+     * - Pagination diaktifkan dengan jumlah data per halaman tertentu.
+     * - Repository memanggil method getPaginated.
+     *
+     * Ekspektasi:
+     * - Service mengembalikan hasil pagination
+     *   yang sama dengan hasil dari repository.
+     */
     public function test_get_materials_with_pagination()
     {
         $search = 'semen';
@@ -63,6 +75,18 @@ class MaterialServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pengambilan seluruh data material tanpa pagination.
+     *
+     * Skenario:
+     * - Parameter pencarian (search) diberikan.
+     * - Pagination dinonaktifkan.
+     * - Repository memanggil method getAll.
+     *
+     * Ekspektasi:
+     * - Service mengembalikan seluruh data material
+     *   sesuai hasil dari repository.
+     */
     public function test_get_materials_without_pagination()
     {
         $search = 'semen';
@@ -84,12 +108,26 @@ class MaterialServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pembuatan data material baru berhasil.
+     *
+     * Skenario:
+     * - Database transaction dijalankan.
+     * - Code generator menghasilkan kode material unik.
+     * - Repository membuat data material baru
+     *   dengan kode yang telah dihasilkan.
+     *
+     * Ekspektasi:
+     * - Material berhasil dibuat.
+     * - Kode material otomatis tersimpan dalam data.
+     * - Method createMaterial mengembalikan instance material.
+     */
     public function test_create_material_successfully()
     {
         $data = [
             'name' => 'Semen',
             'unit' => 'kg',
-            'price' => 75000
+            'price' => 75000,
         ];
 
         DB::shouldReceive('transaction')
@@ -129,6 +167,18 @@ class MaterialServiceTest extends TestCase
         );
     }
 
+    /**
+     * Test pembaruan data material berhasil.
+     *
+     * Skenario:
+     * - Material ditemukan berdasarkan ID.
+     * - Repository menjalankan proses update
+     *   dengan data baru yang diberikan.
+     *
+     * Ekspektasi:
+     * - Method updateMaterial mengembalikan nilai true
+     *   sebagai indikasi bahwa proses update berhasil.
+     */
     public function test_update_material_successfully()
     {
         $materialId = '550e8400-e29b-41d4-a716-446655440010';
@@ -136,7 +186,7 @@ class MaterialServiceTest extends TestCase
         $data = [
             'name' => 'Pasir',
             'unit' => 'm3',
-            'price' => 55000
+            'price' => 55000,
         ];
 
         $materialMock =
@@ -160,11 +210,23 @@ class MaterialServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * Test penghapusan data material berhasil.
+     *
+     * Skenario:
+     * - Material ditemukan berdasarkan ID.
+     * - Repository menjalankan proses delete
+     *   terhadap material tersebut.
+     *
+     * Ekspektasi:
+     * - Method deleteMaterial mengembalikan nilai true
+     *   sebagai indikasi bahwa proses penghapusan berhasil.
+     */
     public function test_delete_material_successfully()
     {
         $materialId = '550e8400-e29b-41d4-a716-446655440011';
 
-        $material = new MasterMaterial();
+        $material = new MasterMaterial;
 
         $this->materialRepository
             ->shouldReceive('find')

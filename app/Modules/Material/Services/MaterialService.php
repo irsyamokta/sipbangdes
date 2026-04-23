@@ -2,10 +2,9 @@
 
 namespace App\Modules\Material\Services;
 
-use DomainException;
 use App\Models\MasterMaterial;
 use App\Modules\Material\Repositories\MaterialRepository;
-use App\Services\CodeGeneratorService;
+use App\Contracts\CodeGeneratorInterface;
 use Illuminate\Support\Facades\DB;
 
 class MaterialService
@@ -15,7 +14,7 @@ class MaterialService
      */
     public function __construct(
         protected MaterialRepository $materialRepository,
-        protected CodeGeneratorService $codeGenerator
+        protected CodeGeneratorInterface $codeGenerator
     ) {}
 
     /**
