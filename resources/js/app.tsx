@@ -5,8 +5,10 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from 'sonner';
+import { DebugProvider } from "@/Context/DebugContext";
+import DebugPanel from "@/Components/debug/DebugPanel";
 
-const appName = import.meta.env.VITE_APP_NAME || 'Sipbangdes';
+const appName = import.meta.env.PROD || 'Sipbangdes';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -20,7 +22,10 @@ createInertiaApp({
 
         root.render(
             <>
-                <App {...props} />
+                <DebugProvider>
+                    <DebugPanel />
+                    <App {...props} />
+                </DebugProvider>
                 <Toaster
                     richColors
                     duration={3000}

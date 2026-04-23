@@ -7,6 +7,8 @@ import { SidebarProvider, useSidebar } from "@/Context/SidebarContext";
 import AppHeader from "@/Components/app/AppHeader";
 import AppSidebar from "@/Components/app/AppSidebar";
 
+import DebugWatcher from "@/Components/debug/DebugWatcher";
+
 import { getSidebarConfig } from "@/config/sidebar.config";
 
 function LayoutContent({ children }: PropsWithChildren) {
@@ -18,6 +20,8 @@ function LayoutContent({ children }: PropsWithChildren) {
 
     return (
         <div className="min-h-screen xl:flex">
+            <DebugWatcher />
+
             <div>
                 <AppSidebar sections={navItems} />
                 <Backdrop />
