@@ -47,6 +47,7 @@ export default function RAB() {
     });
 
     const isSelected = !!filters.project_id;
+    const isApproved = rab?.project?.rab_status === "approved";
 
     const handlePrint = () => {
         if (!filters.project_id) return;
@@ -65,8 +66,8 @@ export default function RAB() {
                     <HeaderTitle
                         title="Rencana Anggaran Biaya (RAB)"
                         subtitle="Hasil perhitungan otomatis dari TOS × AHSP × Master Harga"
-                        actionLabel={can("rab.download") && isSelected ? "Cetak RAB" : undefined}
-                        actionIcon={can("rab.download") && isSelected ? <PiPrinter size={20} /> : undefined}
+                        actionLabel={can("rab.download") && isSelected && isApproved ? "Cetak RAB" : undefined}
+                        actionIcon={can("rab.download") && isSelected && isApproved ? <PiPrinter size={20} /> : undefined}
                         onActionClick={handlePrint}
                     />
                 </div>
