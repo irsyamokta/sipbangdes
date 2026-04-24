@@ -48,7 +48,7 @@ class TakeOffSheetController extends Controller
 
             'projectOptions' => $this->projectService->getProjects()->map(fn($project) => [
                 'value' => $project->id,
-                'label' => $project->project_name
+                'label' => $project->project_name . " (". $project->budget_year . ")"
             ]),
 
             'workerCategoryOptions' => $this->workerCategoryService->getWorkerCategory()->map(fn($workerCategory) => [

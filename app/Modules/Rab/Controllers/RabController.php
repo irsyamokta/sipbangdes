@@ -70,9 +70,9 @@ class RabController extends Controller
         return Inertia::render('Modules/Rab/Index', [
             'rab' => $rab,
 
-            'projectOptions' => $projects->map(fn($p) => [
-                'value' => $p->id,
-                'label' => $p->project_name
+            'projectOptions' => $projects->map(fn($project) => [
+                'value' => $project->id,
+                'label' => $project->project_name. " (". $project->budget_year . ")"
             ]),
 
             'unitOptions' => $units->map(fn($unit) => [

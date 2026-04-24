@@ -67,15 +67,15 @@ class AhspController extends Controller
             ]),
             'materialOptions' => $materials->map(fn($material) => [
                 'value' => $material->id,
-                'label' => $material->name,
+                'label' => $material->name . " (". $material->unit . ")",
             ]),
             'wageOptions' => $wages->map(fn($wage) => [
                 'value' => $wage->id,
-                'label' => $wage->position,
+                'label' => $wage->position . " (". $wage->unit . ")",
             ]),
             'toolOptions' => $tools->map(fn($tool) => [
                 'value' => $tool->id,
-                'label' => $tool->name,
+                'label' => $tool->name . " (". $tool->unit . ")",
             ]),
             'filters' => [
                 'search' => $request->search ?? ""
