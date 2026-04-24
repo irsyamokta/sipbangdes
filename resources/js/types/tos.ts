@@ -4,6 +4,7 @@ interface SelectOption {
     value: string;
     label: string;
     category_id?: string;
+    data?: any;
 }
 
 interface Project {
@@ -39,7 +40,6 @@ interface TakeOffSheet {
 
     locked_unit_price?: number;
     locked_at?: string;
-    note?: string;
 
     created_at: string;
     updated_at: string;
@@ -55,7 +55,6 @@ interface TakeOffSheetForm {
     volume: number;
 
     locked_unit_price?: number;
-    note?: string;
 }
 
 interface ModalTakeOffSheetProps {

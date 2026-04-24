@@ -31,8 +31,6 @@ class TakeOffSheetStoreRequest extends FormRequest
             'work_name' => 'required|string|max:255',
             'volume' => 'required|numeric|min:0',
             'unit' => 'required|string|max:50',
-
-            'note' => 'nullable|string|max:255',
         ];
     }
 

@@ -67,6 +67,7 @@ const WorkerCategoryModal = ({
                     name="description"
                     placeholder="Deskripsi singkat kategori..."
                     value={data.description}
+                    maxLength={120}
                     onChange={(value) => setData("description", value)}
                     error={serverErrors.description}
                     required

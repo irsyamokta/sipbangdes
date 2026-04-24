@@ -75,7 +75,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ? "border-error-500 focus:border-error-300 focus:ring-error-500/20"
             : success
             ? "border-success-500 focus:border-success-300 focus:ring-success-500/20"
-            : "bg-transparent text-gray-800 border-gray-300 focus:border-primary focus:ring-primary/20";
+            : "bg-transparent border-gray-300 focus:border-primary focus:ring-primary/20";
 
         const paddingLeft = startIcon ? "pl-9" : "pl-4";
         const paddingRight =

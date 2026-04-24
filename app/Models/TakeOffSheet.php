@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property float|null $locked_unit_price
  * @property \Carbon\Carbon|null $locked_at
  * @property array|null $locked_snapshot
- * @property string|null $note
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
@@ -36,7 +35,6 @@ class TakeOffSheet extends Model
         'work_name',
         'volume',
         'unit',
-        'note',
         'locked_unit_price',
         'locked_at',
         'locked_snapshot',

@@ -60,8 +60,12 @@ class TakeOffSheetController extends Controller
                 ->get()
                 ->map(fn($item) => [
                     'value' => $item->ahsp_id,
-                    'label' => $item->ahsp->work_name,
-                    'category_id' => $item->category_id
+                    'label' => $item->ahsp->work_code . ' - ' . $item->ahsp->work_name,
+                    'category_id' => $item->category_id,
+                    'data' => [
+                        'work_name' => $item->ahsp->work_name,
+                        'unit' => $item->ahsp->unit
+                    ]
                 ]),
 
             'unitOptions' => $this->unitService->getUnits(
