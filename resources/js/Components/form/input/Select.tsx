@@ -101,6 +101,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                 {label && (
                     <label className="block text-sm font-medium text-gray-800">
                         {label}
+                        {required && <span className="text-error-500"> *</span>}
                     </label>
                 )}
 

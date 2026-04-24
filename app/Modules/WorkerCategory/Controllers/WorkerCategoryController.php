@@ -49,6 +49,10 @@ class WorkerCategoryController extends Controller
             'ahspOptions' => $ahsp->map(fn($ahsp) => [
                 'value' => $ahsp->id,
                 'label' => $ahsp->work_code . ' - ' . $ahsp->work_name,
+                'data' => [
+                    'work_name' => $ahsp->work_name,
+                    'unit'=> $ahsp->unit
+                ]
             ])
         ]);
     }

@@ -5,6 +5,7 @@ interface SelectOption {
     value: string;
     label: string;
     filter?: any;
+    data?: any;
 }
 
 {/** Worker Category */ }

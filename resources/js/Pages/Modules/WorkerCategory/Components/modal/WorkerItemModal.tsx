@@ -13,31 +13,36 @@ const WorkerItemModal = ({
     workerItem,
     categoryId,
     unitOptions,
-    ahspOptions
+    ahspOptions,
 }: ModalWorkerItemProps) => {
-    const {
-        data,
-        setData,
-        handleSubmit,
-        loading,
-        serverErrors,
-        isEditing,
-    } = useModalForm<WorkerItemForm>({
-        isOpen,
-        onClose,
-        initialValues: {
-            work_name: "",
-            ahsp_id: "",
-            category_id: categoryId,
-            unit: "",
-        },
-        editData: workerItem,
-        editId: workerItem?.id,
-        successMessage: "Item pekerjaan berhasil disimpan",
-        updateMessage: "Item pekerjaan berhasil diperbarui",
-        storeRoute: "workeritem.store",
-        updateRoute: "workeritem.update",
-    });
+    const { data, setData, handleSubmit, loading, serverErrors, isEditing } =
+        useModalForm<WorkerItemForm>({
+            isOpen,
+            onClose,
+            initialValues: {
+                work_name: "",
+                ahsp_id: "",
+                category_id: categoryId,
+                unit: "",
+            },
+            editData: workerItem,
+            editId: workerItem?.id,
+            successMessage: "Item pekerjaan berhasil disimpan",
+            updateMessage: "Item pekerjaan berhasil diperbarui",
+            storeRoute: "workeritem.store",
+            updateRoute: "workeritem.update",
+        });
+
+    const handleAhspChange = (value: string | number | boolean) => {
+        const selected = ahspOptions?.find((opt: any) => opt.value === value || opt.value === String(value));
+
+        setData("ahsp_id", value as string);
+
+        if (selected?.data) {
+            setData("work_name", selected.data.work_name);
+            setData("unit", selected.data.unit);
+        }
+    };
 
     return (
         <Modal
@@ -54,6 +59,19 @@ const WorkerItemModal = ({
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4 p-4 md:p-6"
             >
+                {/* AHSP */}
+                <Select
+                    label="Referensi AHSP"
+                    value={data.ahsp_id}
+                    placeholder="Pilih AHSP"
+                    onChange={handleAhspChange}
+                    error={serverErrors.ahsp_id}
+                    required
+                    options={(ahspOptions ?? []).filter(
+                        (ahsp: any) => ahsp.value,
+                    )}
+                />
+
                 {/* Worker Name */}
                 <Input
                     label="Nama Pekerjaan"
@@ -70,28 +88,17 @@ const WorkerItemModal = ({
                 <Select
                     label="Satuan"
                     value={data.unit}
+                    placeholder="Pilih Satuan"
                     onChange={(value) => setData("unit", value)}
                     error={serverErrors.unit}
                     required
-                    options={(unitOptions ?? [])
-                        .filter((unit: any) => unit.value)
-                    }
-                />
-
-                {/* AHSP */}
-                <Select
-                    label="Referensi AHSP"
-                    value={data.ahsp_id}
-                    onChange={(value) => setData("ahsp_id", value)}
-                    error={serverErrors.ahsp_id}
-                    required
-                    options={(ahspOptions ?? [])
-                        .filter((ahsp: any) => ahsp.value)
-                    }
+                    options={(unitOptions ?? []).filter(
+                        (unit: any) => unit.value,
+                    )}
                 />
             </Form>
         </Modal>
-    )
-}
+    );
+};
 
 export default WorkerItemModal;
