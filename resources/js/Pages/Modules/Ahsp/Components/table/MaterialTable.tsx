@@ -90,28 +90,28 @@ const MaterialTable = ({
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Satuan
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Koefisien
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Harga
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Jumlah
                                     </TableCell>
@@ -119,7 +119,7 @@ const MaterialTable = ({
                                     {can('ahsp.create') && (
                                         <TableCell
                                             isHeader
-                                            className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                            className="px-6 py-3 text-sm font-semibold text-gray-900 text-center whitespace-nowrap"
                                         >
                                             Aksi
                                         </TableCell>
@@ -133,34 +133,34 @@ const MaterialTable = ({
                                     <TableBody key={item.id} className="divide-y divide-gray-100 border-b">
                                         <TableRow className="hover:bg-gray-50 transition">
                                             {/* Name */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {capitalizeEachWord(item.master_material.name)}
                                             </TableCell>
 
                                             {/* Unit */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {item.master_material.unit}
                                             </TableCell>
 
                                             {/* Coefficient */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatDecimal(item.coefficient)}
                                             </TableCell>
 
                                             {/* Price */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatCurrency(item.master_material.price)}
                                             </TableCell>
 
                                             {/* Quantity */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatCurrency(item.coefficient * item.master_material.price)}
                                             </TableCell>
 
                                             {/* Action */}
                                             {can('ahsp.edit') && can('ahsp.delete') && (
                                                 <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
-                                                    <div className="flex justify-end gap-1">
+                                                    <div className="flex justify-center gap-1">
                                                         {/* Edit */}
                                                         <Button
                                                             size="icon"

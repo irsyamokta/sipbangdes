@@ -89,28 +89,28 @@ const WageTable = ({
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Satuan
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Koefisien
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Harga
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Jumlah
                                     </TableCell>
@@ -118,7 +118,7 @@ const WageTable = ({
                                     {can("ahsp.create") && (
                                         <TableCell
                                             isHeader
-                                            className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                            className="px-6 py-3 text-sm font-semibold text-gray-900 text-center whitespace-nowrap"
                                         >
                                             Aksi
                                         </TableCell>
@@ -132,34 +132,34 @@ const WageTable = ({
                                     <TableBody key={item.id} className="divide-y divide-gray-100 border-b">
                                         <TableRow className="hover:bg-gray-50 transition">
                                             {/* Position */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {capitalizeEachWord(item.master_wage.position)}
                                             </TableCell>
 
                                             {/* Unit */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {item.master_wage.unit}
                                             </TableCell>
 
                                             {/* Coefficient */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatDecimal(item.coefficient)}
                                             </TableCell>
 
                                             {/* Price */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatCurrency(item.master_wage.price)}
                                             </TableCell>
 
                                             {/* Quantity */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatCurrency(item.coefficient * item.master_wage.price)}
                                             </TableCell>
 
                                             {/* Action */}
                                             {can("ahsp.edit") && can("ahsp.delete") && (
-                                                <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
-                                                    <div className="flex justify-end gap-1">
+                                                <TableCell className="px-6 py-4 text-sm font-medium text-center text-gray-800 whitespace-nowrap">
+                                                    <div className="flex justify-center gap-1">
                                                         {/* Edit */}
                                                         <Button
                                                             size="icon"

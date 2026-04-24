@@ -49,15 +49,15 @@ const RecapMaterialTable = ({
                                 Nama Material
                             </TableCell>
 
-                            <TableCell isHeader className="px-6 py-3 text-xs text-end text-gray-900">
+                            <TableCell isHeader className="px-6 py-3 text-xs text-start text-gray-900">
                                 Satuan
                             </TableCell>
 
-                            <TableCell isHeader className="px-6 py-3 text-xs text-end text-gray-900 whitespace-nowrap">
+                            <TableCell isHeader className="px-6 py-3 text-xs text-start text-gray-900 whitespace-nowrap">
                                 Kebutuhan
                             </TableCell>
 
-                            <TableCell isHeader className="px-6 py-3 text-xs text-end text-gray-900 whitespace-nowrap">
+                            <TableCell isHeader className="px-6 py-3 text-xs text-start text-gray-900 whitespace-nowrap">
                                 Harga Satuan
                             </TableCell>
 
@@ -81,22 +81,22 @@ const RecapMaterialTable = ({
                                     className="hover:bg-gray-50 transition"
                                 >
                                     {/* Material */}
-                                    <TableCell className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                                    <TableCell className="px-6 py-4 text-sm text-start text-gray-900 whitespace-nowrap">
                                         {capitalizeEachWord(item.name)}
                                     </TableCell>
 
                                     {/* Unit */}
-                                    <TableCell className="px-6 py-4 text-sm text-end text-gray-900">
+                                    <TableCell className="px-6 py-4 text-sm text-start text-gray-900">
                                         {item.unit}
                                     </TableCell>
 
                                     {/* Quantity */}
-                                    <TableCell className="px-6 py-4 text-sm text-end text-gray-900 whitespace-nowrap">
+                                    <TableCell className="px-6 py-4 text-sm text-start text-gray-900 whitespace-nowrap">
                                         {formatDecimal(item.quantity)}
                                     </TableCell>
 
                                     {/* Price */}
-                                    <TableCell className="px-6 py-4 text-sm text-end text-gray-900 whitespace-nowrap">
+                                    <TableCell className="px-6 py-4 text-sm text-start text-gray-900 whitespace-nowrap">
                                         {formatCurrency(item.price)}
                                     </TableCell>
 

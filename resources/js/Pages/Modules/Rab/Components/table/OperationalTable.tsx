@@ -102,15 +102,15 @@ const OperationalTable = ({
                                     Nama Biaya
                                 </TableCell>
 
-                                <TableCell isHeader className="px-6 py-3 text-xs text-end text-gray-900">
+                                <TableCell isHeader className="px-6 py-3 text-xs text-start text-gray-900">
                                     Satuan
                                 </TableCell>
 
-                                <TableCell isHeader className="px-6 py-3 text-xs text-end text-gray-900 whitespace-nowrap">
+                                <TableCell isHeader className="px-6 py-3 text-xs text-start text-gray-900 whitespace-nowrap">
                                     Kebutuhan
                                 </TableCell>
 
-                                <TableCell isHeader className="px-6 py-3 text-xs text-end text-gray-900 whitespace-nowrap">
+                                <TableCell isHeader className="px-6 py-3 text-xs text-start text-gray-900 whitespace-nowrap">
                                     Harga Satuan
                                 </TableCell>
 
@@ -119,7 +119,7 @@ const OperationalTable = ({
                                 </TableCell>
 
                                 {can("rab.create") && rab_status !== "approved" && (
-                                    <TableCell isHeader className="px-6 py-3 text-xs text-end text-gray-900 whitespace-nowrap">
+                                    <TableCell isHeader className="px-6 py-3 text-xs text-center text-gray-900 whitespace-nowrap">
                                         Aksi
                                     </TableCell>
                                 )}
@@ -140,22 +140,22 @@ const OperationalTable = ({
                                         className="hover:bg-gray-50 transition"
                                     >
                                         {/* Name */}
-                                        <TableCell className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                                        <TableCell className="px-6 py-4 text-sm text-start text-gray-900 whitespace-nowrap">
                                             {capitalizeEachWord(item.name)}
                                         </TableCell>
 
                                         {/* Unit */}
-                                        <TableCell className="px-6 py-4 text-sm text-end text-gray-900">
+                                        <TableCell className="px-6 py-4 text-sm text-start text-gray-900">
                                             {item.unit}
                                         </TableCell>
 
                                         {/* Volume */}
-                                        <TableCell className="px-6 py-4 text-sm text-end text-gray-900 whitespace-nowrap">
+                                        <TableCell className="px-6 py-4 text-sm text-start text-gray-900 whitespace-nowrap">
                                             {formatDecimal(item.volume)}
                                         </TableCell>
 
                                         {/* Harga */}
-                                        <TableCell className="px-6 py-4 text-sm text-end text-gray-900 whitespace-nowrap">
+                                        <TableCell className="px-6 py-4 text-sm text-start text-gray-900 whitespace-nowrap">
                                             {formatCurrency(item.unit_price)}
                                         </TableCell>
 
@@ -167,7 +167,7 @@ const OperationalTable = ({
                                         {/* Action */}
                                         {can('rab.create') && rab_status !== "approved" && (
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
-                                                <div className="flex justify-end gap-1">
+                                                <div className="flex justify-center gap-1">
 
                                                     {/* Edit */}
                                                     <Button

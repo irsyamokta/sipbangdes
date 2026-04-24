@@ -47,35 +47,35 @@ const ToolTable = ({
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Satuan
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Koefisien
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Vol x Koef.
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Harga
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Jumlah
                                     </TableCell>
@@ -88,32 +88,32 @@ const ToolTable = ({
                                     <TableBody key={index} className="divide-y divide-gray-100 border-b">
                                         <TableRow className="hover:bg-gray-50 transition">
                                             {/* Name */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {capitalizeEachWord(item.name)}
                                             </TableCell>
 
                                             {/* Unit */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {item.unit}
                                             </TableCell>
 
                                             {/* Coefficient */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatDecimal(item.coefficient)}
                                             </TableCell>
 
                                             {/* Vol x Koef. */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatDecimal(item.qty)}
                                             </TableCell>
 
                                             {/* Price */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatCurrency(item.price)}
                                             </TableCell>
 
                                             {/* Total */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-start text-gray-800 whitespace-nowrap">
                                                 {formatCurrency(item.total)}
                                             </TableCell>
                                         </TableRow>

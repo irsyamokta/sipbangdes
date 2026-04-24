@@ -73,14 +73,14 @@ const WorkerItemTable = ({
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Satuan
                                     </TableCell>
 
                                     <TableCell
                                         isHeader
-                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                        className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
                                         Referensi AHSP
                                     </TableCell>
@@ -88,7 +88,7 @@ const WorkerItemTable = ({
                                     {can('workercategory.create') && (
                                         <TableCell
                                             isHeader
-                                            className="px-6 py-3 text-sm font-semibold text-gray-900 text-end whitespace-nowrap"
+                                            className="px-6 py-3 text-sm font-semibold text-gray-900 text-center whitespace-nowrap"
                                         >
                                             Aksi
                                         </TableCell>
@@ -102,26 +102,26 @@ const WorkerItemTable = ({
                                     <TableBody key={item.id} className="divide-y divide-gray-100 border-b">
                                         <TableRow className="hover:bg-gray-50 transition">
                                             {/* Worker Name */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 text-start whitespace-nowrap">
                                                 {capitalizeEachWord(item.work_name)}
                                             </TableCell>
 
                                             {/* Unit */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 text-start whitespace-nowrap">
                                                 {item.unit}
                                             </TableCell>
 
                                             {/* AHSP */}
-                                            <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
-                                                <div className="flex justify-end items-center gap-2">
+                                            <TableCell className="px-6 py-4 text-sm font-medium text-gray-800 text-start whitespace-nowrap">
+                                                <div className="flex justify-start items-center gap-2">
                                                     <PiCalculatorLight size={20} /> {item.ahsp.work_code} - {capitalizeEachWord(item.ahsp.work_name)}
                                                 </div>
                                             </TableCell>
 
                                             {/* Action */}
                                             {can('workercategory.edit') && can('workercategory.delete') && (
-                                                <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
-                                                    <div className="flex justify-end gap-1">
+                                                <TableCell className="px-6 py-4 text-sm font-medium text-center text-gray-800 whitespace-nowrap">
+                                                    <div className="flex justify-center gap-1">
 
                                                         {/* Edit */}
                                                         <Button

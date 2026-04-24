@@ -71,20 +71,20 @@ const ExpenditureTable = ({
                                     Uraian
                                 </TableCell>
 
-                                <TableCell isHeader className="px-6 py-3 text-sm font-semibold text-end">
+                                <TableCell isHeader className="px-6 py-3 text-sm font-semibold text-start">
                                     Tanggal
                                 </TableCell>
 
-                                <TableCell isHeader className="px-6 py-3 text-sm font-semibold text-end">
+                                <TableCell isHeader className="px-6 py-3 text-sm font-semibold text-start">
                                     Nominal
                                 </TableCell>
 
-                                <TableCell isHeader className="px-6 py-3 text-sm font-semibold text-end">
+                                <TableCell isHeader className="px-6 py-3 text-sm font-semibold text-start">
                                     Keterangan
                                 </TableCell>
 
                                 {actionColumn && (
-                                    <TableCell isHeader className="px-6 py-3 text-sm font-semibold text-end">
+                                    <TableCell isHeader className="px-6 py-3 text-sm font-semibold text-center">
                                         Aksi
                                     </TableCell>
                                 )}
@@ -107,34 +107,34 @@ const ExpenditureTable = ({
                                         className="hover:bg-gray-50 transition"
                                     >
                                         {/* No */}
-                                        <TableCell className="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                                        <TableCell className="px-6 py-4 text-sm font-medium text-start whitespace-nowrap">
                                             {index + 1}
                                         </TableCell>
 
                                         {/* Description */}
-                                        <TableCell className="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                                        <TableCell className="px-6 py-4 text-sm font-medium text-start whitespace-nowrap">
                                             {capitalizeEachWord(item.description)}
                                         </TableCell>
 
                                         {/* Date */}
-                                        <TableCell className="px-6 py-4 text-sm text-end whitespace-nowrap">
+                                        <TableCell className="px-6 py-4 text-sm text-start whitespace-nowrap">
                                             {formatCalendarDate(item.date)}
                                         </TableCell>
 
                                         {/* Nominal */}
-                                        <TableCell className="px-6 py-4 text-sm text-end whitespace-nowrap">
+                                        <TableCell className="px-6 py-4 text-sm text-start whitespace-nowrap">
                                             {formatCurrency(item.nominal)}
                                         </TableCell>
 
                                         {/* Information */}
-                                        <TableCell className="px-6 py-4 text-sm text-end">
+                                        <TableCell className="px-6 py-4 text-sm text-start">
                                             {item.information ?? "-"}
                                         </TableCell>
 
                                         {/* Action */}
                                         {actionColumn && (
                                             <TableCell className="px-6 py-4 text-sm text-end whitespace-nowrap">
-                                                <div className="flex justify-end gap-1">
+                                                <div className="flex justify-center gap-1">
 
                                                     {/* Edit */}
                                                     <Button
