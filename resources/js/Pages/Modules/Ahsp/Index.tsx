@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage } from "@inertiajs/react";
 
 import usePermission from "@/hooks/usePermission";
 import { useSearch } from "@/hooks/useSearch";
@@ -28,8 +28,8 @@ export default function AHSP() {
             materialOptions,
             wageOptions,
             toolOptions,
-            filters: filter
-        }
+            filters: filter,
+        },
     } = usePage<AhspPageProps>();
 
     const { can } = usePermission();
@@ -52,8 +52,9 @@ export default function AHSP() {
     const { filters, setFilter } = useSearch({
         routeName: "ahsp.index",
         initialFilters: {
-            search: filter.search ?? { search: "" },
-        }
+            search: filter.search ?? "",
+            per_page: filter.per_page ?? "10",
+        },
     });
 
     return (
@@ -72,13 +73,14 @@ export default function AHSP() {
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">
-
                 {/* Header */}
                 <div className="col-span-12">
                     <HeaderTitle
                         title="Analisis Harga Satuan Pekerjaan (AHSP)"
                         subtitle="Daftar AHSP standar yang dapat digunakan lintas proyek"
-                        actionLabel={can("ahsp.create") ? "Tambah AHSP" : undefined}
+                        actionLabel={
+                            can("ahsp.create") ? "Tambah AHSP" : undefined
+                        }
                         actionIcon={can("ahsp.create") ? <LuPlus /> : undefined}
                         onActionClick={() => setIsModalOpen(true)}
                     />
@@ -86,20 +88,36 @@ export default function AHSP() {
 
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
-
                     {/* Filter Bar */}
-                    <FilterBar
-                        className="md:max-w-sm"
-                        search={{
-                            value: filters.search ?? "",
-                            placeholder: "Cari satuan pekerjaan...",
-                            onChange: (value) => setFilter("search", value),
-                        }}
-                    />
+                    <div className="flex justify-between gap-2">
+                        <FilterBar
+                            className="w-full md:max-w-sm"
+                            search={{
+                                value: filters.search ?? "",
+                                placeholder: "Cari satuan pekerjaan...",
+                                onChange: (value) => setFilter("search", value),
+                            }}
+                        />
+                        <FilterBar
+                            className="w-32 md:max-w-24"
+                            select={{
+                                value: String(filters.per_page ?? "10"),
+                                placeholder: "Lihat",
+                                options: [
+                                    { value: "10", label: "10" },
+                                    { value: "25", label: "25" },
+                                    { value: "50", label: "50" },
+                                    { value: "all", label: "Semua" },
+                                ],
+                                onChange: (value) =>
+                                    setFilter("per_page", value),
+                            }}
+                        />
+                    </div>
 
                     {/* AHSP List */}
                     <div className="flex flex-col gap-4">
-                        {ahsp.length === 0 ? (
+                        {ahsp.data.length === 0 ? (
                             <div className="mt-4">
                                 <EmptyState
                                     title="Tidak Ada AHSP"
@@ -107,7 +125,7 @@ export default function AHSP() {
                                 />
                             </div>
                         ) : (
-                            ahsp.map((item) => (
+                            ahsp.data.map((item) => (
                                 <AhspAccordion
                                     key={item.id}
                                     ahsp={item}
@@ -120,7 +138,6 @@ export default function AHSP() {
                                     }}
                                     onDelete={(item) => handleDelete(item.id)}
                                 >
-
                                     {/* Summary Card */}
                                     <SummaryCard
                                         material_total={item.material_total}
@@ -131,7 +148,9 @@ export default function AHSP() {
                                     {/* Material Table */}
                                     <MaterialTable
                                         ahspId={item.id}
-                                        materials={item.ahsp_component_materials}
+                                        materials={
+                                            item.ahsp_component_materials
+                                        }
                                         materialOptions={materialOptions}
                                     />
 

@@ -2,10 +2,10 @@
 
 namespace App\Modules\Ahsp\Services;
 
-use DomainException;
 use App\Models\Ahsp;
 use App\Modules\Ahsp\Repositories\AhspRepository;
 use App\Services\CodeGenerators\DotCodeGenerator;
+use DomainException;
 use Illuminate\Support\Facades\DB;
 
 class AhspService
@@ -19,15 +19,19 @@ class AhspService
     ) {}
 
     /**
-     * Mengambil seluruh data AHSP dengan filter pencarian opsional.
+     * Mengambil data AHSP dengan dukungan pencarian dan pagination.
      *
      * Catatan:
      * - Digunakan untuk halaman index
-     * - Search mencakup work_code dan work_name
+     * - Mendukung filter pencarian berdasarkan work_code dan work_name
+     * - Mendukung jumlah data dinamis (10, 25, 50, atau semua)
+     * - Jika perPage = 'all', maka seluruh data akan ditampilkan
      */
-    public function getAhsp(?string $search)
-    {
-        return $this->ahspRepository->getAll($search);
+    public function getAhsp(
+        ?string $search,
+        int|string $perPage = 10
+    ) {
+        return $this->ahspRepository->getPaginated($search, $perPage);
     }
 
     /**
@@ -54,8 +58,9 @@ class AhspService
      */
     public function createAhsp(array $data)
     {
-        if ($this->ahspRepository->existsByName($data['work_name']))
+        if ($this->ahspRepository->existsByName($data['work_name'])) {
             throw new DomainException('Nama pekerjaan sudah ada');
+        }
 
         return DB::transaction(function () use ($data) {
             $data['work_code'] = $this->codeGenerator->generate(
@@ -78,8 +83,9 @@ class AhspService
     {
         $ahsp = $this->ahspRepository->find($id);
 
-        if ($this->ahspRepository->existsByNameExcept($id, $data['work_name']))
+        if ($this->ahspRepository->existsByNameExcept($id, $data['work_name'])) {
             throw new DomainException('Nama pekerjaan sudah ada');
+        }
 
         $ahsp->update($data);
     }

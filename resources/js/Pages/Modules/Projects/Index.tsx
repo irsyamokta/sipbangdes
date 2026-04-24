@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Head, usePage, router } from '@inertiajs/react';
+import { Head, usePage, router } from "@inertiajs/react";
 
 import usePermission from "@/hooks/usePermission";
 import { useSearch } from "@/hooks/useSearch";
@@ -12,25 +12,26 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import HeaderTitle from "@/Components/HeaderTitle";
 import FilterBar from "@/Components/filter/FilterBar";
 import ProjectModal from "./Components/modal/ProjectModal";
-import ProjectCard from "./Components/card/ProjectCard"
+import ProjectCard from "./Components/card/ProjectCard";
 
 import { LuPlus } from "react-icons/lu";
 
 export default function Projects() {
     const {
-        props: {
-            projects,
-            unitOptions,
-            filters: filter
-        }
+        props: { projects, unitOptions, filters: filter },
     } = usePage<ProjectPageProps>();
 
     const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [selectedProject, setSelectedProject] = useState<Project | null>(
+        null,
+    );
 
-    const budgetYearOptions = useBudgetYears({ startYear: 2025, includeAll: true });
+    const budgetYearOptions = useBudgetYears({
+        startYear: 2025,
+        includeAll: true,
+    });
 
     const { handleDelete } = useDelete({
         routeName: "project.destroy",
@@ -55,8 +56,8 @@ export default function Projects() {
         routeName: "project.index",
         initialFilters: {
             search: filter.search ?? "",
-            year: filter.year ?? ""
-        }
+            year: filter.year ?? "",
+        },
     });
 
     return (
@@ -75,23 +76,26 @@ export default function Projects() {
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">
-
                 {/* Header */}
                 <div className="col-span-12">
                     <HeaderTitle
                         title="Daftar Proyek"
                         subtitle="Kelola proyek pembangunan desa"
-                        actionLabel={can("project.create") ? "Tambah Proyek" : undefined}
-                        actionIcon={can("project.create") ? <LuPlus /> : undefined}
+                        actionLabel={
+                            can("project.create") ? "Tambah Proyek" : undefined
+                        }
+                        actionIcon={
+                            can("project.create") ? <LuPlus /> : undefined
+                        }
                         onActionClick={() => setIsModalOpen(true)}
                     />
                 </div>
 
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
-
                     {/* Filter Bar */}
                     <FilterBar
+                        className="w-full md:max-w-2xl"
                         select={{
                             value: filters.year,
                             options: budgetYearOptions,

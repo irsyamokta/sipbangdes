@@ -5,15 +5,51 @@ namespace App\Modules\Ahsp\Repositories;
 use App\Models\Ahsp;
 
 class AhspRepository
-{
+{   
     /**
-     * Mengambil seluruh data AHSP dengan relasi lengkap.
+     * Mengambil seluruh data tanpa pagination.
      *
      * Catatan:
-     * - Eager loading untuk material, upah, dan alat
-     * - Menghindari N+1 query pada tampilan detail
+     * - Digunakan untuk kebutuhan dropdown
+     * - Mendukung filter pencarian opsional
      */
-    public function getAll(?string $search)
+    public function getAll(?string $search = null)
+    {
+        return $this->baseQuery($search)->get();
+    }
+
+    /**
+     * Mengambil data dengan pagination.
+     *
+     * Catatan:
+     * - Mendukung jumlah data dinamis (10, 25, 50, atau semua)
+     * - Jika perPage = 'all', maka seluruh data ditampilkan
+     * - Query string dipertahankan untuk kebutuhan filter frontend
+     */
+    public function getPaginated(
+        ?string $search = null,
+        int|string $perPage = 10
+    ) {
+        $query = $this->baseQuery($search);
+
+        if ($perPage === 'all') {
+            $perPage = $query->count();
+        }
+
+        return $this->baseQuery($search)
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
+     * Base query untuk AHSP.
+     *
+     * Catatan:
+     * - Digunakan ulang untuk konsistensi query
+     * - Menggunakan eager loading untuk menghindari N+1 query
+     * - Mendukung filter pencarian berdasarkan kode dan nama pekerjaan
+     */
+    private function baseQuery(?string $search)
     {
         return Ahsp::query()
             ->with([
@@ -26,10 +62,9 @@ class AhspRepository
                     $q->where('work_code', 'like', "%{$search}%")
                         ->orWhere('work_name', 'like', "%{$search}%");
                 });
-            })
-            ->get();
+            });
     }
-
+    
     /**
      * Mengambil data AHSP berdasarkan kategori pekerja.
      *

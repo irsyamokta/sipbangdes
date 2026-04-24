@@ -48,13 +48,21 @@ interface AhspHeaderCardProps {
 }
 
 interface AhspPageProps extends PageProps {
-    ahsp: Ahsp[];
+    ahsp: {
+        data: Ahsp[];
+        links?: any[];
+        current_page?: number;
+        last_page?: number;
+        total?: number;
+        per_page?: number | string;
+    };
     unitOptions: SelectOption[];
     materialOptions: SelectOption[];
     wageOptions: SelectOption[];
     toolOptions: SelectOption[];
     filters: {
         search: string;
+        per_page?: string | number;
     }
 }
 

@@ -2,18 +2,18 @@
 
 namespace App\Modules\Ahsp\Controllers;
 
-use Throwable;
 use DomainException;
+use Throwable;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Modules\Ahsp\Services\AhspService;
-use App\Modules\Material\Services\MaterialService;
-use App\Modules\Wage\Services\WageService;
-use App\Modules\Tool\Services\ToolService;
-use App\Modules\Unit\Services\UnitService;
 use App\Modules\Ahsp\Requests\AhspStoreRequest;
 use App\Modules\Ahsp\Requests\AhspUpdateRequest;
+use App\Modules\Ahsp\Services\AhspService;
+use App\Modules\Material\Services\MaterialService;
+use App\Modules\Tool\Services\ToolService;
+use App\Modules\Unit\Services\UnitService;
+use App\Modules\Wage\Services\WageService;
 
 class AhspController extends Controller
 {
@@ -32,13 +32,22 @@ class AhspController extends Controller
      * Menampilkan halaman daftar AHSP.
      *
      * Catatan:
-     * - Mengambil data AHSP beserta relasi
-     * - Menyediakan data master untuk dropdown (unit, material, upah, alat)
-     * - Data diformat untuk kebutuhan frontend (select options)
+     * - Mengambil data AHSP dengan dukungan pencarian dan pagination dinamis
+     * - Jumlah data per halaman dapat diatur melalui parameter per_page
+     *   (10, 25, 50, atau 'all')
+     * - Mengambil data master (unit, material, upah, alat) untuk kebutuhan dropdown
+     * - Data master diformat menjadi select options untuk frontend
+     * - Parameter filter dikirim kembali ke frontend untuk mempertahankan state filter
      */
     public function index(AhspService $service, Request $request)
     {
-        $ahsp = $service->getAhsp(request('search'));
+        $perPage = $request->get('per_page', 10);
+
+        $ahsp = $service->getAhsp(
+            $request->search,
+            $perPage
+        );
+
         $units = $this->unitService->getUnits(
             null,
             false
@@ -61,25 +70,26 @@ class AhspController extends Controller
 
         return Inertia::render('Modules/Ahsp/Index', [
             'ahsp' => $ahsp,
-            'unitOptions' => $units->map(fn($unit) => [
+            'unitOptions' => $units->map(fn ($unit) => [
                 'value' => $unit->name,
                 'label' => $unit->name,
             ]),
-            'materialOptions' => $materials->map(fn($material) => [
+            'materialOptions' => $materials->map(fn ($material) => [
                 'value' => $material->id,
-                'label' => $material->name . " (". $material->unit . ")",
+                'label' => $material->name.' ('.$material->unit.')',
             ]),
-            'wageOptions' => $wages->map(fn($wage) => [
+            'wageOptions' => $wages->map(fn ($wage) => [
                 'value' => $wage->id,
-                'label' => $wage->position . " (". $wage->unit . ")",
+                'label' => $wage->position.' ('.$wage->unit.')',
             ]),
-            'toolOptions' => $tools->map(fn($tool) => [
+            'toolOptions' => $tools->map(fn ($tool) => [
                 'value' => $tool->id,
-                'label' => $tool->name . " (". $tool->unit . ")",
+                'label' => $tool->name.' ('.$tool->unit.')',
             ]),
             'filters' => [
-                'search' => $request->search ?? ""
-            ]
+                'search' => $request->search ?? '',
+                'per_page' => $perPage,
+            ],
         ]);
     }
 
@@ -98,11 +108,11 @@ class AhspController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'work_name' => $e->getMessage()
+                'work_name' => $e->getMessage(),
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
-                'Terjadi kesalahan, silahkan coba lagi'
+                'Terjadi kesalahan, silahkan coba lagi',
             ]);
         }
     }
@@ -121,11 +131,11 @@ class AhspController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'work_name' => $e->getMessage()
+                'work_name' => $e->getMessage(),
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
-                'Terjadi kesalahan, silahkan coba lagi'
+                'Terjadi kesalahan, silahkan coba lagi',
             ]);
         }
     }
@@ -141,11 +151,11 @@ class AhspController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                $e->getMessage()
+                $e->getMessage(),
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
-                'Terjadi kesalahan, silahkan coba lagi'
+                'Terjadi kesalahan, silahkan coba lagi',
             ]);
         }
     }

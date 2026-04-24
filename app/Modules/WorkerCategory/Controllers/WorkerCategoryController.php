@@ -34,7 +34,7 @@ class WorkerCategoryController extends Controller
     public function index()
     {
         $workerCategories = $this->workerCategoryService->getWorkerCategory();
-        $ahsp = $this->ahspService->getAhsp(null);
+        $ahsp = $this->ahspService->getAhsp(null, 'all');
         $units = $this->unitService->getUnits(
             null,
             false

@@ -79,7 +79,7 @@ export default function RAB() {
 
                         {/* Filter */}
                         <FilterBar
-                            className="md:max-w-sm"
+                            className="w-full md:max-w-sm"
                             select={{
                                 value: filters.project_id,
                                 options: projectOptions,

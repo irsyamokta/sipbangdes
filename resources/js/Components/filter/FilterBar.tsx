@@ -28,7 +28,7 @@ export default function FilterBar({
     className = "",
 }: FilterBarProps) {
     return (
-        <div className={`flex flex-col sm:flex-row items-center gap-2 w-full lg:w-1/2 ${className}`}>
+        <div className={`flex flex-col sm:flex-row items-center gap-2 ${className}`}>
 
             {select && (
                 <Select
@@ -36,7 +36,7 @@ export default function FilterBar({
                     options={select.options}
                     placeholder={select.placeholder}
                     onChange={(value) => select.onChange(value as string)}
-                    className="w-full rounded-lg border-gray-300 text-sm"
+                    className="rounded-lg border-gray-300 text-sm"
                 />
             )}
 
@@ -47,7 +47,7 @@ export default function FilterBar({
                     placeholder={search.placeholder ?? "Cari..."}
                     value={search.value}
                     onChange={(e) => search.onChange(e.target.value)}
-                    className="w-full rounded-lg border-gray-300 text-sm"
+                    className="rounded-lg border-gray-300 text-sm"
                 />
             )}
         </div>
