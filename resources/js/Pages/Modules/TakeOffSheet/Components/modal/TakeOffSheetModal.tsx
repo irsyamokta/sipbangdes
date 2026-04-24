@@ -5,7 +5,7 @@ import { ModalTakeOffSheetProps, TakeOffSheetForm } from '@/types/tos';
 import { Modal } from '@/Components/ui/modal';
 import Form from '@/Components/form/Form';
 import Input from '@/Components/form/input/InputField';
-import CurrencyInput from '@/Components/form/input/CurrencyInput';
+import NumberInput from '@/Components/form/input/NumberInput';
 import Select from '@/Components/form/input/Select';
 import TextArea from '@/Components/form/input/TextArea';
 
@@ -112,7 +112,7 @@ const TakeOffSheetModal = ({
 
                 {/* Volume & Unit */}
                 <div className="grid md:grid-cols-2 gap-4">
-                    <CurrencyInput
+                    <NumberInput
                         label="Volume"
                         placeholder="Masukkan Volume"
                         value={data.volume}

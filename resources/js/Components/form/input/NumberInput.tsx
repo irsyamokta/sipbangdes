@@ -17,7 +17,7 @@ interface CurrencyInputProps
     maxFractionDigits?: number;
 }
 
-const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
+const NumberInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
     (
         {
             value,
@@ -29,7 +29,7 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
             required = false,
             optional = false,
             isCurrency = false,
-            maxFractionDigits = 6,
+            maxFractionDigits = 8,
             id,
             disabled,
             className = "",
@@ -172,5 +172,5 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
     }
 );
 
-CurrencyInput.displayName = "CurrencyInput";
-export default CurrencyInput;
+NumberInput.displayName = "NumberInput";
+export default NumberInput;

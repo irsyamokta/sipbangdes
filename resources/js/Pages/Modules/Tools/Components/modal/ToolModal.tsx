@@ -5,7 +5,7 @@ import { ModalToolProps, ToolForm } from '@/types/tool';
 import { Modal } from '@/Components/ui/modal';
 import Form from '@/Components/form/Form';
 import Input from '@/Components/form/input/InputField';
-import CurrencyInput from '@/Components/form/input/CurrencyInput';
+import NumberInput from '@/Components/form/input/NumberInput';
 import Select from '@/Components/form/input/Select';
 
 const ToolModal = ({
@@ -79,7 +79,7 @@ const ToolModal = ({
                 />
 
                 {/* Price */}
-                <CurrencyInput
+                <NumberInput
                     label="Harga Satuan (Rp)"
                     name="price"
                     value={data.price}

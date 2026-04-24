@@ -8,7 +8,7 @@ import { Modal } from '@/Components/ui/modal';
 import Form from '@/Components/form/Form';
 import Input from '@/Components/form/input/InputField';
 import Select from '@/Components/form/input/Select';
-import CurrencyInput from '@/Components/form/input/CurrencyInput';
+import NumberInput from '@/Components/form/input/NumberInput';
 
 const ProjectModal = ({
     isOpen,
@@ -91,7 +91,7 @@ const ProjectModal = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                     {/* Volume */}
-                    <CurrencyInput
+                    <NumberInput
                         label="Volume"
                         name="volume"
                         value={data.volume}

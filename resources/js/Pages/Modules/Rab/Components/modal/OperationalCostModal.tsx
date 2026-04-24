@@ -6,7 +6,7 @@ import { Modal } from "@/Components/ui/modal";
 import Form from "@/Components/form/Form";
 import Input from "@/Components/form/input/InputField";
 import Select from "@/Components/form/input/Select";
-import CurrencyInput from "@/Components/form/input/CurrencyInput";
+import NumberInput from "@/Components/form/input/NumberInput";
 
 const OperationalCostModal = ({
     isOpen,
@@ -86,7 +86,7 @@ const OperationalCostModal = ({
                 />
 
                 {/* Volume */}
-                <CurrencyInput
+                <NumberInput
                     label="Kebutuhan"
                     name="volume"
                     value={data.volume}
@@ -96,7 +96,7 @@ const OperationalCostModal = ({
                 />
 
                 {/* Unit Price */}
-                <CurrencyInput
+                <NumberInput
                     label="Harga Satuan"
                     name="unit_price"
                     value={data.unit_price}

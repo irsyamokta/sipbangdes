@@ -164,19 +164,19 @@
 
             @php $subtotalMaterial = 0; @endphp
             @foreach ($rab['recap_material'] as $index => $item)
-                @php $subtotalMaterial += $item['total']; @endphp
+                @php $subtotalMaterial += (float) str_replace('.', '', $item['total']); @endphp
                 <tr>
                     <td style="padding-left: 20px;">1.{{ $index + 1 }} {{ $item['name'] }}</td>
                     <td class="text-right">{{ $item['quantity'] }}</td>
                     <td class="text-right">{{ $item['unit'] }}</td>
-                    <td class="text-right">{{ number_format($item['price']) }}</td>
-                    <td class="text-right">{{ number_format($item['total']) }}</td>
+                    <td class="text-right">{{ number_format($item['price'], 0, ',', '.') }}</td>
+                    <td class="text-right">{{ number_format($item['total'], 0, ',', '.') }}</td>
                 </tr>
             @endforeach
 
             <tr>
                 <td class="text-right" colspan="4"><strong>Subtotal 1)</strong></td>
-                <td class="text-right"><strong>{{ number_format($subtotalMaterial) }}</strong></td>
+                <td class="text-right"><strong>{{ number_format($subtotalMaterial, 0, ',', '.') }}</strong></td>
             </tr>
 
             <!-- ================= ALAT ================= -->
@@ -186,19 +186,19 @@
 
             @php $subtotalTool = 0; @endphp
             @foreach ($rab['recap_tool'] as $index => $item)
-                @php $subtotalTool += $item['total']; @endphp
+                @php $subtotalTool += (float) str_replace('.', '', $item['total']); @endphp
                 <tr>
                     <td style="padding-left: 20px;">2.{{ $index + 1 }} {{ $item['name'] }}</td>
                     <td class="text-right">{{ $item['quantity'] }}</td>
                     <td class="text-right">{{ $item['unit'] }}</td>
-                    <td class="text-right">{{ number_format($item['price']) }}</td>
-                    <td class="text-right">{{ number_format($item['total']) }}</td>
+                    <td class="text-right">{{ number_format($item['price'], 0, ',', '.') }}</td>
+                    <td class="text-right">{{ number_format($item['total'], 0, ',', '.') }}</td>
                 </tr>
             @endforeach
 
             <tr>
                 <td class="text-right" colspan="4"><strong>Subtotal 2)</strong></td>
-                <td class="text-right"><strong>{{ number_format($subtotalTool) }}</strong></td>
+                <td class="text-right"><strong>{{ number_format($subtotalTool, 0, ',', '.') }}</strong></td>
             </tr>
 
             <!-- ================= UPAH ================= -->
@@ -208,19 +208,19 @@
 
             @php $subtotalWage = 0; @endphp
             @foreach ($rab['recap_wage'] as $index => $item)
-                @php $subtotalWage += $item['total']; @endphp
+                @php $subtotalWage += (float) str_replace('.', '', $item['total']); @endphp
                 <tr>
                     <td style="padding-left: 20px;">3.{{ $index + 1 }} {{ $item['name'] }}</td>
                     <td class="text-right">{{ $item['quantity'] }}</td>
                     <td class="text-right">{{ $item['unit'] }}</td>
-                    <td class="text-right">{{ number_format($item['price']) }}</td>
-                    <td class="text-right">{{ number_format($item['total']) }}</td>
+                    <td class="text-right">{{ number_format($item['price'], 0, ',', '.') }}</td>
+                    <td class="text-right">{{ number_format($item['total'], 0, ',', '.') }}</td>
                 </tr>
             @endforeach
 
             <tr>
                 <td class="text-right" colspan="4"><strong>Subtotal 3)</strong></td>
-                <td class="text-right"><strong>{{ number_format($subtotalWage) }}</strong></td>
+                <td class="text-right"><strong>{{ number_format($subtotalWage, 0, ',', '.') }}</strong></td>
             </tr>
 
             <!-- ================= OPERASIONAL ================= -->
@@ -230,26 +230,26 @@
 
             @php $subtotalOperational = 0; @endphp
             @foreach ($rab['operational'] as $index => $item)
-                @php $subtotalOperational += $item['total']; @endphp
+                @php $subtotalOperational += (float) str_replace('.', '', $item['total']); @endphp
                 <tr>
                     <td style="padding-left: 20px;">4.{{ $index + 1 }} {{ $item['name'] }}</td>
                     <td>{{ $item['volume'] }}</td>
                     <td>{{ $item['unit'] }}</td>
-                    <td class="text-right">{{ number_format($item['unit_price']) }}</td>
-                    <td class="text-right">{{ number_format($item['total']) }}</td>
+                    <td class="text-right">{{ number_format($item['unit_price'], 0, ',', '.') }}</td>
+                    <td class="text-right">{{ number_format($item['total'], 0, ',', '.') }}</td>
                 </tr>
             @endforeach
 
             <tr>
                 <td class="text-right" colspan="4"><strong>Subtotal 4)</strong></td>
-                <td class="text-right"><strong>{{ number_format($subtotalOperational) }}</strong></td>
+                <td class="text-right"><strong>{{ number_format($subtotalOperational, 0, ',', '.') }}</strong></td>
             </tr>
 
             <!-- GRAND TOTAL -->
             <tr>
                 <td class="text-center" colspan="4"><strong>JUMLAH TOTAL</strong></td>
                 <td class="text-right">
-                    <strong>{{ number_format($rab['summary']['grand_total']) }}</strong>
+                    <strong>{{ number_format($rab['summary']['grand_total'], 0, ',', '.') }}</strong>
                 </td>
             </tr>
 

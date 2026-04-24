@@ -6,7 +6,7 @@ import { Modal } from '@/Components/ui/modal';
 import Form from '@/Components/form/Form';
 import Input from '@/Components/form/input/InputField';
 import TextArea from '@/Components/form/input/TextArea';
-import CurrencyInput from '@/Components/form/input/CurrencyInput';
+import NumberInput from '@/Components/form/input/NumberInput';
 import DatePicker from '@/Components/form/input/DatePicker';
 
 const ExpenditureModal = ({
@@ -86,7 +86,7 @@ const ExpenditureModal = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                     {/* Nominal */}
-                    <CurrencyInput
+                    <NumberInput
                         label="Nominal"
                         name="nominal"
                         value={data.nominal}
@@ -97,7 +97,7 @@ const ExpenditureModal = ({
                     />
 
                     {/* Remaining Budget */}
-                    <CurrencyInput
+                    <NumberInput
                         label="Sisa Anggaran"
                         value={remainingBudget || 0}
                         onChange={() => {}}

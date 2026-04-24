@@ -5,7 +5,7 @@ import { ModalMaterialProps, MaterialForm } from '@/types/material';
 import { Modal } from '@/Components/ui/modal';
 import Form from '@/Components/form/Form';
 import Input from '@/Components/form/input/InputField';
-import CurrencyInput from '@/Components/form/input/CurrencyInput';
+import NumberInput from '@/Components/form/input/NumberInput';
 import Select from '@/Components/form/input/Select';
 
 const MaterialModal = ({
@@ -79,7 +79,7 @@ const MaterialModal = ({
                 />
 
                 {/* Price */}
-                <CurrencyInput
+                <NumberInput
                     label="Harga Satuan (Rp)"
                     name="price"
                     value={data.price}

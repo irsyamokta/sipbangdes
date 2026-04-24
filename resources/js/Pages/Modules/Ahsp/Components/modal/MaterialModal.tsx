@@ -4,7 +4,7 @@ import { ModalAhspMaterialProps, AhspMaterialForm } from "@/types/ahsp";
 
 import { Modal } from "@/Components/ui/modal";
 import Form from "@/Components/form/Form";
-import InputCurrency from "@/Components/form/input/CurrencyInput";
+import InputCurrency from "@/Components/form/input/NumberInput";
 import Select from "@/Components/form/input/Select";
 
 const AhspMaterialModal = ({
