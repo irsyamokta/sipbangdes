@@ -18,6 +18,7 @@ type FilterBarProps = {
         options: SelectOption[];
         placeholder?: string;
         onChange: (value: string) => void;
+        searchable?: boolean;
     };
     className?: string;
 };
@@ -28,14 +29,22 @@ export default function FilterBar({
     className = "",
 }: FilterBarProps) {
     return (
-        <div className={`flex flex-col sm:flex-row items-center gap-2 ${className}`}>
-
+        <div
+            className={`flex flex-col sm:flex-row items-center gap-2 ${className}`}
+        >
             {select && (
                 <Select
                     value={select.value}
                     options={select.options}
                     placeholder={select.placeholder}
-                    onChange={(value) => select.onChange(value as string)}
+                    onChange={(value) =>
+                        select.onChange(value as string)
+                    }
+                    searchable={
+                        select.searchable !== undefined
+                            ? select.searchable
+                            : true
+                    }
                     className="rounded-lg border-gray-300 text-sm"
                 />
             )}
@@ -46,7 +55,9 @@ export default function FilterBar({
                     startIcon={<FiSearch />}
                     placeholder={search.placeholder ?? "Cari..."}
                     value={search.value}
-                    onChange={(e) => search.onChange(e.target.value)}
+                    onChange={(e) =>
+                        search.onChange(e.target.value)
+                    }
                     className="rounded-lg border-gray-300 text-sm"
                 />
             )}

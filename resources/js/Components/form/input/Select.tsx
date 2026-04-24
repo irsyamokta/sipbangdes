@@ -1,10 +1,4 @@
-import React, {
-    forwardRef,
-    useId,
-    useState,
-    useEffect,
-    useRef,
-} from "react";
+import React, { forwardRef, useId, useState, useEffect, useRef } from "react";
 import { LuChevronDown } from "react-icons/lu";
 
 interface Option {
@@ -30,6 +24,8 @@ interface SelectProps {
     hideChevron?: boolean;
     className?: string;
     id?: string;
+
+    searchable?: boolean;
 }
 
 const Select = forwardRef<HTMLButtonElement, SelectProps>(
@@ -49,8 +45,9 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
             hideChevron = false,
             className = "",
             id,
+            searchable = true,
         },
-        ref
+        ref,
     ) => {
         const generatedId = useId();
         const selectId = id ?? generatedId;
@@ -73,7 +70,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                     !wrapperRef.current.contains(event.target as Node)
                 ) {
                     setOpen(false);
-                    setSearch("");
+                    if (searchable) setSearch("");
                 }
             };
 
@@ -83,17 +80,19 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
             };
         }, []);
 
-        const filteredOptions = options.filter((opt) =>
-            opt.label.toLowerCase().includes(search.toLowerCase())
-        );
+        const filteredOptions = searchable
+            ? options.filter((opt) =>
+                  opt.label.toLowerCase().includes(search.toLowerCase()),
+              )
+            : options;
 
         const stateClasses = disabled
             ? "bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed"
             : hasError
-                ? "border-error-500 focus:ring-error-500/20"
-                : success
-                    ? "border-success-500 focus:ring-success-500/20"
-                    : "border-gray-300 focus:ring-primary/20 focus:border-primary";
+              ? "border-error-500 focus:ring-error-500/20"
+              : success
+                ? "border-success-500 focus:ring-success-500/20"
+                : "border-gray-300 focus:ring-primary/20 focus:border-primary";
 
         return (
             <div ref={wrapperRef} className={`w-full space-y-1.5 ${className}`}>
@@ -106,23 +105,35 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                 )}
 
                 <div className="relative">
-
                     {/* Trigger / Input */}
                     <div
                         className={`flex h-11 w-full items-center justify-between rounded-lg border px-3 py-2 text-sm ${stateClasses}`}
                         onClick={() => !disabled && setOpen(true)}
                     >
-                        <input
-                            ref={ref as any}
-                            disabled={disabled}
-                            value={open ? search : selected?.label ?? ""}
-                            placeholder={placeholder}
-                            onChange={(e) => {
-                                setSearch(e.target.value);
-                                if (!open) setOpen(true);
-                            }}
-                            className="w-full outline-none bg-transparent text-sm"
-                        />
+                        {searchable ? (
+                            <input
+                                ref={ref as any}
+                                disabled={disabled}
+                                value={open ? search : (selected?.label ?? "")}
+                                placeholder={placeholder}
+                                onChange={(e) => {
+                                    setSearch(e.target.value);
+                                    if (!open) setOpen(true);
+                                }}
+                                className="w-full outline-none bg-transparent text-sm"
+                            />
+                        ) : (
+                            <div
+                                ref={ref as any}
+                                className="w-full text-sm text-left"
+                            >
+                                {selected?.label ?? (
+                                    <span className="text-gray-400">
+                                        {placeholder}
+                                    </span>
+                                )}
+                            </div>
+                        )}
 
                         {!hideChevron && (
                             <LuChevronDown
@@ -186,8 +197,8 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                             hasError
                                 ? "text-error-500"
                                 : success
-                                    ? "text-success-500"
-                                    : "text-gray-500"
+                                  ? "text-success-500"
+                                  : "text-gray-500"
                         }`}
                     >
                         {error ?? internalError ?? hint}
@@ -195,7 +206,7 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                 )}
             </div>
         );
-    }
+    },
 );
 
 Select.displayName = "Select";

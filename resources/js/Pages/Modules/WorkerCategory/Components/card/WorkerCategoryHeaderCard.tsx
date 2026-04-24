@@ -51,7 +51,7 @@ const WorkerCategoryHeaderCard = ({
 
                 <div className="flex justify-between sm:justify-end items-center gap-3 sm:gap-6">
                     {/* Badge */}
-                    <Badge>{workerCategory.total_items} item pekerjaan</Badge>
+                    <Badge className="whitespace-nowrap">{workerCategory.total_items} item pekerjaan</Badge>
 
                     {/* Actions */}
                     <div className="flex gap-2">

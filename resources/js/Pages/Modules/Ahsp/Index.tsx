@@ -98,6 +98,7 @@ export default function AHSP() {
                                 onChange: (value) => setFilter("search", value),
                             }}
                         />
+                        
                         <FilterBar
                             className="w-32 md:max-w-24"
                             select={{
@@ -111,6 +112,7 @@ export default function AHSP() {
                                 ],
                                 onChange: (value) =>
                                     setFilter("per_page", value),
+                                searchable: false,
                             }}
                         />
                     </div>
