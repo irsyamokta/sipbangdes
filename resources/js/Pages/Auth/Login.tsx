@@ -111,16 +111,9 @@ export default function Login({
                             Masuk
                         </Button>
 
-                        {/* Forgot Password */}
+                        {/* Copyright */}
                         <div className="text-center text-sm text-gray-500 mt-4">
-                            Lupa Password?{" "}
-                            <Link
-                                href={"https://wa.me/6281286966966"}
-                                target="_blank"
-                                className="text-primary font-semibold hover:underline"
-                            >
-                                Hubungi Admin
-                            </Link>
+                            © {new Date().getFullYear()} Sipbangdes. Hak cipta dilindungi undang-undang.
                         </div>
                     </Form>
                 </div>

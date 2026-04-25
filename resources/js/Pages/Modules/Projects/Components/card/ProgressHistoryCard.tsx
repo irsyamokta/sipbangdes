@@ -132,7 +132,7 @@ const ProgressHistoryCard = ({
                             <LightGallery
                                 speed={500}
                                 plugins={[lgZoom, lgThumbnail]}
-                                elementClassNames="flex gap-2.5 overflow-x-auto pb-2 no-scrollbar"
+                                elementClassNames="flex gap-2.5 overflow-x-auto no-scrollbar"
                                 selector="a"
                             >
                                 {progress.documents.map((document) => (
