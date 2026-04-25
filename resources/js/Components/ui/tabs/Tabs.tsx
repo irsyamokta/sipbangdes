@@ -38,7 +38,7 @@ const Tabs: React.FC<TabsProps> = ({
         <div className="w-full">
             {/* Tab Header */}
             <div className="w-full overflow-x-auto">
-                <div className="inline-flex bg-gray-200 rounded-lg p-1 gap-1 min-w-max">
+                <div className="flex w-full sm:inline-flex sm:w-auto bg-gray-200 rounded-lg p-1 gap-1 min-w-max">
                     {tabs.map((tab) => {
                         const isActive = activeTab === tab.key;
 
@@ -46,7 +46,7 @@ const Tabs: React.FC<TabsProps> = ({
                             <button
                                 key={tab.key}
                                 onClick={() => setActiveTab(tab.key)}
-                                className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-lg transition
+                                className={`flex-1 text-center sm:flex-none whitespace-nowrap px-4 py-2 text-sm font-medium rounded-lg transition
                                     ${
                                         isActive
                                             ? "bg-white shadow text-gray-900"
