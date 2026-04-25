@@ -27,9 +27,9 @@ const ProjectDetailTabs = ({
     totalRealization,
     remainingBudget,
     onOpenProgressModal,
-    onOpenExpenditureModal
+    onOpenExpenditureModal,
+    onEditProgress,
 }: ProjectDetailTabsProps) => {
-
     const { can } = usePermission();
 
     const isRunning = project.project_status === "berjalan";
@@ -39,7 +39,7 @@ const ProjectDetailTabs = ({
         {
             key: "progress",
             label: "Progres Fisik",
-            content:
+            content: (
                 <div className="space-y-6">
                     {can("progress.create") && isRunning && !isFinished && (
                         <div className="col-span-12 flex justify-end">
@@ -63,21 +63,21 @@ const ProjectDetailTabs = ({
                             icon={<LuTrendingUp />}
                         />
                     </div>
-                    
+
                     {/* Progress History */}
                     <div className="col-span-12">
                         <ProgressHistoryCard
-                            projectProgresses={
-                                project.project_progresses
-                            }
+                            projectProgresses={project.project_progresses}
+                            onEditProgress={onEditProgress}
                         />
                     </div>
                 </div>
+            ),
         },
         {
             key: "expenditure",
             label: "Realisasi Anggaran",
-            content:
+            content: (
                 <div className="space-y-6">
                     {can("progress.create") && isRunning && !isFinished && (
                         <div className="col-span-12 flex justify-end">
@@ -101,7 +101,7 @@ const ProjectDetailTabs = ({
                             icon={<BiWallet />}
                         />
                     </div>
-                    
+
                     {/* Stat Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Total Budget */}
@@ -131,7 +131,7 @@ const ProjectDetailTabs = ({
                             iconBgColor="bg-red-100"
                         />
                     </div>
-                    
+
                     {/* Expenditure Table */}
                     <div className="col-span-12">
                         <ExpenditureTable
@@ -140,16 +140,11 @@ const ProjectDetailTabs = ({
                         />
                     </div>
                 </div>
+            ),
         },
     ];
 
-    return (
-        <Tabs
-            tabs={tabs}
-            storageKey="project-tabs"
-            defaultTab="progress"
-        />
-    );
-}
+    return <Tabs tabs={tabs} storageKey="project-tabs" defaultTab="progress" />;
+};
 
 export default ProjectDetailTabs;

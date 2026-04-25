@@ -16,6 +16,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('progres')->group(function () {
             Route::get('/{id}', [ProjectDetailController::class, 'show'])->middleware('permission:progress.view')->name('progress.show');
             Route::post('/{id}', [ProgressController::class, 'storeProgress'])->middleware('permission:progress.create')->name('progress.store');
+            Route::patch('/{id}', [ProgressController::class, 'updateProgress'])->middleware('permission:progress.edit')->name('progress.update');
+            Route::delete('/delete-documents/{documentId}', [ProgressController::class, 'deleteDocument'])->middleware('permission:progress.delete')->name('progress.delete-documents');
+            
             Route::post('/expenditure/{id}', [ProjectExpenditureController::class, 'store'])->middleware('permission:progress.create')->name('expenditure.store');
             Route::patch('/expenditure/{id}', [ProjectExpenditureController::class, 'update'])->middleware('permission:progress.edit')->name('expenditure.update');
             Route::delete('/expenditure/{id}', [ProjectExpenditureController::class, 'destroy'])->middleware('permission:progress.delete')->name('expenditure.destroy');

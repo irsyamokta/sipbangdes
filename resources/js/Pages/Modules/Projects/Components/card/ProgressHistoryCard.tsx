@@ -1,6 +1,13 @@
-import { ProjectProgressCardHistoryProps } from "@/types/progress";
+import { useDelete } from "@/hooks/useDelete";
+import usePermission from "@/hooks/usePermission";
+
+import {
+    ProjectProgress,
+    ProjectProgressCardHistoryProps,
+} from "@/types/progress";
 
 import Badge from "@/Components/ui/badge/Badge";
+import Button from "@/Components/ui/button/Button";
 
 import { formatDateTime } from "@/utils/formatDate";
 
@@ -16,6 +23,7 @@ import { capitalizedFirst } from "@/utils/capitalize";
 
 import { IoCalendarOutline } from "react-icons/io5";
 import { RxImage } from "react-icons/rx";
+import { LuPencil, LuTrash2, LuLoaderCircle  } from "react-icons/lu";
 
 const percentageBadgeColor = (percentage: number) => {
     switch (percentage) {
@@ -32,9 +40,23 @@ const percentageBadgeColor = (percentage: number) => {
 
 const ProgressHistoryCard = ({
     projectProgresses,
-}: ProjectProgressCardHistoryProps) => {
+    onEditProgress,
+}: ProjectProgressCardHistoryProps & {
+    onEditProgress?: (
+        progress: ProjectProgress["project_progresses"][number],
+    ) => void;
+}) => {
+    const { can } = usePermission();
 
-    {/* Empty state */ }
+    const { handleDelete, deletingId } = useDelete({
+        routeName: "progress.delete-documents",
+        confirmTitle: "Hapus Dokumentasi?",
+        confirmText: "Foto yang dihapus tidak dapat dikembalikan!",
+        successMessage: "Dokumentasi berhasil dihapus",
+        errorMessage: "Dokumentasi gagal dihapus",
+    });
+
+    /* Empty state */
     if (!projectProgresses.length) {
         return (
             <div className="bg-white p-10 rounded-xl border border-gray-200 text-center text-gray-500 transition hover:shadow-md">
@@ -46,19 +68,44 @@ const ProgressHistoryCard = ({
     return (
         <div className="space-y-4">
             {projectProgresses.map((progress) => (
-                <div key={progress.id} className="space-y-4 rounded-2xl border border-gray-200 bg-white p-6 transition hover:shadow-md">
-
+                <div
+                    key={progress.id}
+                    className="space-y-4 rounded-2xl border border-gray-200 bg-white p-6 transition hover:shadow-md"
+                >
                     {/* Header */}
-                    <div className="flex items-center gap-2 border-b-2 border-gray-300 pb-4">
-                        <Badge
-                            color={percentageBadgeColor(progress.percentage)}
-                        >
-                            {progress.percentage}%
-                        </Badge>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <span><IoCalendarOutline /></span>
-                            <span>{formatDateTime(progress.created_at)}</span>
+                    <div className="flex items-center justify-between gap-2 border-b-2 border-gray-300 pb-4">
+                        <div className="flex items-center gap-2">
+                           
+                           {/* Badge Percentage */}
+                            <Badge
+                                color={percentageBadgeColor(
+                                    progress.percentage,
+                                )}
+                            >
+                                {progress.percentage}%
+                            </Badge>
+                            
+                            {/* Updated At */}
+                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                                <span>
+                                    <IoCalendarOutline />
+                                </span>
+                                <span>
+                                   Diperbarui: {formatDateTime(progress.updated_at)}
+                                </span>
+                            </div>
                         </div>
+                        
+                        {/* Delete Button */}
+                        {can("progress.edit") && (
+                            <Button
+                                size="icon"
+                                variant="edit"
+                                onClick={() => onEditProgress?.(progress)}
+                            >
+                                <LuPencil size={18} />
+                            </Button>
+                        )}
                     </div>
 
                     {/* Description */}
@@ -68,11 +115,16 @@ const ProgressHistoryCard = ({
 
                     {/* Images */}
                     <div className="flex flex-col gap-2 text-sm text-gray-900">
-
+                        
                         {/* Total */}
                         <div className="flex items-center gap-2">
-                            <span><RxImage /></span>
-                            <span>Dokuemntasi {`(${progress.documents.length} file)`}</span>
+                            <span>
+                                <RxImage />
+                            </span>
+                            <span>
+                                Dokumentasi{" "}
+                                {`(${progress.documents.length} file)`}
+                            </span>
                         </div>
 
                         {/* Slider */}
@@ -81,19 +133,43 @@ const ProgressHistoryCard = ({
                                 speed={500}
                                 plugins={[lgZoom, lgThumbnail]}
                                 elementClassNames="flex gap-2.5 overflow-x-auto pb-2 no-scrollbar"
+                                selector="a"
                             >
                                 {progress.documents.map((document) => (
-                                    <a
+                                    <div
                                         key={document.id}
-                                        href={document.image_url}
-                                        className="w-56 h-40 rounded-2xl overflow-hidden shrink-0"
+                                        className="relative w-56 h-40 rounded-2xl overflow-hidden shrink-0 group"
                                     >
-                                        <img
-                                            src={document.image_url}
-                                            alt=""
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </a>
+                                        <a
+                                            href={document.image_url}
+                                            className="block w-full h-full"
+                                        >
+                                            <img
+                                                src={document.image_url}
+                                                alt=""
+                                                className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-50"
+                                            />
+                                        </a>
+
+                                        {deletingId === document.id && (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                                                <LuLoaderCircle  size={28} className="animate-spin text-white" />
+                                            </div>
+                                        )}
+
+                                        {can("progress.delete") && (
+                                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <button
+                                                    type="button"
+                                                    disabled={deletingId === document.id}
+                                                    onClick={() => handleDelete(document.id)}
+                                                    className="flex items-center justify-center w-8 h-8 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                                                >
+                                                    <LuTrash2 size={15} />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
                             </LightGallery>
                         </div>
@@ -101,7 +177,7 @@ const ProgressHistoryCard = ({
                 </div>
             ))}
         </div>
-    )
-}
+    );
+};
 
 export default ProgressHistoryCard;

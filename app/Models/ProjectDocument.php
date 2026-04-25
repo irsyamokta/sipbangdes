@@ -21,6 +21,8 @@ class ProjectDocument extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $touches = ['projectProgress'];
+
     protected $table = 'project_documents';
     public $incrementing = false;
     protected $keyType = 'string';

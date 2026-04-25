@@ -2,11 +2,12 @@
 
 namespace App\Modules\Project\Controllers;
 
-use Throwable;
-use DomainException;
 use App\Http\Controllers\Controller;
-use App\Modules\Project\Services\ProgressService;
 use App\Modules\Project\Requests\ProgressStoreRequest;
+use App\Modules\Project\Requests\ProgressUpdateRequest;
+use App\Modules\Project\Services\ProgressService;
+use DomainException;
+use Throwable;
 
 class ProgressController extends Controller
 {
@@ -40,11 +41,67 @@ class ProgressController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                $e->getMessage()
+                $e->getMessage(),
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
-                'Terjadi kesalahan, silahkan coba lagi'
+                'Terjadi kesalahan, silahkan coba lagi',
+            ]);
+        }
+    }
+
+    /**
+     * Memperbarui data progress yang sudah ada,
+     * termasuk penambahan dokumen baru jika tersedia.
+     *
+     * Catatan:
+     * - Validasi input dilakukan melalui ProgressUpdateRequest
+     * - Dokumen baru akan ditambahkan tanpa menghapus dokumen lama
+     *   (kecuali dihapus melalui endpoint deleteDocument)
+     * - Error bisnis ditangani menggunakan DomainException
+     * - Error sistem umum ditangani menggunakan Throwable
+     */
+    public function updateProgress(ProgressUpdateRequest $request, string $progressId)
+    {
+        try {
+            $this->progressService->updateProgress(
+                progressId: $progressId,
+                data: $request->validated(),
+                files: $request->file('documents', [])
+            );
+
+            return back();
+        } catch (DomainException $e) {
+            return back()->withErrors([
+                $e->getMessage(),
+            ]);
+        } catch (Throwable $e) {
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi',
+            ]);
+        }
+    }
+
+     /**
+     * Menghapus dokumen yang terhubung dengan progress.
+     *
+     * Catatan:
+     * - Hanya dokumen yang dipilih yang akan dihapus
+     * - Proses penghapusan termasuk data di database
+     * - Jika terjadi kesalahan sistem, akan dikembalikan pesan error umum
+     */
+    public function deleteDocument(string $documentId)
+    {
+        try {
+            $this->progressService
+                ->deleteDocument(
+                    documentId: $documentId
+                );
+
+            return back();
+        } catch (Throwable $e) {
+            return back()->withErrors([
+                'Terjadi kesalahan, silahkan coba lagi',
             ]);
         }
     }

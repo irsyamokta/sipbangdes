@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Head } from '@inertiajs/react';
+import { Head } from "@inertiajs/react";
 import { usePage } from "@inertiajs/react";
 
-import { ProjectProgressPageProps, ProjectExpenditure } from "@/types/progress"
+import { ProjectProgressPageProps, ProjectExpenditure } from "@/types/progress";
 
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import PageBreadcrumb from "@/Components/ui/breadcrumb/Breadcrumb";
@@ -19,13 +19,15 @@ export default function Detail() {
             totalBudget,
             totalRealization,
             remainingBudget,
-            percentageBudget
-        }
+            percentageBudget,
+        },
     } = usePage<ProjectProgressPageProps>();
 
     const [isProgressModalOpen, setIsProgressModalOpen] = useState(false);
     const [isExpenditureModalOpen, setIsExpenditureModalOpen] = useState(false);
-    const [selectedExpenditure, setSelectedExpenditure] = useState<ProjectExpenditure | null>(null);
+    const [selectedExpenditure, setSelectedExpenditure] =
+        useState<ProjectExpenditure | null>(null);
+    const [selectedProgress, setSelectedProgress] = useState<any | null>(null);
 
     return (
         <DashboardLayout>
@@ -36,9 +38,11 @@ export default function Detail() {
                 isOpen={isProgressModalOpen}
                 onClose={() => {
                     setIsProgressModalOpen(false);
+                    setSelectedProgress(null);
                 }}
                 project={project}
                 totalProgress={totalProgress}
+                progress={selectedProgress}
             />
 
             {/* Expenditure Modal */}
@@ -54,7 +58,6 @@ export default function Detail() {
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">
-
                 {/* Header */}
                 <div className="col-span-12">
                     <PageBreadcrumb
@@ -76,12 +79,17 @@ export default function Detail() {
                         totalBudget={totalBudget}
                         totalRealization={totalRealization}
                         remainingBudget={remainingBudget}
-                        onOpenProgressModal={() =>
-                            setIsProgressModalOpen(true)
-                        }
+                        onOpenProgressModal={() => {
+                            setSelectedProgress(null);
+                            setIsProgressModalOpen(true);
+                        }}
                         onOpenExpenditureModal={() =>
                             setIsExpenditureModalOpen(true)
                         }
+                        onEditProgress={(progress) => {
+                            setSelectedProgress(progress);
+                            setIsProgressModalOpen(true);
+                        }}
                     />
                 </div>
             </div>

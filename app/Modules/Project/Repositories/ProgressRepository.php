@@ -3,6 +3,7 @@
 namespace App\Modules\Project\Repositories;
 
 use App\Models\Project;
+use App\Models\ProjectDocument;
 use App\Models\ProjectProgress;
 
 class ProgressRepository
@@ -23,10 +24,6 @@ class ProgressRepository
             },
             'projectProgresses.reportedBy',
             'projectProgresses.documents',
-            
-            'projectExpenditures' => function ($query) {
-                $query->latest('date');
-            }
         ])->findOrFail($projectId);
     }
 
@@ -53,5 +50,48 @@ class ProgressRepository
     public function createProgress(array $data)
     {
         return ProjectProgress::create($data);
+    }
+
+    /**
+     * Memperbarui data progress yang sudah ada berdasarkan ID.
+     *
+     * Catatan:
+     * - Menggunakan findOrFail untuk memastikan progress tersedia
+     * - Hanya memperbarui field yang dikirim pada parameter $data
+     * - Tidak menangani dokumen atau relasi lain
+     */
+    public function updateProgress(string $progressId, array $data)
+    {
+        $progress = ProjectProgress::findOrFail($progressId);
+
+        $progress->update($data);
+
+        return $progress;
+    }
+
+    /**
+     * Mengambil data progress beserta seluruh dokumen yang terkait.
+     *
+     * Catatan:
+     * - Digunakan ketika membutuhkan akses ke dokumen terkait progress
+     *   (misalnya untuk proses update atau validasi)
+     * - Menggunakan eager loading relasi 'documents'
+     */
+    public function getProgressWithDocuments(string $progressId)
+    {
+        return ProjectProgress::with('documents')
+            ->findOrFail($progressId);
+    }
+
+    /**
+     * Mengambil satu dokumen berdasarkan ID.
+     *
+     * Catatan:
+     * - Digunakan untuk kebutuhan penghapusan atau manipulasi dokumen
+     * - Menggunakan findOrFail untuk memastikan dokumen tersedia
+     */
+    public function getDocument(string $documentId)
+    {
+        return ProjectDocument::findOrFail($documentId);
     }
 }

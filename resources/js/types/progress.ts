@@ -10,6 +10,7 @@ interface ProjectDetailTabsProps {
     remainingBudget: number;
     onOpenProgressModal: () => void;
     onOpenExpenditureModal: () => void;
+    onEditProgress?: (progress: ProjectProgress["project_progresses"][number]) => void;
 }
 
 interface ProjectProgress {
@@ -25,6 +26,7 @@ interface ProjectProgress {
             image_url: string;
         }[];
         created_at: string;
+        updated_at: string;
     }[];
     created_at: string;
 }
@@ -34,6 +36,7 @@ interface ModalProjectProgressProps {
     onClose: () => void;
     project?: any;
     totalProgress: number;
+    progress?: ProjectProgress["project_progresses"][number] | null;
 };
 
 interface ProjectProgressForm {
