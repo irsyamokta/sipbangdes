@@ -110,6 +110,7 @@ const RABTabs = ({
             label: "Insight",
             content: <AIInsightCard
                 projectId={project_id}
+                rabStatus={rab_status}
                 hasInsight={insight !== null}
                 insight={insight}
             />,

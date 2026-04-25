@@ -16,12 +16,14 @@ import { FcIdea } from "react-icons/fc";
 
 interface AIInsightCardProps {
     projectId: string;
+    rabStatus?: string;
     insight: RabInsight | null;
     hasInsight?: boolean;
 }
 
 const AIInsightCard = ({
     projectId,
+    rabStatus,
     insight,
     hasInsight
 }: AIInsightCardProps) => {
@@ -67,7 +69,7 @@ const AIInsightCard = ({
                 </div>
 
                 {/* Button */}
-                {can("rab.create") && (
+                {can("rab.create") && rabStatus !== "approved" && (
                     <Button
                         onClick={handleSubmit}
                         className="w-full md:w-auto flex items-center gap-2"
