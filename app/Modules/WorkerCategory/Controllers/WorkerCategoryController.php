@@ -5,6 +5,7 @@ namespace App\Modules\WorkerCategory\Controllers;
 use Throwable;
 use DomainException;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Modules\WorkerCategory\Services\WorkerCategoryService;
 use App\Modules\Ahsp\Services\AhspService;
@@ -31,21 +32,24 @@ class WorkerCategoryController extends Controller
      * - Menyediakan data AHSP dan unit untuk kebutuhan dropdown
      * - Data diformat menjadi select option untuk frontend
      */
-    public function index()
+    public function index(Request $request)
     {
-        $workerCategories = $this->workerCategoryService->getWorkerCategory();
-        $ahsp = $this->ahspService->getAhsp(null, 'all');
-        $units = $this->unitService->getUnits(
-            null,
-            false
+        $perPage = $request->get('per_page', 10);
+        $workerCategories = $this->workerCategoryService->getWorkerCategory(
+            $request->search,
+            $perPage
         );
+        $ahsp = $this->ahspService->getAhsp(null, 'all');
+        $units = $this->unitService->getUnits(null, false);
 
         return Inertia::render('Modules/WorkerCategory/Index', [
             'workerCategories' => $workerCategories,
+
             'unitOptions' => $units->map(fn($unit) => [
                 'value' => $unit->name,
                 'label' => $unit->name
             ]),
+
             'ahspOptions' => $ahsp->map(fn($ahsp) => [
                 'value' => $ahsp->id,
                 'label' => $ahsp->work_code . ' - ' . $ahsp->work_name,
@@ -53,7 +57,12 @@ class WorkerCategoryController extends Controller
                     'work_name' => $ahsp->work_name,
                     'unit'=> $ahsp->unit
                 ]
-            ])
+            ]),
+            
+            'filters' => [
+                'search' => $request->search ?? '',
+                'per_page' => $perPage,
+            ],
         ]);
     }
 

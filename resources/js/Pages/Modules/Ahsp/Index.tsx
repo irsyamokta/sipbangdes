@@ -46,7 +46,7 @@ export default function AHSP() {
         routeName: "ahsp.destroy",
         confirmTitle: "Hapus AHSP?",
         successMessage: "AHSP berhasil dihapus",
-        errorMessage: "Gagal menghapus AHSP",
+        errorMessage: "Data masih digunakan, tidak dapat dihapus",
     });
 
     const { filters, setFilter } = useSearch({

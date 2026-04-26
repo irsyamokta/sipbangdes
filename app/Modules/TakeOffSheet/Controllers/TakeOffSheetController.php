@@ -43,15 +43,19 @@ class TakeOffSheetController extends Controller
             $request->project_id
         );
 
+        $project = $this->projectService->getProjects();
+        $workerCategory = $this->workerCategoryService->getWorkerCategory(null, 'all');
+        $units = $this->unitService->getUnits(null, false);
+
         return Inertia::render('Modules/TakeOffSheet/Index', [
             'takeOffSheets' => $data,
 
-            'projectOptions' => $this->projectService->getProjects()->map(fn($project) => [
+            'projectOptions' => $project->map(fn($project) => [
                 'value' => $project->id,
                 'label' => $project->project_name . " (". $project->budget_year . ")"
             ]),
 
-            'workerCategoryOptions' => $this->workerCategoryService->getWorkerCategory()->map(fn($workerCategory) => [
+            'workerCategoryOptions' => $workerCategory->map(fn($workerCategory) => [
                 'value' => $workerCategory->id,
                 'label' => $workerCategory->name
             ]),
@@ -68,11 +72,7 @@ class TakeOffSheetController extends Controller
                     ]
                 ]),
 
-            'unitOptions' => $this->unitService->getUnits(
-                null,
-                false,
-                true
-            )->map(fn($unit) => [
+            'unitOptions' => $units->map(fn($unit) => [
                 'value' => $unit->name,
                 'label' => $unit->name
             ]),

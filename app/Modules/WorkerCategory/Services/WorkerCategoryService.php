@@ -20,9 +20,11 @@ class WorkerCategoryService
      * Catatan:
      * - Digunakan untuk kebutuhan tampilan (index / dropdown)
      */
-    public function getWorkerCategory()
-    {
-        return $this->workerCategoryRepository->getAll();
+    public function getWorkerCategory(
+        ?string $search = null,
+        int|string $perPage = 10
+    ) {
+        return $this->workerCategoryRepository->getPaginated($search, $perPage);
     }
 
     /**

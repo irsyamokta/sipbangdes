@@ -40,9 +40,20 @@ interface WorkerCategoryHeaderCardProps {
 }
 
 interface WokerCategoryPageProps extends PageProps {
-    workerCategories: WorkerCategory[];
+    workerCategories: {
+        data: WorkerCategory[];
+        links?: any[];
+        current_page?: number;
+        last_page?: number;
+        total?: number;
+        per_page?: number | string;
+    };
     unitOptions: SelectOption[];
     ahspOptions: SelectOption[];
+    filters: {
+        search: string;
+        per_page?: string | number;
+    }
 }
 
 {/** Worker Item */ }

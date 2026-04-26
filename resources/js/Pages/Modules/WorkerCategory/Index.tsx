@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 
 import usePermission from '@/hooks/usePermission';
+import { useSearch } from "@/hooks/useSearch";
 import { useDelete } from "@/hooks/useDelete";
 
 import { WorkerCategory, WokerCategoryPageProps } from "@/types/workerCategory";
@@ -10,6 +11,7 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import HeaderTitle from "@/Components/HeaderTitle";
 import Accordion from '@/Components/ui/accordion/Accordion';
 import EmptyState from "@/Components/empty/EmptyState";
+import FilterBar from "@/Components/filter/FilterBar";
 import WorkerCategoryModal from './Components/modal/WorkerCategoryModal';
 import WorkerCategoryHeaderCard from './Components/card/WorkerCategoryHeaderCard';
 import WorkerItemTable from './Components/table/WorkerItemTable';
@@ -21,7 +23,8 @@ export default function CategoryJob() {
         props: {
             workerCategories,
             unitOptions,
-            ahspOptions
+            ahspOptions,
+            filters: filter,
         }
     } = usePage<WokerCategoryPageProps>();
     
@@ -39,7 +42,15 @@ export default function CategoryJob() {
         routeName: "workercategory.destroy",
         confirmTitle: "Hapus Kategori Pekerjaan?",
         successMessage: "Kategori pekerjaan berhasil dihapus",
-        errorMessage: "Gagal menghapus kategori pekerjaan",
+        errorMessage: "Data masih digunakan, tidak dapat dihapus",
+    });
+
+    const { filters, setFilter } = useSearch({
+        routeName: "workercategory.index",
+        initialFilters: {
+            search: filter.search ?? "",
+            per_page: filter.per_page ?? "10",
+        },
     });
 
     return (
@@ -72,9 +83,38 @@ export default function CategoryJob() {
                 {/* Content */}
                 <div className="col-span-12 space-y-6 mt-4">
 
+                    {/* Filter Bar */}
+                    <div className="flex justify-between gap-2">
+                        <FilterBar
+                            className="w-full md:max-w-sm"
+                            search={{
+                                value: filters.search ?? "",
+                                placeholder: "Cari kategori pekerjaan...",
+                                onChange: (value) => setFilter("search", value),
+                            }}
+                        />
+                        
+                        <FilterBar
+                            className="w-32 md:max-w-24"
+                            select={{
+                                value: String(filters.per_page ?? "10"),
+                                placeholder: "Lihat",
+                                options: [
+                                    { value: "10", label: "10" },
+                                    { value: "25", label: "25" },
+                                    { value: "50", label: "50" },
+                                    { value: "all", label: "Semua" },
+                                ],
+                                onChange: (value) =>
+                                    setFilter("per_page", value),
+                                searchable: false,
+                            }}
+                        />
+                    </div>
+
                     {/* Worker Category List */}
                     <div className="flex flex-col gap-4">
-                        {workerCategories.length == 0 ? (
+                        {workerCategories.data.length == 0 ? (
                             <div className="mt-4">
                                 <EmptyState
                                     title="Tidak Ada Kategori Pekerjaan"
@@ -82,7 +122,7 @@ export default function CategoryJob() {
                                 />
                             </div>
                         ) : (
-                            workerCategories.map((item) => (
+                            workerCategories.data.map((item) => (
                                 <Accordion
                                     key={item.id}
                                     open={openId === item.id}

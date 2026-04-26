@@ -41,7 +41,7 @@ const TakeOffSheetTable = ({
         routeName: "tos.destroy",
         confirmTitle: "Hapus Item TOS?",
         successMessage: "TOS berhasil dihapus",
-        errorMessage: "Proyek sudah disetujui",
+        errorMessage: "Proyek sudah disetujui, tidak dapat dihapus",
     });
 
     return (

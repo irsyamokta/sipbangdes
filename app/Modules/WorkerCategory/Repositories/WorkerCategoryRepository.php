@@ -13,14 +13,45 @@ class WorkerCategoryRepository
      * - eager load workerItems dan relasi terkait
      * - Menghindari N+1 query pada tampilan
      */
-    public function getAll()
+    /**
+     * Mengambil seluruh data tanpa pagination.
+     */
+    public function getAll(?string $search = null)
+    {
+        return $this->baseQuery($search)->get();
+    }
+
+    /**
+     * Mengambil data dengan pagination.
+     */
+    public function getPaginated(
+        ?string $search = null,
+        int|string $perPage = 10
+    ) {
+        $query = $this->baseQuery($search);
+
+        if ($perPage === 'all') {
+            $perPage = $query->count();
+        }
+
+        return $this->baseQuery($search)
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
+     * Base query untuk Worker Category.
+     */
+    private function baseQuery(?string $search)
     {
         return WorkerCategory::query()
             ->with([
                 'workerItems.workerCategory',
                 'workerItems.ahsp',
             ])
-            ->get();
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
     }
 
     /**
