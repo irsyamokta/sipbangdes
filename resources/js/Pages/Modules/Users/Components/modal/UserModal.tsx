@@ -99,11 +99,12 @@ const UserModal = ({
                     onChange={(value) => setData("role", value)}
                     error={serverErrors.role}
                     required
+                    disabled={isEditing && data.role === "admin"}
                     options={[
-                        { value: "admin", label: "Admin" },
-                        { value: "planner", label: "Planner" },
-                        { value: "reviewer", label: "Reviewer" },
-                        { value: "approver", label: "Approver" },
+                        ...(isEditing && data.role === "admin" ? [{ value: "admin", label: "Admin" }] : []),
+                        { value: "planner", label: "Kaur Perencanaan (Planner)" },
+                        { value: "reviewer", label: "Sekretaris Desa (Reviewer)" },
+                        { value: "approver", label: "Kepala Desa (Approver)" },
                     ]}
                 />
 
@@ -115,6 +116,7 @@ const UserModal = ({
                     onChange={(value) => setData("is_active", value)}
                     error={serverErrors.is_active ? "Status wajib diisi" : ""}
                     required
+                    disabled={isEditing && data.role === "admin"}
                     options={[
                         { value: true, label: "Aktif" },
                         { value: false, label: "Tidak Aktif" },

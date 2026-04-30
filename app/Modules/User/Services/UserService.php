@@ -33,6 +33,7 @@ class UserService
      *
      * Aturan bisnis:
      * - Email harus unik
+     * - Peran Admin tidak boleh ditambahkan (di-assign)
      *
      * Catatan:
      * - Password di-hash sebelum disimpan
@@ -44,6 +45,10 @@ class UserService
     {
         if ($this->userRepository->existsByEmail($data['email']))
             throw new DomainException("Email sudah terdaftar.");
+
+        if (($data['role'] ?? '') === 'admin') {
+            throw new DomainException("Tidak dapat membuat pengguna dengan peran Admin.");
+        }
 
         return DB::transaction(function () use ($data) {
 
@@ -66,6 +71,7 @@ class UserService
      *
      * Aturan bisnis:
      * - Email harus tetap unik (kecuali user itu sendiri)
+     * - Peran Admin tidak boleh diubah
      *
      * Catatan:
      * - Password hanya di-update jika diisi
@@ -85,6 +91,11 @@ class UserService
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
+        }
+
+        if ($user->hasRole('admin')) {
+            unset($data['role']);
+            unset($data['is_active']);
         }
 
         return $this->userRepository->update($user, $data);

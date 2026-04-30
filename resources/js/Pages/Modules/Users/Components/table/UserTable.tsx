@@ -45,7 +45,7 @@ const UserTable = ({
         routeName: "user.destroy",
         confirmTitle: "Hapus Pengguna?",
         successMessage: "Pengguna berhasil dihapus",
-        errorMessage: "Gagal menghapus pengguna",
+        errorMessage: "Pengguna tidak dapat dihapus",
     });
 
     return (
