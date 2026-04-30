@@ -34,6 +34,29 @@ class AhspWageRepository
     }
 
     /**
+     * Mengecek apakah upah sudah ada dalam AHSP tertentu
+     */
+    public function existsInAhsp($ahspId, $wageId)
+    {
+        return AhspComponentWage::query()
+            ->where('ahsp_id', $ahspId)
+            ->where('wage_id', $wageId)
+            ->exists();
+    }
+
+    /**
+     * Mengecek duplikasi upah pada AHSP saat update
+     */
+    public function existsInAhspExcept($id, $ahspId, $wageId)
+    {
+        return AhspComponentWage::query()
+            ->where('ahsp_id', $ahspId)
+            ->where('wage_id', $wageId)
+            ->where('id', '!=', $id)
+            ->exists();
+    }
+
+    /**
      * Menyimpan data upah AHSP baru.
      *
      * Catatan:

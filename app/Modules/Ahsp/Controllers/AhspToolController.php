@@ -35,7 +35,7 @@ class AhspToolController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'ahsp_id' => $e->getMessage()
+                'tool_id' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
@@ -58,7 +58,7 @@ class AhspToolController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'ahsp_id' => $e->getMessage()
+                'tool_id' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([

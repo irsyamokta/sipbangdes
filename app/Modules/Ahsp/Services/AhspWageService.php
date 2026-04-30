@@ -3,8 +3,8 @@
 namespace App\Modules\Ahsp\Services;
 
 use DomainException;
-use App\Models\Ahsp;
 use App\Modules\Ahsp\Repositories\AhspWageRepository;
+use App\Modules\Ahsp\Repositories\AhspRepository;
 
 class AhspWageService
 {
@@ -12,7 +12,8 @@ class AhspWageService
      * Inisialisasi service dengan dependency repository.
      */
     public function __construct(
-        protected AhspWageRepository $ahspWageRepository
+        protected AhspWageRepository $ahspWageRepository,
+        protected AhspRepository $ahspRepository
     ) {}
 
     /**
@@ -35,8 +36,12 @@ class AhspWageService
      */
     public function createAhspWage(array $data)
     {
-        if (!Ahsp::where('id', $data['ahsp_id'])->exists()) {
-            throw new DomainException('AHSP tidak ditemukan');
+        if (!$this->ahspRepository->exists($data['ahsp_id'])) {
+            throw new DomainException('AHSP tidak ditemukan.');
+        }
+
+        if ($this->ahspWageRepository->existsInAhsp($data['ahsp_id'], $data['wage_id'])) {
+            throw new DomainException('Nama upah dengan satuan tersebut sudah ada.');
         }
 
         return $this->ahspWageRepository->create($data);
@@ -51,6 +56,10 @@ class AhspWageService
      */
     public function updateAhspWage($id, array $data)
     {
+        if ($this->ahspWageRepository->existsInAhspExcept($id, $data['ahsp_id'], $data['wage_id'])) {
+            throw new DomainException('Nama upah dengan satuan tersebut sudah ada.');
+        }
+
         $ahspWage = $this->ahspWageRepository->find($id);
 
         return $this->ahspWageRepository->update($ahspWage, $data);

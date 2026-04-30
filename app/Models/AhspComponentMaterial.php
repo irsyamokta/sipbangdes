@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property float $coefficient
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @method bool|null delete()
  */
 class AhspComponentMaterial extends Model
 {

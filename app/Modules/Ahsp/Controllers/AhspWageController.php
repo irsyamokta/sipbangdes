@@ -35,7 +35,7 @@ class AhspWageController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'ahsp_id' => $e->getMessage()
+                'wage_id' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
@@ -58,7 +58,7 @@ class AhspWageController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'ahsp_id' => $e->getMessage()
+                'wage_id' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([

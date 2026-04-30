@@ -12,7 +12,8 @@ class AhspMaterialService
      * Inisialisasi service dengan dependency repository.
      */
     public function __construct(
-        protected AhspMaterialRepository $ahspMaterialRepository
+        protected AhspMaterialRepository $ahspMaterialRepository,
+        protected \App\Modules\Ahsp\Repositories\AhspRepository $ahspRepository
     ) {}
 
     /**
@@ -35,8 +36,12 @@ class AhspMaterialService
      */
     public function createAhspMaterial(array $data)
     {
-        if (!Ahsp::where('id', $data['ahsp_id'])->exists()) {
-            throw new DomainException('AHSP tidak ditemukan');
+        if (!$this->ahspRepository->exists($data['ahsp_id'])) {
+            throw new DomainException('AHSP tidak ditemukan.');
+        }
+
+        if ($this->ahspMaterialRepository->existsInAhsp($data['ahsp_id'], $data['material_id'])) {
+            throw new DomainException('Nama material dengan satuan tersebut sudah ada.');
         }
 
         return $this->ahspMaterialRepository->create($data);
@@ -50,6 +55,10 @@ class AhspMaterialService
      */
     public function updateAhspMaterial($id, array $data)
     {
+        if ($this->ahspMaterialRepository->existsInAhspExcept($id, $data['ahsp_id'], $data['material_id'])) {
+            throw new DomainException('Nama material dengan satuan tersebut sudah ada.');
+        }
+
         $ahspMaterial = $this->ahspMaterialRepository->find($id);
 
         return $this->ahspMaterialRepository->update($ahspMaterial, $data);

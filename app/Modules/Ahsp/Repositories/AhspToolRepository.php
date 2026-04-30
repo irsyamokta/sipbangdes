@@ -34,6 +34,29 @@ class AhspToolRepository
     }
 
     /**
+     * Mengecek apakah alat sudah ada dalam AHSP tertentu
+     */
+    public function existsInAhsp($ahspId, $toolId)
+    {
+        return AhspComponentTool::query()
+            ->where('ahsp_id', $ahspId)
+            ->where('tool_id', $toolId)
+            ->exists();
+    }
+
+    /**
+     * Mengecek duplikasi alat pada AHSP saat update
+     */
+    public function existsInAhspExcept($id, $ahspId, $toolId)
+    {
+        return AhspComponentTool::query()
+            ->where('ahsp_id', $ahspId)
+            ->where('tool_id', $toolId)
+            ->where('id', '!=', $id)
+            ->exists();
+    }
+
+    /**
      * Menyimpan data alat AHSP baru.
      *
      * Catatan:

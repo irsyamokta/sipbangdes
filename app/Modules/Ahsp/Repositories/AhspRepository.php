@@ -98,7 +98,7 @@ class AhspRepository
      */
     public function existsByNameExcept($id, string $name)
     {
-        return Ahsp::where('id', '!=', $id)
+        return Ahsp::query()->where('id', '!=', $id)
             ->where('work_name', $name)
             ->exists();
     }
@@ -110,7 +110,15 @@ class AhspRepository
      */
     public function existsByName(string $name)
     {
-        return Ahsp::where('work_name', $name)->exists();
+        return Ahsp::query()->where('work_name', $name)->exists();
+    }
+
+    /**
+     * Mengecek apakah AHSP ada berdasarkan ID.
+     */
+    public function exists($id)
+    {
+        return Ahsp::query()->where('id', $id)->exists();
     }
 
     /**

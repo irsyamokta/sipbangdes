@@ -34,6 +34,29 @@ class AhspMaterialRepository
     }
 
     /**
+     * Mengecek apakah material sudah ada dalam AHSP tertentu
+     */
+    public function existsInAhsp($ahspId, $materialId)
+    {
+        return AhspComponentMaterial::query()
+            ->where('ahsp_id', $ahspId)
+            ->where('material_id', $materialId)
+            ->exists();
+    }
+
+    /**
+     * Mengecek duplikasi material pada AHSP saat update
+     */
+    public function existsInAhspExcept($id, $ahspId, $materialId)
+    {
+        return AhspComponentMaterial::query()
+            ->where('ahsp_id', $ahspId)
+            ->where('material_id', $materialId)
+            ->where('id', '!=', $id)
+            ->exists();
+    }
+
+    /**
      * Menyimpan data material AHSP baru.
      *
      * Catatan:
@@ -43,7 +66,6 @@ class AhspMaterialRepository
     {
         return AhspComponentMaterial::create($data);
     }
-
 
     /**
      * Memperbarui data material AHSP.
