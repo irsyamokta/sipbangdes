@@ -58,9 +58,9 @@ class WageRepository
      *
      * Digunakan saat create.
      */
-    public function existsByPosition(string $position)
+    public function existsByPositionAndUnit(string $position, string $unit)
     {
-        return MasterWage::where('position', $position)->exists();
+        return MasterWage::query()->where('position', $position)->where('unit', $unit)->exists();
     }
 
     /**
@@ -68,9 +68,10 @@ class WageRepository
      *
      * Digunakan saat update.
      */
-    public function existsByPositionExcept($id, string $position)
+    public function existsByPositionAndUnitExcept($id, string $position, string $unit)
     {
-        return MasterWage::where('position', $position)
+        return MasterWage::query()->where('position', $position)
+            ->where('unit', $unit)
             ->where('id', '!=', $id)
             ->exists();
     }

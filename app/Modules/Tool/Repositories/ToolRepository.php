@@ -58,9 +58,9 @@ class ToolRepository
      *
      * Digunakan saat create.
      */
-    public function existsByName(string $name)
+    public function existsByNameAndUnit(string $name, string $unit)
     {
-        return MasterTool::where('name', $name)->exists();
+        return MasterTool::query()->where('name', $name)->where('unit', $unit)->exists();
     }
 
     /**
@@ -68,9 +68,10 @@ class ToolRepository
      *
      * Digunakan saat update.
      */
-    public function existsByNameExcept($id, string $name)
+    public function existsByNameAndUnitExcept($id, string $name, string $unit)
     {
-        return MasterTool::where('name', $name)
+        return MasterTool::query()->where('name', $name)
+            ->where('unit', $unit)
             ->where('id', '!=', $id)
             ->exists();
     }

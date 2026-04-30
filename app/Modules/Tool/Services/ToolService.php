@@ -2,6 +2,7 @@
 
 namespace App\Modules\Tool\Services;
 
+use DomainException;
 use App\Models\MasterTool;
 use App\Modules\Tool\Repositories\ToolRepository;
 use App\Contracts\CodeGeneratorInterface;
@@ -44,11 +45,16 @@ class ToolService
      * Membuat data alat baru.
      *
      * Catatan:
+     * - Kombinasi nama + satuan harus unik
      * - Code di-generate otomatis dengan prefix 'TL'
      * - Menggunakan transaction untuk menjaga konsistensi data
      */
     public function createTool(array $data)
     {
+        if ($this->toolRepository->existsByNameAndUnit($data['name'], $data['unit'])) {
+            throw new DomainException('Nama alat dengan satuan tersebut sudah ada.');
+        }
+
         return DB::transaction(function () use ($data) {
             $data['code'] = $this->codeGenerator->generate(
                 MasterTool::class,
@@ -62,9 +68,16 @@ class ToolService
 
     /**
      * Memperbarui data alat.
+     *
+     * Catatan:
+     * - Kombinasi nama + satuan harus unik
      */
     public function updateTool($id, array $data)
     {
+        if ($this->toolRepository->existsByNameAndUnitExcept($id, $data['name'], $data['unit'])) {
+            throw new DomainException('Nama alat dengan satuan tersebut sudah ada.');
+        }
+
         $tool = $this->toolRepository->find($id);
 
         return $this->toolRepository->update($tool, $data);

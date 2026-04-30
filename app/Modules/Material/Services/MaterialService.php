@@ -2,6 +2,7 @@
 
 namespace App\Modules\Material\Services;
 
+use DomainException;
 use App\Models\MasterMaterial;
 use App\Modules\Material\Repositories\MaterialRepository;
 use App\Contracts\CodeGeneratorInterface;
@@ -44,11 +45,16 @@ class MaterialService
      * Membuat data material baru.
      *
      * Catatan:
+     * - Kombinasi nama + satuan harus unik
      * - Code material di-generate otomatis dengan prefix 'MAT'
      * - Menggunakan transaction untuk menjaga konsistensi data
      */
     public function createMaterial(array $data)
     {
+        if ($this->materialRepository->existsByNameAndUnit($data['name'], $data['unit'])) {
+            throw new DomainException('Nama material dengan satuan tersebut sudah ada.');
+        }
+
         return DB::transaction(function () use ($data) {
             $data["code"] = $this->codeGenerator->generate(
                 MasterMaterial::class,
@@ -62,9 +68,16 @@ class MaterialService
 
     /**
      * Memperbarui data material.
+     *
+     * Catatan:
+     * - Kombinasi nama + satuan harus unik
      */
     public function updateMaterial($id, array $data)
     {
+        if ($this->materialRepository->existsByNameAndUnitExcept($id, $data['name'], $data['unit'])) {
+            throw new DomainException('Nama material dengan satuan tersebut sudah ada.');
+        }
+
         $material = $this->materialRepository->find($id);
 
         return $this->materialRepository->update($material, $data);

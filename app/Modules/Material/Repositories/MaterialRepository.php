@@ -58,9 +58,9 @@ class MaterialRepository
      *
      * Digunakan saat create.
      */
-    public function existsByName(string $name)
+    public function existsByNameAndUnit(string $name, string $unit)
     {
-        return MasterMaterial::where('name', $name)->exists();
+        return MasterMaterial::query()->where('name', $name)->where('unit', $unit)->exists();
     }
 
     /**
@@ -68,9 +68,10 @@ class MaterialRepository
      *
      * Digunakan saat update.
      */
-    public function existsByNameExcept($id, string $name)
+    public function existsByNameAndUnitExcept($id, string $name, string $unit)
     {
-        return MasterMaterial::where('name', $name)
+        return MasterMaterial::query()->where('name', $name)
+            ->where('unit', $unit)
             ->where('id', '!=', $id)
             ->exists();
     }
