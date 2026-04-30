@@ -5,7 +5,7 @@ import Form from "@/Components/form/Form";
 import Input from "@/Components/form/input/InputField";
 import Button from "@/Components/ui/button/Button";
 
-import { AiOutlineMail } from "react-icons/ai";
+import { AiOutlineMail, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { TbLockPassword } from "react-icons/tb";
 
 import LogoColor from "../../../assets/logo/logo-color.svg"
@@ -108,7 +108,14 @@ export default function Login({
                             className="w-full"
                             disabled={processing}
                         >
-                            Masuk
+                            {processing ? (
+                                <div className="flex items-center gap-2">
+                                    <AiOutlineLoading3Quarters className="animate-spin" />
+                                    Memuat...
+                                </div>
+                            ) : (
+                                "Masuk"
+                            )}
                         </Button>
 
                         {/* Copyright */}

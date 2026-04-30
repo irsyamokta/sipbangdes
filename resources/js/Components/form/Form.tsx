@@ -39,6 +39,7 @@ const Form: FC<FormProps> = ({
             }}
             className={className}
             onKeyDown={handleKeyDown}
+            noValidate
         >
             {children}
         </form>

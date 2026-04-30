@@ -100,7 +100,7 @@ class TakeOffSheetService
     private function ensureApproved($status)
     {
         if ($status === 'approved') {
-            throw new DomainException('Proyek sudah disetujui, tidak dapat menghapus TOS');
+            throw new DomainException('Proyek sudah disetujui, tidak dapat mengubah data!');
         }
     }
 }

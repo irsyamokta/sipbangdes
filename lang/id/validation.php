@@ -24,6 +24,7 @@ return [
         'percentage' => 'Persentase',
         'description' => 'Deskripsi',
         'price' => 'Harga',
+        'date' => 'Tanggal',
         'project_name' => 'Nama proyek',
         'location' => 'Lokasi',
         'work_name' => 'Nama pekerjaan',

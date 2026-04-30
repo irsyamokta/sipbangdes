@@ -31,4 +31,13 @@ class ProgressStoreRequest extends FormRequest
             'documents.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'description.required' => 'Keterangan wajib diisi.',
+            'description.string' => 'Keterangan harus berupa string.',
+            'description.max' => 'Keterangan maksimal 255 karakter.',
+        ];
+    }
 }

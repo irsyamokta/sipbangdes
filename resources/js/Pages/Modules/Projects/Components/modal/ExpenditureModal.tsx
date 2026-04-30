@@ -113,7 +113,7 @@ const ExpenditureModal = ({
                     placeholder="Catatan tambahan..."
                     onChange={(value) => setData("information", value)}
                     error={serverErrors.information}
-                    optional
+                    required
                 />
             </Form>
         </Modal>

@@ -10,17 +10,17 @@ export const ROLE_MENU: Record<
         main: [
             "dashboard",
             "proyek",
-            "kategori",
             "ahsp",
+            "kategori",
             "tos",
             "rab",
         ],
 
         master: [
-            "material",
-            "alat",
-            "upah",
             "satuan",
+            "material",
+            "upah",
+            "alat",
         ],
 
         admin: ["pengguna"],
@@ -30,8 +30,8 @@ export const ROLE_MENU: Record<
         main: [
             "dashboard",
             "proyek",
-            "kategori",
             "ahsp",
+            "kategori",
             "tos",
             "rab",
         ],
@@ -41,8 +41,8 @@ export const ROLE_MENU: Record<
         main: [
             "dashboard",
             "proyek",
-            "kategori",
             "ahsp",
+            "kategori",
             "tos",
             "rab",
         ],
@@ -52,8 +52,8 @@ export const ROLE_MENU: Record<
         main: [
             "dashboard",
             "proyek",
-            "kategori",
             "ahsp",
+            "kategori",
             "tos",
             "rab",
         ],
