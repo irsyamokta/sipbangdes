@@ -33,7 +33,8 @@ const ProjectDetailTabs = ({
     const { can } = usePermission();
 
     const isRunning = project.project_status === "berjalan";
-    const isFinished = totalProgress === 100;
+    const isFinished = totalProgress >= 100;
+    const isBudgetFinished = percentageBudget >= 100;
 
     const tabs = [
         {
@@ -79,7 +80,7 @@ const ProjectDetailTabs = ({
             label: "Realisasi Anggaran",
             content: (
                 <div className="space-y-6">
-                    {can("progress.create") && isRunning && !isFinished && (
+                    {can("progress.create") && isRunning && !isBudgetFinished && (
                         <div className="col-span-12 flex justify-end">
                             <Button
                                 startIcon={<LuPlus />}
