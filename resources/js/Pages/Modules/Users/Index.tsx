@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Head, usePage } from '@inertiajs/react';
 
+import usePermission from "@/hooks/usePermission";
 import { useSearch } from '@/hooks/useSearch';
 
 import { User, UserPageProps } from "@/types/user";
@@ -21,6 +22,8 @@ export default function Users() {
         },
     } = usePage<UserPageProps>();
 
+    const { can } = usePermission();
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -63,12 +66,16 @@ export default function Users() {
 
                     {/* Filter Bar */}
                     <FilterBar
-                        className="md:max-w-sm"
-                        search={{
-                            value: filters.search,
-                            placeholder: "Cari berdasarkan nama atau email...",
-                            onChange: (value) => setFilter("search", value),
-                        }}
+                        className="w-full md:max-w-sm"
+                        search={
+                            can("users.search")
+                                ? {
+                                    value: filters.search,
+                                    placeholder: "Cari pengguna...",
+                                    onChange: (value) => setFilter("search", value),
+                                }
+                                : undefined
+                        }
                     />
 
                     {/* User Table */}

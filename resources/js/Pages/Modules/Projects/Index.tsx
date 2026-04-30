@@ -96,17 +96,25 @@ export default function Projects() {
                     {/* Filter Bar */}
                     <FilterBar
                         className="w-full md:max-w-2xl"
-                        select={{
-                            value: filters.year,
-                            options: budgetYearOptions,
-                            placeholder: "Pilih Tahun",
-                            onChange: (value) => setFilter("year", value),
-                        }}
-                        search={{
-                            value: filters.search,
-                            placeholder: "Cari proyek...",
-                            onChange: (value) => setFilter("search", value),
-                        }}
+                        select={
+                            can("project.filter")
+                                ? {
+                                    value: filters.year,
+                                    options: budgetYearOptions,
+                                    placeholder: "Pilih Tahun",
+                                    onChange: (value) => setFilter("year", value),
+                                }
+                                : undefined
+                        }
+                        search={
+                            can("project.search")
+                                ? {
+                                    value: filters.search,
+                                    placeholder: "Cari proyek...",
+                                    onChange: (value) => setFilter("search", value),
+                                }
+                                : undefined
+                        }
                     />
 
                     {/* Cards */}

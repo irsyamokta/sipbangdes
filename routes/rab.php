@@ -11,14 +11,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/comment', [RabController::class, 'action'])->middleware('permission:rab.view')->name('rab.action');
         Route::get('/pdf', [RabController::class, 'pdf'])->middleware('permission:rab.download')->name('rab.pdf');
 
-        Route::prefix('operational')->middleware('permission:rab.create')->group(function () {
-            Route::post('/', [OperationalCostController::class, 'store'])->name('operational.store');
-            Route::patch('/{id}', [OperationalCostController::class, 'update'])->name('operational.update');
-            Route::delete('/{id}', [OperationalCostController::class, 'destroy'])->name('operational.destroy');
+        Route::prefix('operational')->group(function () {
+            Route::post('/', [OperationalCostController::class, 'store'])->middleware('permission:rab.operational.create')->name('operational.store');
+            Route::patch('/{id}', [OperationalCostController::class, 'update'])->middleware('permission:rab.operational.edit')->name('operational.update');
+            Route::delete('/{id}', [OperationalCostController::class, 'destroy'])->middleware('permission:rab.operational.delete')->name('operational.destroy');
         });
 
         Route::post('/insight/generate', [GenerateInsightController::class, 'generate'])
-            ->middleware('permission:rab.create')
+            ->middleware('permission:rab.generate.ai')
             ->name('rab.insight.store');
     });
 });

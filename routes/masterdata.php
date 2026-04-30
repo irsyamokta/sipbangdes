@@ -48,15 +48,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /* Worker Category */
     Route::prefix('kategori-pekerjaan')->group(function () {
-        Route::get('/', [WorkerCategoryController::class, 'index'])->middleware('permission:workercategory.view')->name('workercategory.index');
-        Route::post('/', [WorkerCategoryController::class, 'store'])->middleware('permission:workercategory.create')->name('workercategory.store');
-        Route::patch('/{id}', [WorkerCategoryController::class, 'update'])->middleware('permission:workercategory.edit')->name('workercategory.update');
-        Route::delete('/{id}', [WorkerCategoryController::class, 'destroy'])->middleware('permission:workercategory.delete')->name('workercategory.destroy');
+        Route::get('/', [WorkerCategoryController::class, 'index'])->middleware('permission:category.view')->name('workercategory.index');
+        Route::post('/', [WorkerCategoryController::class, 'store'])->middleware('permission:category.create')->name('workercategory.store');
+        Route::patch('/{id}', [WorkerCategoryController::class, 'update'])->middleware('permission:category.edit')->name('workercategory.update');
+        Route::delete('/{id}', [WorkerCategoryController::class, 'destroy'])->middleware('permission:category.delete')->name('workercategory.destroy');
 
         Route::prefix('item')->group(function () {
-            Route::post('/', [WorkerItemController::class, 'store'])->middleware('permission:workercategory.create')->name('workeritem.store');
-            Route::patch('/{id}', [WorkerItemController::class, 'update'])->middleware('permission:workercategory.edit')->name('workeritem.update');
-            Route::delete('/{id}', [WorkerItemController::class, 'destroy'])->middleware('permission:workercategory.delete')->name('workeritem.destroy');
+            Route::post('/', [WorkerItemController::class, 'store'])->middleware('permission:category.create')->name('workeritem.store');
+            Route::patch('/{id}', [WorkerItemController::class, 'update'])->middleware('permission:category.edit')->name('workeritem.update');
+            Route::delete('/{id}', [WorkerItemController::class, 'destroy'])->middleware('permission:category.delete')->name('workeritem.destroy');
         });
     });
 

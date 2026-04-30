@@ -85,7 +85,7 @@ const WorkerItemTable = ({
                                         Referensi AHSP
                                     </TableCell>
 
-                                    {can('workercategory.create') && (
+                                    {can('category.create') && (
                                         <TableCell
                                             isHeader
                                             className="px-6 py-3 text-sm font-semibold text-gray-900 text-center whitespace-nowrap"
@@ -119,7 +119,7 @@ const WorkerItemTable = ({
                                             </TableCell>
 
                                             {/* Action */}
-                                            {can('workercategory.edit') && can('workercategory.delete') && (
+                                            {can('category.edit') && can('category.delete') && (
                                                 <TableCell className="px-6 py-4 text-sm font-medium text-center text-gray-800 whitespace-nowrap">
                                                     <div className="flex justify-center gap-1">
 
@@ -161,7 +161,7 @@ const WorkerItemTable = ({
                 </div>
             )}
             <div>
-                {can('workercategory.create') && (
+                {can('category.create') && (
                     <Button
                         variant="ghost"
                         startIcon={<LuPlus size={18} />}

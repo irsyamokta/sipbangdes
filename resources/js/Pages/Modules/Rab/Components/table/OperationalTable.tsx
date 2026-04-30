@@ -80,7 +80,7 @@ const OperationalTable = ({
                         </p>
                     </div>
                     {
-                        can("rab.create") && rab_status !== "approved" && (
+                        can("rab.operational.create") && rab_status !== "approved" && (
                             <Button
                                 variant="primary"
                                 startIcon={<LuPlus size={18} />}
@@ -118,7 +118,7 @@ const OperationalTable = ({
                                     Total Harga
                                 </TableCell>
 
-                                {can("rab.create") && rab_status !== "approved" && (
+                                {can("rab.operational.edit") && can("rab.operational.delete") && rab_status !== "approved" && (
                                     <TableCell isHeader className="px-6 py-3 text-xs text-center text-gray-900 whitespace-nowrap">
                                         Aksi
                                     </TableCell>
@@ -130,7 +130,7 @@ const OperationalTable = ({
                         <TableBody className="divide-y divide-gray-100">
                             {operationals.length === 0 ? (
                                 <EmptyTable
-                                    colspan={can("rab.create") ? 6 : 5}
+                                    colspan={can("rab.operational.create") ? 6 : 5}
                                     description="Belum ada biaya operasional"
                                 />
                             ) : (
@@ -165,7 +165,7 @@ const OperationalTable = ({
                                         </TableCell>
 
                                         {/* Action */}
-                                        {can('rab.create') && rab_status !== "approved" && (
+                                        {can('rab.operational.create') && rab_status !== "approved" && (
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 <div className="flex justify-center gap-1">
 

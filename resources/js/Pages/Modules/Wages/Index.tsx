@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Head, usePage } from '@inertiajs/react';
 
+import usePermission from "@/hooks/usePermission";
 import { useSearch } from "@/hooks/useSearch";
 
 import { Wage, WagePageProps } from "@/types/wage";
@@ -21,6 +22,8 @@ export default function Wages() {
             filters: filter
         }
     } = usePage<WagePageProps>();
+
+    const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedWage, setSelectedWage] = useState<Wage | null>(null);
@@ -65,12 +68,16 @@ export default function Wages() {
 
                     {/* Filter Bar */}
                     <FilterBar
-                        className="md:max-w-sm"
-                        search={{
-                            value: filters.search,
-                            placeholder: "Cari jabatan...",
-                            onChange: (value) => setFilter("search", value),
-                        }}
+                        className="w-full md:max-w-sm"
+                        search={
+                            can("wage.search")
+                                ? {
+                                    value: filters.search,
+                                    placeholder: "Cari upah...",
+                                    onChange: (value) => setFilter("search", value),
+                                }
+                                : undefined
+                        }
                     />
 
                     {/* Wage Table */}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { router } from "@inertiajs/react";
 import { toast } from "sonner";
+import usePermission from "@/hooks/usePermission";
 
 import Button from "@/Components/ui/button/Button";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
@@ -18,6 +19,7 @@ interface Props {
 type ActionType = "send" | "forward" | "approve" | "revision";
 
 const RabActionButtons = ({ role, projectId, status }: Props) => {
+    const { can } = usePermission();
     const [selectedAction, setSelectedAction] = useState<ActionType | null>(null);
 
     if (!projectId) return null;
@@ -76,7 +78,13 @@ const RabActionButtons = ({ role, projectId, status }: Props) => {
         );
     };
 
-    const actions = roleActions[role] ?? [];
+    const actions = (roleActions[role] ?? []).filter((btn) => {
+        if (btn.action === "send") return can("rab.send");
+        if (btn.action === "revision") return can("rab.review");
+        if (btn.action === "forward") return can("rab.forward");
+        if (btn.action === "approve") return can("rab.approve");
+        return true;
+    });
 
     return (
         <>

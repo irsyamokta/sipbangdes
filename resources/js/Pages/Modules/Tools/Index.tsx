@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage } from "@inertiajs/react";
 
+import usePermission from "@/hooks/usePermission";
 import { useSearch } from "@/hooks/useSearch";
 
 import { Tool, ToolPageProps } from "@/types/tool";
@@ -8,19 +9,17 @@ import { Tool, ToolPageProps } from "@/types/tool";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import HeaderTitle from "@/Components/HeaderTitle";
 import FilterBar from "@/Components/filter/FilterBar";
-import ToolTable from './Components/table/ToolTable';
+import ToolTable from "./Components/table/ToolTable";
 import ToolModal from "./Components/modal/ToolModal";
 
 import { LuPlus } from "react-icons/lu";
 
 export default function Tools() {
     const {
-        props: {
-            tools,
-            unitOptions,
-            filters: filter
-        },
+        props: { tools, unitOptions, filters: filter },
     } = usePage<ToolPageProps>();
+
+    const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
@@ -49,7 +48,6 @@ export default function Tools() {
 
             {/* Content */}
             <div className="grid grid-cols-12 gap-4 md:gap-6">
-
                 {/* Header */}
                 <div className="col-span-12 space-y-6">
                     <HeaderTitle
@@ -62,15 +60,19 @@ export default function Tools() {
                 </div>
 
                 <div className="col-span-12 space-y-6 mt-4">
-
                     {/* Filter Bar */}
                     <FilterBar
-                        className="md:max-w-sm"
-                        search={{
-                            value: filters.search,
-                            placeholder: "Cari alat...",
-                            onChange: (value) => setFilter("search", value),
-                        }}
+                        className="w-full md:max-w-sm"
+                        search={
+                            can("tool.search")
+                                ? {
+                                      value: filters.search,
+                                      placeholder: "Cari alat...",
+                                      onChange: (value) =>
+                                          setFilter("search", value),
+                                  }
+                                : undefined
+                        }
                     />
 
                     {/* Tool Table */}

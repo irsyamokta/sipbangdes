@@ -27,7 +27,7 @@ const rabStatusMap: Record<
         color: "info",
     },
     reviewed: {
-        label: "Ditinjau",
+        label: "Diteruskan",
         color: "info",
     },
 };

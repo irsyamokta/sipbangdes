@@ -13,161 +13,139 @@ class RolePermissionSeeder extends Seeder
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        /* Create Permissions */
         $permissions = [
 
-            /* Dashboard Module */
+            /* General */
             'dashboard.view',
 
-            /* Project Module */
+            /* Users */
+            'users.view',
+            'users.create',
+            'users.edit',
+            'users.delete',
+            'users.search',
+
+            /* Project */
             'project.view',
             'project.create',
             'project.edit',
             'project.delete',
+            'project.search',
+            'project.filter',
 
-            /* Take Off Sheet Module */
-            'tos.view',
-            'tos.create',
-            'tos.edit',
-            'tos.delete',
-
-            /* RAB Module */
-            'rab.view',
-            'rab.create',
-            'rab.edit',
-            'rab.delete',
-            'rab.send',
-            'rab.forward',
-            'rab.download',
-            'rab.approve',
-            'rab.review',
-
-            /* Master Data Module */
-            'material.view',
-            'material.create',
-            'material.edit',
-            'material.delete',
-
-            'tool.view',
-            'tool.create',
-            'tool.edit',
-            'tool.delete',
-
-            'wage.view',
-            'wage.create',
-            'wage.edit',
-            'wage.delete',
-
-            'unit.view',
-            'unit.create',
-            'unit.edit',
-            'unit.delete',
-
-            'workercategory.view',
-            'workercategory.create',
-            'workercategory.edit',
-            'workercategory.delete',
-
-            'ahsp.view',
-            'ahsp.create',
-            'ahsp.edit',
-            'ahsp.delete',
-
-            /* Progress Module */
+            /* Progress */
             'progress.view',
             'progress.create',
             'progress.edit',
             'progress.delete',
 
-            /* Users Module */
-            'users.view',
-            'users.create',
-            'users.edit',
-            'users.delete',
+            /* Master Data */
+            'unit.view','unit.create','unit.edit','unit.delete','unit.search',
+            'material.view','material.create','material.edit','material.delete','material.search',
+            'wage.view','wage.create','wage.edit','wage.delete','wage.search',
+            'tool.view','tool.create','tool.edit','tool.delete','tool.search',
+
+            /* AHSP */
+            'ahsp.view',
+            'ahsp.create',
+            'ahsp.edit',
+            'ahsp.delete',
+            'ahsp.search',
+
+            /* Category */
+            'category.view',
+            'category.create',
+            'category.edit',
+            'category.delete',
+            'category.search',
+
+            /* TOS */
+            'tos.view',
+            'tos.create',
+            'tos.edit',
+            'tos.delete',
+            'tos.search',
+            'tos.filter',
+
+            /* RAB */
+            'rab.view',
+            'rab.create',
+            'rab.edit',
+            'rab.delete',
+            'rab.operational.create',
+            'rab.operational.edit',
+            'rab.operational.delete',
+            'rab.generate.ai',
+            'rab.download',
+
+            /* RAB Flow */
+            'rab.send',
+            'rab.review',
+            'rab.forward',
+            'rab.approve',
         ];
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        /* Create Roles */
+        /* Roles */
         $admin = Role::firstOrCreate(['name' => 'admin']);
         $planner = Role::firstOrCreate(['name' => 'planner']);
         $reviewer = Role::firstOrCreate(['name' => 'reviewer']);
         $approver = Role::firstOrCreate(['name' => 'approver']);
 
-        /* Admin Permissions */
-        $admin->givePermissionTo(permission::all());
+        /* Admin */
+        $admin->syncPermissions(Permission::all());
 
-        /* Planner Permissions */
-        $planner->givePermissionTo([
+        /* Planner (Kaur Perencanaan) */
+        $planner->syncPermissions([
             'dashboard.view',
 
-            'project.view',
-            'project.create',
-            'project.edit',
-            'project.delete',
+            'project.view','project.create','project.edit','project.delete','project.search','project.filter',
 
-            'tos.view',
-            'tos.create',
-            'tos.edit',
-            'tos.delete',
+            'tos.view','tos.create','tos.edit','tos.delete','tos.search','tos.filter',
 
-            'rab.view',
-            'rab.create',
-            'rab.edit',
+            'rab.view','rab.create','rab.edit','rab.generate.ai','rab.download',
+            'rab.operational.create','rab.operational.edit','rab.operational.delete',
             'rab.send',
-            'rab.download',
 
-            'ahsp.view',
-            'ahsp.create',
-            'ahsp.edit',
-            'ahsp.delete',
-
-            'workercategory.view',
-            'workercategory.create',
-            'workercategory.edit',
-            'workercategory.delete',
+            'ahsp.view','ahsp.create','ahsp.edit','ahsp.delete','ahsp.search',
+            'category.view','category.create','category.edit','category.delete','category.search',
 
             'progress.view',
         ]);
 
-        /* Reviewer Permissions */
-        $reviewer->givePermissionTo([
+        /* Reviewer (Sekretaris Desa) */
+        $reviewer->syncPermissions([
             'dashboard.view',
 
-            'project.view',
-
-            'tos.view',
-
+            'project.view', 'project.search', 'project.filter',
+            'tos.view', 'tos.search', 'tos.filter',
             'rab.view',
+
+            'rab.review',
             'rab.forward',
-            'rab.review',
 
-            'ahsp.view',
-
-            'workercategory.view',
+            'ahsp.view', 'ahsp.search',
+            'category.view', 'category.search',
 
             'progress.view',
-            'progress.create',
-            'progress.edit',
-            'progress.delete',
         ]);
 
-        /* Approver Permissions */
-        $approver->givePermissionTo([
+        /* Approver (Kepala Desa) */
+        $approver->syncPermissions([
             'dashboard.view',
 
-            'project.view',
-
-            'tos.view',
-
+            'project.view', 'project.search', 'project.filter',
+            'tos.view', 'tos.search', 'tos.filter',
             'rab.view',
-            'rab.approve',
-            'rab.review',
-            'ahsp.view',
 
-            'workercategory.view',
+            'rab.review',
+            'rab.approve',
+
+            'ahsp.view', 'ahsp.search',
+            'category.view', 'category.search',
 
             'progress.view',
         ]);

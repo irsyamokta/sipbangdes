@@ -69,7 +69,7 @@ const AIInsightCard = ({
                 </div>
 
                 {/* Button */}
-                {can("rab.create") && rabStatus !== "approved" && (
+                {can("rab.generate.ai") && rabStatus !== "approved" && (
                     <Button
                         onClick={handleSubmit}
                         className="w-full md:w-auto flex items-center gap-2"

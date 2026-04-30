@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Head, usePage } from '@inertiajs/react';
 
+import usePermission from "@/hooks/usePermission";
 import { useSearch } from "@/hooks/useSearch";
 
 import { Unit, UnitPageProps } from "@/types/unit";
@@ -20,6 +21,8 @@ export default function Units() {
             filters: filter
         },
     } = usePage<UnitPageProps>();
+
+    const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
@@ -63,12 +66,16 @@ export default function Units() {
 
                     {/* Filter Bar */}
                     <FilterBar
-                        className="md:max-w-sm"
-                        search={{
-                            value: filters.search,
-                            placeholder: "Cari satuan...",
-                            onChange: (value) => setFilter("search", value),
-                        }}
+                        className="w-full md:max-w-sm"
+                        search={
+                            can("unit.search")
+                                ? {
+                                    value: filters.search,
+                                    placeholder: "Cari satuan...",
+                                    onChange: (value) => setFilter("search", value),
+                                }
+                                : undefined
+                        }
                     />
 
                     {/* Unit Table */}

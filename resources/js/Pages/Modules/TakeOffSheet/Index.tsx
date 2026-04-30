@@ -79,17 +79,27 @@ export default function TOS() {
                     {/* Filter Bar */}
                     <FilterBar
                         className="w-full md:max-w-2xl"
-                        select={{
-                            value: filters.project_id,
-                            options: projects,
-                            placeholder: "Pilih Proyek",
-                            onChange: (value) => setFilter("project_id", value),
-                        }}
-                        search={{
-                            value: filters.search,
-                            placeholder: "Cari pekerjaan...",
-                            onChange: (value) => setFilter("search", value),
-                        }}
+                        select={
+                            can("tos.filter")
+                                ? {
+                                      value: filters.project_id,
+                                      options: projects,
+                                      placeholder: "Pilih Proyek",
+                                      onChange: (value) =>
+                                          setFilter("project_id", value),
+                                  }
+                                : undefined
+                        }
+                        search={
+                            can("tos.search")
+                                ? {
+                                      value: filters.search,
+                                      placeholder: "Cari pekerjaan...",
+                                      onChange: (value) =>
+                                          setFilter("search", value),
+                                  }
+                                : undefined
+                        }
                     />
 
                     {/* Take Off Sheet Table */}

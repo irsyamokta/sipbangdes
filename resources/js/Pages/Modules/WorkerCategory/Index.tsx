@@ -74,8 +74,8 @@ export default function CategoryJob() {
                     <HeaderTitle
                         title="Kategori Pekerjaan"
                         subtitle="Item pekerjaan yang dapat digunakan lintas proyek"
-                        actionLabel={can('workercategory.create') ? "Tambah Kategori" : undefined}
-                        actionIcon={can('workercategory.create') ? <LuPlus /> : undefined}
+                        actionLabel={can('category.create') ? "Tambah Kategori" : undefined}
+                        actionIcon={can('category.create') ? <LuPlus /> : undefined}
                         onActionClick={() => setIsModalOpen(true)}
                     />
                 </div>
@@ -87,11 +87,15 @@ export default function CategoryJob() {
                     <div className="flex justify-between gap-2">
                         <FilterBar
                             className="w-full md:max-w-sm"
-                            search={{
-                                value: filters.search ?? "",
-                                placeholder: "Cari kategori pekerjaan...",
-                                onChange: (value) => setFilter("search", value),
-                            }}
+                            search={
+                                can("category.search")
+                                    ? {
+                                        value: filters.search ?? "",
+                                        placeholder: "Cari kategori...",
+                                        onChange: (value) => setFilter("search", value),
+                                    }
+                                    : undefined
+                            }
                         />
                         
                         <FilterBar

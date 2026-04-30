@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Head, usePage } from '@inertiajs/react';
 
+import usePermission from "@/hooks/usePermission";
 import { useSearch } from "@/hooks/useSearch";
 
 import { Material, MaterialPageProps } from "@/types/material";
@@ -21,6 +22,8 @@ export default function Materials() {
             filters: filter
         }
     } = usePage<MaterialPageProps>();
+
+    const { can } = usePermission();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
@@ -65,12 +68,16 @@ export default function Materials() {
 
                     {/* Filter Bar */}
                     <FilterBar
-                        className="md:max-w-sm"
-                        search={{
-                            value: filters.search,
-                            placeholder: "Cari material...",
-                            onChange: (value) => setFilter("search", value),
-                        }}
+                        className="w-full md:max-w-sm"
+                        search={
+                            can("material.search")
+                                ? {
+                                    value: filters.search,
+                                    placeholder: "Cari material...",
+                                    onChange: (value) => setFilter("search", value),
+                                }
+                                : undefined
+                        }
                     />
 
                     {/* Material Table */}
