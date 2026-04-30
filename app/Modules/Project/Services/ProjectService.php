@@ -2,9 +2,12 @@
 
 namespace App\Modules\Project\Services;
 
-use DomainException;
 use App\Modules\Project\Repositories\ProjectRepository;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use DomainException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ProjectService
 {
@@ -47,7 +50,7 @@ class ProjectService
             $data['budget_year'],
             $data['location']
         )) {
-            throw new DomainException("Proyek tersebut sudah ada.");
+            throw new DomainException('Proyek tersebut sudah ada.');
         }
 
         return DB::transaction(function () use ($data) {
@@ -77,19 +80,44 @@ class ProjectService
             $data['location'],
             $project->id
         )) {
-            throw new DomainException("Proyek tersebut sudah ada.");
+            throw new DomainException('Proyek tersebut sudah ada.');
         }
 
         return $this->projectRepository->update($project, $data);
     }
 
     /**
-     * Menghapus project.
+     * Menghapus project beserta dokumen terkait.
+     *
+     * Proses:
+     * - Mengambil data project berdasarkan ID
+     * - Menghapus file dokumen dari Cloudinary (jika memiliki public_id)
+     * - Menghapus data project dari database
+     *
+     * Catatan:
+     * - Penghapusan file eksternal tidak menghentikan proses jika gagal (error hanya di-log)
+     * - Menggunakan transaction untuk menjaga konsistensi data
      */
     public function deleteProject($id)
     {
-        $project = $this->projectRepository->find($id);
+        return DB::transaction(function () use ($id) {
+            $project = $this->projectRepository->find($id);
 
-        return $this->projectRepository->delete($project);
+            $documents = $project->projectDocuments;
+
+            if ($documents) {
+                foreach ($documents as $document) {
+                    if ($document->public_id) {
+                        try {
+                            Cloudinary::uploadApi()->destroy($document->public_id);
+                        } catch (Throwable $e) {
+                            Log::error($e->getMessage());
+                        }
+                    }
+                }
+            }
+
+            return $this->projectRepository->delete($project);
+        });
     }
 }

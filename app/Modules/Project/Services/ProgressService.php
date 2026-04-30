@@ -2,10 +2,10 @@
 
 namespace App\Modules\Project\Services;
 
+use Throwable;
 use App\Modules\Project\Repositories\ProgressRepository;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\DB;
-use Throwable;
 
 class ProgressService
 {
