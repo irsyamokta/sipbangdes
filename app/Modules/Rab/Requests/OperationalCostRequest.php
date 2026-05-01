@@ -18,17 +18,23 @@ class OperationalCostRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
         return [
-            'project_id' => ['required', 'exists:projects,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'unit' => ['required', 'string', 'max:50'],
-            'volume' => ['required', 'numeric', 'min:0'],
-            'unit_price' => ['required', 'numeric', 'min:0'],
+            'project_id' => 'required|exists:projects,id',
+            'name' => 'required|string|max:255',
+            'unit' => 'required|string|max:50',
+            'volume' => 'required|numeric|min:0',
+            'unit_price' => 'required|numeric|min:0',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'volume' => 'Kebutuhan',
+            'unit_price' => 'Harga',
         ];
     }
 }
