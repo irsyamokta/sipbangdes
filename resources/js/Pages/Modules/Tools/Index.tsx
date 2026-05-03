@@ -62,12 +62,12 @@ export default function Tools() {
                 <div className="col-span-12 space-y-6 mt-4">
                     {/* Filter Bar */}
                     <FilterBar
-                        className="w-full md:max-w-sm"
+                        className="w-full md:max-w-md"
                         search={
                             can("tool.search")
                                 ? {
                                       value: filters.search,
-                                      placeholder: "Cari alat...",
+                                      placeholder: "Cari berdasarkan kode atau nama alat...",
                                       onChange: (value) =>
                                           setFilter("search", value),
                                   }

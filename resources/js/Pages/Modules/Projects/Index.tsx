@@ -110,7 +110,7 @@ export default function Projects() {
                             can("project.search")
                                 ? {
                                     value: filters.search,
-                                    placeholder: "Cari proyek...",
+                                    placeholder: "Cari berdasarkan nama proyek...",
                                     onChange: (value) => setFilter("search", value),
                                 }
                                 : undefined

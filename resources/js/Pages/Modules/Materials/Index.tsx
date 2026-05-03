@@ -68,12 +68,12 @@ export default function Materials() {
 
                     {/* Filter Bar */}
                     <FilterBar
-                        className="w-full md:max-w-sm"
+                        className="w-full md:max-w-md"
                         search={
                             can("material.search")
                                 ? {
                                     value: filters.search,
-                                    placeholder: "Cari material...",
+                                    placeholder: "Cari berdasarkan kode atau nama material...",
                                     onChange: (value) => setFilter("search", value),
                                 }
                                 : undefined

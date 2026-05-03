@@ -86,12 +86,12 @@ export default function CategoryJob() {
                     {/* Filter Bar */}
                     <div className="flex justify-between gap-2">
                         <FilterBar
-                            className="w-full md:max-w-sm"
+                            className="w-full md:max-w-md"
                             search={
                                 can("category.search")
                                     ? {
                                         value: filters.search ?? "",
-                                        placeholder: "Cari kategori...",
+                                        placeholder: "Cari berdasarkan nama kategori...",
                                         onChange: (value) => setFilter("search", value),
                                     }
                                     : undefined

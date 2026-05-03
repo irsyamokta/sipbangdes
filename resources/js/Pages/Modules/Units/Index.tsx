@@ -66,12 +66,12 @@ export default function Units() {
 
                     {/* Filter Bar */}
                     <FilterBar
-                        className="w-full md:max-w-sm"
+                        className="w-full md:max-w-md"
                         search={
                             can("unit.search")
                                 ? {
                                     value: filters.search,
-                                    placeholder: "Cari satuan...",
+                                    placeholder: "Cari berdasarkan kode, nama atau kategori satuan...",
                                     onChange: (value) => setFilter("search", value),
                                 }
                                 : undefined

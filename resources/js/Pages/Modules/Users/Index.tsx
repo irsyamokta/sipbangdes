@@ -66,12 +66,12 @@ export default function Users() {
 
                     {/* Filter Bar */}
                     <FilterBar
-                        className="w-full md:max-w-sm"
+                        className="w-full md:max-w-md"
                         search={
                             can("users.search")
                                 ? {
                                     value: filters.search,
-                                    placeholder: "Cari pengguna...",
+                                    placeholder: "Cari berdasarkan nama atau email...",
                                     onChange: (value) => setFilter("search", value),
                                 }
                                 : undefined

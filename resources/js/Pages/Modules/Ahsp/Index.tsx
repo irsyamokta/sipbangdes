@@ -91,12 +91,12 @@ export default function AHSP() {
                     {/* Filter Bar */}
                     <div className="flex justify-between gap-2">
                         <FilterBar
-                            className="w-full md:max-w-sm"
+                            className="w-full md:max-w-md"
                             search={
                                 can("ahsp.search")
                                     ? {
                                           value: filters.search ?? "",
-                                          placeholder: "Cari AHSP...",
+                                          placeholder: "Cari berdasarkan kode atau nama pekerjaan...",
                                           onChange: (value) =>
                                               setFilter("search", value),
                                       }

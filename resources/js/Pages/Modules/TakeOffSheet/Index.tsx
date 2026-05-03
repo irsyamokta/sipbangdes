@@ -94,7 +94,7 @@ export default function TOS() {
                             can("tos.search")
                                 ? {
                                       value: filters.search,
-                                      placeholder: "Cari pekerjaan...",
+                                      placeholder: "Cari berdasarkan nama pekerjaan...",
                                       onChange: (value) =>
                                           setFilter("search", value),
                                   }

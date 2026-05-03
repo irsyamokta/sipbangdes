@@ -68,12 +68,12 @@ export default function Wages() {
 
                     {/* Filter Bar */}
                     <FilterBar
-                        className="w-full md:max-w-sm"
+                        className="w-full md:max-w-md"
                         search={
                             can("wage.search")
                                 ? {
                                     value: filters.search,
-                                    placeholder: "Cari upah...",
+                                    placeholder: "Cari berdasarkan kode atau nama upah...",
                                     onChange: (value) => setFilter("search", value),
                                 }
                                 : undefined

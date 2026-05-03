@@ -85,7 +85,7 @@ const MaterialTable = ({
                                         isHeader
                                         className="px-6 py-3 text-sm font-semibold text-gray-900 text-start whitespace-nowrap"
                                     >
-                                        Nama
+                                        Nama Material
                                     </TableCell>
 
                                     <TableCell
