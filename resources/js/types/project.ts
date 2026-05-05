@@ -12,6 +12,7 @@ interface Project {
     location: string;
     chairman: string;
     project_status: string;
+    rab_status: string;
     progress_percentage: number;
     budget_year: string;
     volume: number;

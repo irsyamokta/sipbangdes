@@ -43,6 +43,8 @@ const ProjectModal = ({
         updateRoute: "project.update",
     });
 
+    const isRabApproved = project?.rab_status === "approved";
+
     const budgetYearOptions = useBudgetYears({ startYear: 2025 });
 
     return (
@@ -131,11 +133,16 @@ const ProjectModal = ({
                         value={data.project_status}
                         onChange={(value) => setData("project_status", value)}
                         error={serverErrors.project_status}
+                        hint={
+                            !isRabApproved
+                                ? "Status Berjalan/Selesai hanya tersedia setelah RAB disetujui"
+                                : undefined
+                        }
                         required
                         options={[
                             { value: "draft", label: "Draft" },
-                            { value: "berjalan", label: "Berjalan" },
-                            { value: "selesai", label: "Selesai" }
+                            { value: "berjalan", label: "Berjalan", disabled: !isRabApproved },
+                            { value: "selesai", label: "Selesai", disabled: !isRabApproved },
                         ]}
                     />
                 </div>
