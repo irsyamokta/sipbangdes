@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useModalForm } from "@/hooks/useModalForm";
 
 import { ModalTakeOffSheetProps, TakeOffSheetForm } from "@/types/tos";
@@ -16,13 +17,14 @@ const TakeOffSheetModal = ({
     ahspOptions,
     workerCategoryOptions,
     unitOptions,
+    defaultProjectId,
 }: ModalTakeOffSheetProps) => {
     const { data, setData, handleSubmit, loading, serverErrors, isEditing } =
         useModalForm<TakeOffSheetForm>({
             isOpen,
             onClose,
             initialValues: {
-                project_id: "",
+                project_id: defaultProjectId ?? "",
                 ahsp_id: "",
                 worker_category_id: "",
                 work_name: "",
@@ -37,6 +39,12 @@ const TakeOffSheetModal = ({
             storeRoute: "tos.store",
             updateRoute: "tos.update",
         });
+
+    useEffect(() => {
+        if (!isEditing) {
+            setData("project_id", defaultProjectId ?? "");
+        }
+    }, [defaultProjectId, isEditing]);
 
     const filteredAhspOptions = ahspOptions?.filter(
         (ahsp) => ahsp.category_id === data.worker_category_id,

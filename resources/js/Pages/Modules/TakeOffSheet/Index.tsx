@@ -58,6 +58,7 @@ export default function TOS() {
                 workerCategoryOptions={workerCategoryOptions}
                 ahspOptions={ahspOptions}
                 unitOptions={unitOptions}
+                defaultProjectId={filters.project_id}
             />
 
             <div className="grid grid-cols-12 gap-4 md:gap-6">

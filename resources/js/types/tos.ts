@@ -66,6 +66,7 @@ interface ModalTakeOffSheetProps {
     unitOptions: SelectOption[];
     workerCategoryOptions: SelectOption[];
     ahspOptions: SelectOption[];
+    defaultProjectId?: string;
 }
 
 interface TakeOffSheetTableProps {
