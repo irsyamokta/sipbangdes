@@ -27,6 +27,7 @@ class ProjectStoreRequest extends FormRequest
             'project_name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
             'chairman' => 'required|string|max:255',
+            'responsible_type' => 'required|string|in:TPK,PKA',
             'budget_year' => 'required|numeric',
             'volume' => 'required|numeric|min:0',
             'unit' => 'required|string|max:50',

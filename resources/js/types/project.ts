@@ -11,6 +11,7 @@ interface Project {
     project_name: string;
     location: string;
     chairman: string;
+    responsible_type: string;
     project_status: string;
     rab_status: string;
     progress_percentage: number;
@@ -32,6 +33,7 @@ interface ProjectForm {
     project_name: string;
     location: string;
     chairman: string;
+    responsible_type: string;
     project_status: string;
     budget_year: string;
     volume: number;

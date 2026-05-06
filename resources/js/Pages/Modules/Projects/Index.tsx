@@ -30,6 +30,7 @@ export default function Projects() {
 
     const budgetYearOptions = useBudgetYears({
         startYear: 2025,
+        range: 8,
         includeAll: true,
     });
 

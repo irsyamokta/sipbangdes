@@ -264,7 +264,7 @@
         </tr>
         <tr>
             <td>Kepala Desa {{ config('app.domicile.village') }}</td>
-            <td>Tim Pelaksana Kegiatan</td>
+            <td>{{ $rab['responsible_type'] === 'TPK' ? 'Tim Pelaksana Kegiatan' : 'Pelaksana Kegiatan Anggaran' }}</td>
         </tr>
         <tr>
             <td class="user"> {{ $rab['approver']->name ?? '(.........................)' }}</td>

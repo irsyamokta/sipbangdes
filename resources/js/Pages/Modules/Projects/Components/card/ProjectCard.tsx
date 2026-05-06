@@ -100,10 +100,12 @@ const ProjectCard = ({
                                     </span>
                                 </div>
 
-                                {/* Project Chairman */}
+                                {/* Project Chairman / Responsible Person */}
                                 <div className="flex items-center gap-2">
                                     <LuUser size={16} />
-                                    <span>{capitalizeEachWord(project.chairman)}</span>
+                                    <span>
+                                        {project.responsible_type}: {capitalizeEachWord(project.chairman)}
+                                    </span>
                                 </div>
                             </div>
                         </div>

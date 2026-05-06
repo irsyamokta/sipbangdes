@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  * @property string $id
  * @property string $project_name
  * @property string $location
+ * @property string $responsible_type
  * @property string $chairman
  * @property int $budget_year
  * @property int $volume
@@ -35,6 +36,7 @@ class Project extends Model
     protected $fillable = [
         'project_name',
         'location',
+        'responsible_type',
         'chairman',
         'budget_year',
         'volume',

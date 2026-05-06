@@ -1,51 +1,46 @@
-import { useModalForm } from '@/hooks/useModalForm';
+import { useModalForm } from "@/hooks/useModalForm";
 
-import { useBudgetYears } from '@/hooks/useBudgetYears';
+import { useBudgetYears } from "@/hooks/useBudgetYears";
 
-import { ModalProjectProps, ProjectForm } from '@/types/project';
+import { ModalProjectProps, ProjectForm } from "@/types/project";
 
-import { Modal } from '@/Components/ui/modal';
-import Form from '@/Components/form/Form';
-import Input from '@/Components/form/input/InputField';
-import Select from '@/Components/form/input/Select';
-import NumberInput from '@/Components/form/input/NumberInput';
+import { Modal } from "@/Components/ui/modal";
+import Form from "@/Components/form/Form";
+import Input from "@/Components/form/input/InputField";
+import Select from "@/Components/form/input/Select";
+import NumberInput from "@/Components/form/input/NumberInput";
 
 const ProjectModal = ({
     isOpen,
     onClose,
     project,
-    unitOptions
+    unitOptions,
 }: ModalProjectProps) => {
-    const {
-        data,
-        setData,
-        handleSubmit,
-        loading,
-        serverErrors,
-        isEditing,
-    } = useModalForm<ProjectForm>({
-        isOpen,
-        onClose,
-        initialValues: {
-            project_name: "",
-            location: "",
-            chairman: "",
-            project_status: "draft",
-            budget_year: "",
-            volume: 0,
-            unit: "",
-        },
-        editData: project,
-        editId: project?.id,
-        successMessage: "Proyek berhasil disimpan",
-        updateMessage: "Proyek berhasil diperbarui",
-        storeRoute: "project.store",
-        updateRoute: "project.update",
-    });
+    const { data, setData, handleSubmit, loading, serverErrors, isEditing } =
+        useModalForm<ProjectForm>({
+            isOpen,
+            onClose,
+            initialValues: {
+                project_name: "",
+                location: "",
+                chairman: "",
+                responsible_type: "TPK",
+                project_status: "draft",
+                budget_year: "",
+                volume: 0,
+                unit: "",
+            },
+            editData: project,
+            editId: project?.id,
+            successMessage: "Proyek berhasil disimpan",
+            updateMessage: "Proyek berhasil diperbarui",
+            storeRoute: "project.store",
+            updateRoute: "project.update",
+        });
 
     const isRabApproved = project?.rab_status === "approved";
 
-    const budgetYearOptions = useBudgetYears({ startYear: 2025 });
+    const budgetYearOptions = useBudgetYears({ startYear: 2025, range: 8 });
 
     return (
         <Modal
@@ -53,7 +48,11 @@ const ProjectModal = ({
             onClose={onClose}
             className="max-w-175 m-4"
             title={isEditing ? "Edit Proyek" : "Tambah Proyek"}
-            subtitle={isEditing ? "Ubah detail proyek pembangunan desa" : "Masukkan detail proyek pembangunan desa"}
+            subtitle={
+                isEditing
+                    ? "Ubah detail proyek pembangunan desa"
+                    : "Masukkan detail proyek pembangunan desa"
+            }
             formId="project-form"
             loading={loading}
         >
@@ -64,7 +63,6 @@ const ProjectModal = ({
                 preventEnterSubmit
             >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
                     {/* Project Name */}
                     <Input
                         label="Nama Proyek"
@@ -72,7 +70,9 @@ const ProjectModal = ({
                         name="project_name"
                         value={data.project_name}
                         placeholder="Contoh: Pembangunan Jalan Desa"
-                        onChange={(e) => setData("project_name", e.target.value)}
+                        onChange={(e) =>
+                            setData("project_name", e.target.value)
+                        }
                         error={serverErrors.project_name}
                         required
                     />
@@ -91,7 +91,6 @@ const ProjectModal = ({
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
                     {/* Volume */}
                     <NumberInput
                         label="Volume"
@@ -109,14 +108,13 @@ const ProjectModal = ({
                         onChange={(value) => setData("unit", value)}
                         error={serverErrors.unit}
                         required
-                        options={(unitOptions ?? [])
-                            .filter((unit: any) => unit?.value)
-                        }
+                        options={(unitOptions ?? []).filter(
+                            (unit: any) => unit?.value,
+                        )}
                     />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
                     {/* Budget Year */}
                     <Select
                         label="Tahun Anggaran"
@@ -141,26 +139,51 @@ const ProjectModal = ({
                         required
                         options={[
                             { value: "draft", label: "Draft" },
-                            { value: "berjalan", label: "Berjalan", disabled: !isRabApproved },
-                            { value: "selesai", label: "Selesai", disabled: !isRabApproved },
+                            {
+                                value: "berjalan",
+                                label: "Berjalan",
+                                disabled: !isRabApproved,
+                            },
+                            {
+                                value: "selesai",
+                                label: "Selesai",
+                                disabled: !isRabApproved,
+                            },
                         ]}
                     />
                 </div>
 
-                {/* Chairman */}
-                <Input
-                    label="Ketua TPK"
-                    type="text"
-                    name="chairman"
-                    value={data.chairman}
-                    placeholder="Contoh: John Doe"
-                    onChange={(e) => setData("chairman", e.target.value)}
-                    error={serverErrors.chairman}
-                    required
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Responsible Type */}
+                    <Select
+                        label="Penanggung Jawab"
+                        value={data.responsible_type}
+                        onChange={(value) => setData("responsible_type", value)}
+                        error={serverErrors.responsible_type}
+                        required
+                        options={[
+                            { value: "TPK", label: "TPK (Tim Pelaksana Kegiatan)" },
+                            { value: "PKA", label: "PKA (Pelaksana Kegiatan Anggaran)" },
+                        ]}
+                    />
+
+                    {/* Chairman */}
+                    {data.responsible_type && (
+                        <Input
+                            label="Nama Penanggung Jawab"
+                            type="text"
+                            name="chairman"
+                            value={data.chairman}
+                            placeholder="Contoh: John Doe"
+                            onChange={(e) => setData("chairman", e.target.value)}
+                            error={serverErrors.chairman}
+                            required
+                        />
+                    )}
+                </div>
             </Form>
         </Modal>
-    )
-}
+    );
+};
 
 export default ProjectModal;

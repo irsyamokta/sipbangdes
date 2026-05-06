@@ -334,6 +334,7 @@ class RabService
 
             'approver' => $approver,
             'chairman' => $project->chairman,
+            'responsible_type' => $project->responsible_type,
         ];
     }
 
