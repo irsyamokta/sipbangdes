@@ -80,7 +80,7 @@ const OperationalTable = ({
                         </p>
                     </div>
                     {
-                        can("rab.operational.create") && rab_status !== "approved" && (
+                        can("rab.operational.create") && (rab_status === "draft" || rab_status === "revision") && (
                             <Button
                                 variant="primary"
                                 startIcon={<LuPlus size={18} />}
@@ -118,7 +118,7 @@ const OperationalTable = ({
                                     Total Harga
                                 </TableCell>
 
-                                {can("rab.operational.edit") && can("rab.operational.delete") && rab_status !== "approved" && (
+                                {can("rab.operational.edit") && can("rab.operational.delete") && (rab_status === "draft" || rab_status === "revision") && (
                                     <TableCell isHeader className="px-6 py-3 text-xs text-center text-gray-900 whitespace-nowrap">
                                         Aksi
                                     </TableCell>
@@ -165,7 +165,7 @@ const OperationalTable = ({
                                         </TableCell>
 
                                         {/* Action */}
-                                        {can('rab.operational.create') && rab_status !== "approved" && (
+                                        {can('rab.operational.create') && (rab_status === "draft" || rab_status === "revision") && (
                                             <TableCell className="px-6 py-4 text-sm font-medium text-end text-gray-800 whitespace-nowrap">
                                                 <div className="flex justify-center gap-1">
 
