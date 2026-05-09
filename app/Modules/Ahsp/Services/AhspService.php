@@ -2,10 +2,10 @@
 
 namespace App\Modules\Ahsp\Services;
 
+use DomainException;
 use App\Models\Ahsp;
 use App\Modules\Ahsp\Repositories\AhspRepository;
 use App\Services\CodeGenerators\DotCodeGenerator;
-use DomainException;
 use Illuminate\Support\Facades\DB;
 
 class AhspService
@@ -59,7 +59,7 @@ class AhspService
     public function createAhsp(array $data)
     {
         if ($this->ahspRepository->existsByName($data['work_name'])) {
-            throw new DomainException('Nama pekerjaan sudah ada');
+            throw new DomainException('Nama pekerjaan sudah ada.');
         }
 
         return DB::transaction(function () use ($data) {
@@ -84,7 +84,7 @@ class AhspService
         $ahsp = $this->ahspRepository->find($id);
 
         if ($this->ahspRepository->existsByNameExcept($id, $data['work_name'])) {
-            throw new DomainException('Nama pekerjaan sudah ada');
+            throw new DomainException('Nama pekerjaan sudah ada.');
         }
 
         $ahsp->update($data);

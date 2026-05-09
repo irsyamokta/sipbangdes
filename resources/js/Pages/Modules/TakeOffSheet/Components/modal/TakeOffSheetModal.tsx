@@ -51,7 +51,9 @@ const TakeOffSheetModal = ({
     );
 
     const handleAhspChange = (value: string | number | boolean) => {
-        const selected = filteredAhspOptions?.find((opt: any) => opt.value === value || opt.value === String(value));
+        const selected = filteredAhspOptions?.find(
+            (opt: any) => opt.value === value || opt.value === String(value),
+        );
 
         setData("ahsp_id", value as string);
 
@@ -62,7 +64,7 @@ const TakeOffSheetModal = ({
     };
 
     const isAhspSelected = !!data.ahsp_id;
-    
+
     return (
         <Modal
             isOpen={isOpen}
@@ -117,18 +119,19 @@ const TakeOffSheetModal = ({
                 />
 
                 {/* Worker Name */}
-                <Input
-                    label="Nama Pekerjaan"
-                    placeholder="Contoh: Pembersihan Lokasi"
-                    value={data.work_name}
-                    onChange={(e) => setData("work_name", e.target.value)}
-                    error={serverErrors.work_name}
-                    required
-                    disabled={!isAhspSelected}
-                />
+                <div className="hidden">
+                    <Input
+                        label="Nama Pekerjaan"
+                        placeholder="Contoh: Pembersihan Lokasi"
+                        value={data.work_name}
+                        onChange={(e) => setData("work_name", e.target.value)}
+                        error={serverErrors.work_name}
+                        disabled={!isAhspSelected}
+                    />
+                </div>
 
-                {/* Volume & Unit */}
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Volume */}
                     <NumberInput
                         label="Volume"
                         placeholder="Masukkan Volume"
@@ -139,6 +142,7 @@ const TakeOffSheetModal = ({
                         disabled={!isAhspSelected}
                     />
 
+                    {/* Unit */}
                     <Select
                         label="Satuan"
                         placeholder="Pilih Satuan"
@@ -146,8 +150,7 @@ const TakeOffSheetModal = ({
                         onChange={(value) => setData("unit", value as string)}
                         options={unitOptions ?? []}
                         error={serverErrors.unit}
-                        required
-                        disabled={!isAhspSelected}
+                        disabled
                     />
                 </div>
             </Form>

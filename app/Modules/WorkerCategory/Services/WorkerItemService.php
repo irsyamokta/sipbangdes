@@ -37,7 +37,7 @@ class WorkerItemService
             $data['work_name'],
             $data['category_id']
         )) {
-            throw new DomainException('Nama pekerjaan sudah ada dalam kategori ini.');
+            throw new DomainException('AHSP sudah ada dalam kategori ini.');
         }
 
         return $this->workerItemRepository->create($data);
@@ -58,7 +58,7 @@ class WorkerItemService
             $data['work_name'],
             $data['category_id']
         )) {
-            throw new DomainException('Nama pekerjaan sudah ada dalam kategori ini.');
+            throw new DomainException('AHSP sudah ada dalam kategori ini.');
         }
 
         return $this->workerItemRepository->update($workerItem, $data);

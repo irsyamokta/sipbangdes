@@ -99,7 +99,7 @@ class TakeOffSheetController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'work_name' => $e->getMessage()
+                'ahsp_id' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([
@@ -122,7 +122,7 @@ class TakeOffSheetController extends Controller
             return back();
         } catch (DomainException $e) {
             return back()->withErrors([
-                'work_name' => $e->getMessage()
+                'ahsp_id' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
             return back()->withErrors([

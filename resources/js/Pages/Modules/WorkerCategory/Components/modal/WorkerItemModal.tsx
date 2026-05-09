@@ -73,29 +73,33 @@ const WorkerItemModal = ({
                 />
 
                 {/* Worker Name */}
-                <Input
-                    label="Nama Pekerjaan"
-                    type="text"
-                    name="work_name"
-                    placeholder="Contoh: Pembersihan Lokasi"
-                    value={data.work_name}
-                    onChange={(e) => setData("work_name", e.target.value)}
-                    error={serverErrors.work_name}
-                    required
-                />
+                <div className="hidden">
+                    <Input
+                        label="Nama Pekerjaan"
+                        type="text"
+                        name="work_name"
+                        placeholder="Contoh: Pembersihan Lokasi"
+                        value={data.work_name}
+                        onChange={(e) => setData("work_name", e.target.value)}
+                        error={serverErrors.work_name}
+                        disabled
+                    />
+                </div>
 
                 {/* Unit */}
-                <Select
-                    label="Satuan"
-                    value={data.unit}
-                    placeholder="Pilih Satuan"
-                    onChange={(value) => setData("unit", value)}
-                    error={serverErrors.unit}
-                    required
-                    options={(unitOptions ?? []).filter(
-                        (unit: any) => unit.value,
-                    )}
-                />
+                <div className="hidden">
+                    <Select
+                        label="Satuan"
+                        value={data.unit}
+                        placeholder="Pilih Satuan"
+                        onChange={(value) => setData("unit", value)}
+                        error={serverErrors.unit}
+                        options={(unitOptions ?? []).filter(
+                            (unit: any) => unit.value,
+                        )}
+                        disabled
+                    />
+                </div>
             </Form>
         </Modal>
     );

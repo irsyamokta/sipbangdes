@@ -44,7 +44,7 @@ class TakeOffSheetService
                 $data['project_id'],
                 $data['worker_category_id']
             )) {
-                throw new DomainException('Nama pekerjaan sudah digunakan pada proyek & kategori ini.');
+                throw new DomainException('AHSP sudah digunakan pada proyek & kategori ini.');
             }
 
             return $this->takeOffSheetRepository->create($data);
@@ -72,7 +72,7 @@ class TakeOffSheetService
             $data['project_id'],
             $data['worker_category_id']
         )) {
-            throw new DomainException('Nama pekerjaan sudah digunakan pada proyek & kategori ini.');
+            throw new DomainException('AHSP sudah digunakan pada proyek & kategori ini.');
         }
 
         return DB::transaction(function () use ($tos, $data) {

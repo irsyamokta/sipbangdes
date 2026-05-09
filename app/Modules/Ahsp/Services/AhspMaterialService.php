@@ -3,8 +3,8 @@
 namespace App\Modules\Ahsp\Services;
 
 use DomainException;
-use App\Models\Ahsp;
 use App\Modules\Ahsp\Repositories\AhspMaterialRepository;
+use App\Modules\Ahsp\Repositories\AhspRepository;
 
 class AhspMaterialService
 {
@@ -13,7 +13,7 @@ class AhspMaterialService
      */
     public function __construct(
         protected AhspMaterialRepository $ahspMaterialRepository,
-        protected \App\Modules\Ahsp\Repositories\AhspRepository $ahspRepository
+        protected AhspRepository $ahspRepository
     ) {}
 
     /**
