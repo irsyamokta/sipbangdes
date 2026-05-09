@@ -95,7 +95,7 @@ export const Modal: React.FC<ModalProps> = ({
         : "relative w-full rounded-xl bg-white dark:bg-gray-900 my-8 sm:my-16";
 
     return (
-        <div className="fixed inset-0 z-[99999] overflow-y-auto no-scrollbar">
+        <div className="fixed inset-0 z-99999 overflow-y-auto no-scrollbar">
             {!isFullscreen && (
                 <div
                     className={`fixed inset-0 bg-black/40 transition-opacity duration-200 ${animate ? "opacity-100" : "opacity-0"
@@ -103,7 +103,7 @@ export const Modal: React.FC<ModalProps> = ({
                     onClick={onClose}
                 />
             )}
-            <div className="flex min-h-full items-start justify-center p-4 sm:p-6">
+            <div className="flex min-h-full items-center justify-center p-4 sm:p-6">
                 <div
                     ref={modalRef}
                     className={`
@@ -142,12 +142,12 @@ export const Modal: React.FC<ModalProps> = ({
                     </button>
                 )}
 
-                {/* Body (Allows dropdowns to overflow naturally) */}
+                {/* Body */}
                 <div className="flex-1">
                     {children}
                 </div>
 
-                {/* Footer (Always Exists If Actions Provided) */}
+                {/* Footer */}
                 {(formId || submitLabel) && (
                     <div className="sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 md:px-6 py-4 border-t border-gray-200 dark:border-gray-700 rounded-b-xl">
                         <div className="flex justify-end gap-3">
