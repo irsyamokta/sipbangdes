@@ -91,8 +91,8 @@ export const Modal: React.FC<ModalProps> = ({
     if (!show) return null;
 
     const contentClasses = isFullscreen
-        ? "w-full min-h-screen"
-        : "relative w-full rounded-xl bg-white dark:bg-gray-900 my-8 sm:my-16";
+        ? "w-full h-screen"
+        : "relative w-full rounded-xl bg-white dark:bg-gray-900 max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)] shadow-xl";
 
     return (
         <div className="fixed inset-0 z-99999 overflow-y-auto no-scrollbar">
@@ -103,7 +103,7 @@ export const Modal: React.FC<ModalProps> = ({
                     onClick={onClose}
                 />
             )}
-            <div className="flex min-h-full items-center justify-center p-4 sm:p-6">
+            <div className="flex min-h-full items-center justify-center sm:p-6">
                 <div
                     ref={modalRef}
                     className={`
@@ -119,7 +119,7 @@ export const Modal: React.FC<ModalProps> = ({
                 >
                 {/* Header */}
                 {(title || subtitle) && (
-                    <div className="sticky top-0 z-20 bg-white dark:bg-gray-900 px-4 md:px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 rounded-t-xl">
+                    <div className="sticky top-0 z-20 bg-white dark:bg-gray-900 px-4 md:px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 rounded-t-xl shrink-0">
                         <h4 className="text-2xl font-semibold text-gray-800 dark:text-white/90">
                             {title}
                         </h4>
@@ -143,7 +143,7 @@ export const Modal: React.FC<ModalProps> = ({
                 )}
 
                 {/* Body */}
-                <div className="flex-1">
+                <div className="flex-1 overflow-y-auto no-scrollbar">
                     {children}
                 </div>
 
