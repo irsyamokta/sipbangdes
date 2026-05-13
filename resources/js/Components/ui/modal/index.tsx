@@ -119,7 +119,7 @@ export const Modal: React.FC<ModalProps> = ({
                 >
                 {/* Header */}
                 {(title || subtitle) && (
-                    <div className="sticky top-0 z-20 bg-white dark:bg-gray-900 px-4 md:px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 rounded-t-xl shrink-0">
+                    <div className="sticky top-0 z-20 bg-white dark:bg-gray-900 px-4 md:px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 rounded-t-xl">
                         <h4 className="text-2xl font-semibold text-gray-800 dark:text-white/90">
                             {title}
                         </h4>
@@ -143,7 +143,7 @@ export const Modal: React.FC<ModalProps> = ({
                 )}
 
                 {/* Body */}
-                <div className="flex-1 overflow-y-auto no-scrollbar">
+                <div className="flex-1">
                     {children}
                 </div>
 
