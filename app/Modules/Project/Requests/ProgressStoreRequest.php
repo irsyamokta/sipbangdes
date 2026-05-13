@@ -38,6 +38,12 @@ class ProgressStoreRequest extends FormRequest
             'description.required' => 'Keterangan wajib diisi.',
             'description.string' => 'Keterangan harus berupa string.',
             'description.max' => 'Keterangan maksimal 255 karakter.',
+
+            'documents.required' => 'Dokumen progres wajib diunggah.',
+            'documents.array' => 'Format dokumen tidak valid.',
+            'documents.*.image' => 'Dokumen harus berupa gambar.',
+            'documents.*.mimes' => 'Format gambar harus jpeg, png, jpg, gif, atau webp.',
+            'documents.*.max' => 'Ukuran masing-masing gambar maksimal 2MB.',
         ];
     }
 }

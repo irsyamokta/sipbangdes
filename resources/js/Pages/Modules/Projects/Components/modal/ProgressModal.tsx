@@ -117,7 +117,14 @@ const ProgressModal = ({
                         if (!files) return;
                         setData("documents", Array.from(files));
                     }}
-                    error={serverErrors.documents}
+                    error={
+                        serverErrors.documents ||
+                        serverErrors[
+                            Object.keys(serverErrors).find((key) =>
+                                key.startsWith("documents.")
+                            ) as keyof typeof serverErrors
+                        ]
+                    }
                     multiple
                     required={!isEditing}
                 />
