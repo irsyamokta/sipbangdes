@@ -37,6 +37,13 @@ RUN apk add --no-cache \
     unzip \
     && docker-php-ext-install pdo_mysql
 
+# Set nginx upload limit
+RUN sed -i 's/client_max_body_size 1m;/client_max_body_size 20M;/g' /etc/nginx/nginx.conf
+
+# Set PHP upload limit
+RUN echo "upload_max_filesize=20M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size=20M" >> /usr/local/etc/php/conf.d/uploads.ini
+
 # Puppeteer config
 ENV CHROME_PATH=/usr/bin/chromium
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
