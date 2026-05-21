@@ -23,10 +23,30 @@ class RabCommentStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'project_id' => 'required|exists:projects,id',
             'action' => 'required|in:send,forward,revision,approve',
             'comment' => 'nullable|string|max:1000',
+        ];
+
+        if (in_array($this->action, ['revision', 'forward'])) {
+            $rules['comment'] = 'required|string|max:1000';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return [
+            'comment.required' => 'Catatan/Komentar wajib diisi.',
+            'comment.string' => 'Catatan/Komentar harus berupa string.',
+            'comment.max' => 'Catatan/Komentar maksimal 1000 karakter.',
         ];
     }
 }
