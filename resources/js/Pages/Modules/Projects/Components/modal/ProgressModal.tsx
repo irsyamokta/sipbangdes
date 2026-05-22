@@ -36,9 +36,9 @@ const ProgressModal = ({
         () =>
             progress
                 ? {
-                      percentage: String(progress.percentage),
-                      description: progress.description,
-                  }
+                    percentage: String(progress.percentage),
+                    description: progress.description,
+                }
                 : null,
         [progress?.id, progress?.description],
     );
@@ -108,8 +108,8 @@ const ProgressModal = ({
                 <FileInput
                     label={
                         isEditing
-                            ? "Tambah Dokumentasi (Opsional)"
-                            : "Dokumentasi (Foto/Gambar)"
+                            ? "Tambah Dokumentasi (Foto/Gambar maks. 2MB)"
+                            : "Dokumentasi (Foto/Gambar maks. 2MB)"
                     }
                     variant="card"
                     onChange={(e) => {
@@ -120,9 +120,9 @@ const ProgressModal = ({
                     error={
                         serverErrors.documents ||
                         serverErrors[
-                            Object.keys(serverErrors).find((key) =>
-                                key.startsWith("documents.")
-                            ) as keyof typeof serverErrors
+                        Object.keys(serverErrors).find((key) =>
+                            key.startsWith("documents.")
+                        ) as keyof typeof serverErrors
                         ]
                     }
                     multiple
