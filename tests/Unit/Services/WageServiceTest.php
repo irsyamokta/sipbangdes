@@ -126,10 +126,16 @@ class WageServiceTest extends TestCase
     public function test_create_wage_successfully()
     {
         $data = [
-            'name' => 'Tukang Batu',
+            'position' => 'Tukang Batu',
             'unit' => 'OH',
             'price' => 125000,
         ];
+
+        $this->wageRepository
+            ->shouldReceive('existsByPositionAndUnit')
+            ->once()
+            ->with($data['position'], $data['unit'])
+            ->andReturn(false);
 
         DB::shouldReceive('transaction')
             ->once()
@@ -185,10 +191,16 @@ class WageServiceTest extends TestCase
         $wageId = '550e8400-e29b-41d4-a716-446655440030';
 
         $data = [
-            'name' => 'Mandor',
+            'position' => 'Mandor',
             'unit' => 'OH',
             'price' => 135000,
         ];
+
+        $this->wageRepository
+            ->shouldReceive('existsByPositionAndUnitExcept')
+            ->once()
+            ->with($wageId, $data['position'], $data['unit'])
+            ->andReturn(false);
 
         $wageMock =
             Mockery::mock(MasterWage::class);
@@ -247,3 +259,4 @@ class WageServiceTest extends TestCase
         $this->assertTrue($result);
     }
 }
+

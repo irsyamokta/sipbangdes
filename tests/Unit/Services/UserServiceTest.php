@@ -85,7 +85,7 @@ class UserServiceTest extends TestCase
             'name' => 'John Doe',
             'email' => 'test@mail.com',
             'password' => '123456',
-            'role' => 'admin',
+            'role' => 'planner',
         ];
 
         DB::shouldReceive('transaction')
@@ -99,7 +99,7 @@ class UserServiceTest extends TestCase
         $userMock
             ->shouldReceive('assignRole')
             ->once()
-            ->with('admin');
+            ->with('planner');
 
         $this->userRepository
             ->shouldReceive('existsByEmail')
@@ -134,7 +134,7 @@ class UserServiceTest extends TestCase
      */
     public function test_update_user_throw_exception_if_email_duplicate()
     {
-        $userId = 1;
+        $userId = '550e8400-e29b-41d4-a716-446655440001';
 
         $data = [
             'email' => 'duplicate@mail.com',
@@ -175,7 +175,7 @@ class UserServiceTest extends TestCase
      */
     public function test_update_user_without_password()
     {
-        $userId = 1;
+        $userId = '550e8400-e29b-41d4-a716-446655440001';
 
         $data = [
             'name' => 'John Doe',
@@ -184,6 +184,12 @@ class UserServiceTest extends TestCase
         ];
 
         $userMock = Mockery::mock(User::class);
+
+        $userMock
+            ->shouldReceive('hasRole')
+            ->once()
+            ->with('admin')
+            ->andReturn(false);
 
         $this->userRepository
             ->shouldReceive('find')
@@ -225,7 +231,7 @@ class UserServiceTest extends TestCase
      */
     public function test_update_user_with_password()
     {
-        $userId = 1;
+        $userId = '550e8400-e29b-41d4-a716-446655440001';
 
         $data = [
             'name' => 'Jane Doe',
@@ -234,6 +240,12 @@ class UserServiceTest extends TestCase
         ];
 
         $userMock = Mockery::mock(User::class);
+
+        $userMock
+            ->shouldReceive('hasRole')
+            ->once()
+            ->with('admin')
+            ->andReturn(false);
 
         $this->userRepository
             ->shouldReceive('find')
@@ -335,3 +347,4 @@ class UserServiceTest extends TestCase
         $this->assertTrue($result);
     }
 }
+

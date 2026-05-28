@@ -130,6 +130,12 @@ class MaterialServiceTest extends TestCase
             'price' => 75000,
         ];
 
+        $this->materialRepository
+            ->shouldReceive('existsByNameAndUnit')
+            ->once()
+            ->with($data['name'], $data['unit'])
+            ->andReturn(false);
+
         DB::shouldReceive('transaction')
             ->once()
             ->andReturnUsing(function ($callback) {
@@ -189,6 +195,12 @@ class MaterialServiceTest extends TestCase
             'price' => 55000,
         ];
 
+        $this->materialRepository
+            ->shouldReceive('existsByNameAndUnitExcept')
+            ->once()
+            ->with($materialId, $data['name'], $data['unit'])
+            ->andReturn(false);
+
         $materialMock =
             Mockery::mock(MasterMaterial::class);
 
@@ -246,3 +258,4 @@ class MaterialServiceTest extends TestCase
         $this->assertTrue($result);
     }
 }
+

@@ -131,6 +131,12 @@ class ToolServiceTest extends TestCase
             'price' => 85000,
         ];
 
+        $this->toolRepository
+            ->shouldReceive('existsByNameAndUnit')
+            ->once()
+            ->with($data['name'], $data['unit'])
+            ->andReturn(false);
+
         DB::shouldReceive('transaction')
             ->once()
             ->andReturnUsing(function ($callback) {
@@ -190,6 +196,12 @@ class ToolServiceTest extends TestCase
             'price' => 95000,
         ];
 
+        $this->toolRepository
+            ->shouldReceive('existsByNameAndUnitExcept')
+            ->once()
+            ->with($toolId, $data['name'], $data['unit'])
+            ->andReturn(false);
+
         $toolMock =
             Mockery::mock(MasterTool::class);
 
@@ -247,3 +259,4 @@ class ToolServiceTest extends TestCase
         $this->assertTrue($result);
     }
 }
+
