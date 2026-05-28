@@ -104,11 +104,12 @@ class RabRepository
      * Mengambil user dengan role approver.
      *
      * Catatan:
+     * - Menggunakan Spatie `role()` scope agar konsisten dengan sistem otorisasi
      * - Mengambil data terbaru (latest)
      * - Digunakan untuk penanggung jawab persetujuan RAB
      */
     public function getApprover()
     {
-        return User::where('role', 'approver')->latest()->first();
+        return User::role('approver')->latest()->first();
     }
 }

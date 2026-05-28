@@ -6,6 +6,7 @@ use Throwable;
 use App\Modules\Project\Repositories\ProgressRepository;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProgressService
 {
@@ -152,7 +153,13 @@ class ProgressService
 
             $document = $this->progressRepository->getDocument($documentId);
 
-            Cloudinary::uploadApi()->destroy($document->public_id);
+            if ($document->public_id) {
+                try {
+                    Cloudinary::uploadApi()->destroy($document->public_id);
+                } catch (Throwable $e) {
+                    Log::error($e->getMessage());
+                }
+            }
 
             $document->delete();
 

@@ -35,7 +35,7 @@ class ProjectRepository
      */
     public function find($id)
     {
-        return Project::find($id);
+        return Project::with('latestProgress')->find($id);
     }
 
     /**

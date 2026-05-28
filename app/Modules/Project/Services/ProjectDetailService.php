@@ -37,8 +37,7 @@ class ProjectDetailService
         $project = $this->progressRepository->getProjectDetail($projectId);
 
         $totalProgress = $this->progressRepository->getTotalProgress($projectId);
-
-        $expenditures = $project->projectExpenditures()->latest('date')->get();
+        $expenditures = $project->projectExpenditures;
 
         $totalRealization = $this->expenditureRepository->getTotalRealization($projectId);
 

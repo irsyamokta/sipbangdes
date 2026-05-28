@@ -36,7 +36,7 @@ class AhspRepository
             $perPage = $query->count();
         }
 
-        return $this->baseQuery($search)
+        return $query
             ->paginate($perPage)
             ->withQueryString();
     }
@@ -74,6 +74,11 @@ class AhspRepository
     public function getByCategory(?string $categoryId = null)
     {
         return Ahsp::query()
+            ->with([
+                'ahspComponentMaterials.masterMaterial',
+                'ahspComponentWages.masterWage',
+                'ahspComponentTools.masterTool',
+            ])
             ->when($categoryId, function ($query) use ($categoryId) {
                 $query->where('worker_category_id', $categoryId);
             })

@@ -24,6 +24,10 @@ class ProgressRepository
             },
             'projectProgresses.reportedBy',
             'projectProgresses.documents',
+            'latestProgress',
+            'projectExpenditures' => function ($query) {
+                $query->latest('date');
+            },
         ])->findOrFail($projectId);
     }
 
