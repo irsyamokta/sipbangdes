@@ -1,8 +1,9 @@
-const CACHE_NAME = 'sipbangdes-pwa-cache-v1';
+const CACHE_NAME = 'sipbangdes-pwa-cache-v2';
 const OFFLINE_URL = '/offline.html';
 
 const FILES_TO_CACHE = [
   OFFLINE_URL,
+  '/offline.svg',
   '/favicon.svg',
   '/manifest.json'
 ];
